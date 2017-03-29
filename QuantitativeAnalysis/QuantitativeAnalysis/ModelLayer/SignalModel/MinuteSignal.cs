@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis
+namespace QuantitativeAnalysis.ModelLayer.SignalModel
 {
-    class Program
+    class MinuteSignal : BasicSignal
     {
-        static void Main(string[] args)
-        {
-
-        }
+        public int minuteIndex { get; set; }
     }
 }

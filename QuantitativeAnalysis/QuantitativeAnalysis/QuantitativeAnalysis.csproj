@@ -35,11 +35,19 @@
     <Reference Include="Autofac, Version=4.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.4.0\lib\net45\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics, Version=3.17.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.3.17.0\lib\net40\MathNet.Numerics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.4\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,33 +57,92 @@
     <Reference Include="TA-Lib-Core, Version=1.0.4998.21369, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\TA-Lib.0.5.0.3\lib\TA-Lib-Core.dll</HintPath>
     </Reference>
+    <Reference Include="WAPIWrapperCSharp">
+      <HintPath>..\packages\WAPIWrapperCSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationLayer\BackTestingSystem\XiaoLong\DualThrustTest.cs" />
+    <Compile Include="DataAccessLayer\Common\BasicDataRepository.cs" />
+    <Compile Include="DataAccessLayer\Common\SequentialByDayRepository.cs" />
+    <Compile Include="DataAccessLayer\Common\SequentialByYearRepository.cs" />
+    <Compile Include="DataAccessLayer\Common\SequentialRepository.cs" />
+    <Compile Include="DataAccessLayer\Common\TradeDayRepository.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Common\RecordUtil.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Common\ResultPathUtil.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Option\OptionRecordUtil.cs" />
+    <Compile Include="DataAccessLayer\Futures\FuturesDailyRepository.cs" />
+    <Compile Include="DataAccessLayer\Futures\FuturesMinuteRepository.cs" />
+    <Compile Include="DataAccessLayer\Option\OptionInfoRepository.cs" />
+    <Compile Include="ModelLayer\Common\HoldingStatus.cs" />
+    <Compile Include="ModelLayer\Common\KLine.cs" />
+    <Compile Include="ModelLayer\Common\NetValue.cs" />
+    <Compile Include="ModelLayer\Common\PerformanceStatisics.cs" />
+    <Compile Include="ModelLayer\Common\Sequential.cs" />
+    <Compile Include="ModelLayer\Common\TimeLine.cs" />
+    <Compile Include="ModelLayer\Futures\FuturesDaily.cs" />
+    <Compile Include="ModelLayer\Futures\FuturesInfo.cs" />
+    <Compile Include="ModelLayer\Futures\FuturesMinute.cs" />
+    <Compile Include="ModelLayer\Option\OptionInfo.cs" />
+    <Compile Include="ModelLayer\PositionModel\BasicAccount.cs" />
+    <Compile Include="ModelLayer\PositionModel\BasicPositions.cs" />
+    <Compile Include="ModelLayer\PositionModel\ExecutionReport.cs" />
+    <Compile Include="ModelLayer\PositionModel\PositionDetail.cs" />
+    <Compile Include="ModelLayer\PositionModel\PositionsWithDetail.cs" />
+    <Compile Include="ModelLayer\PositionModel\TransactionRecord.cs" />
+    <Compile Include="ModelLayer\SignalModel\BasicSignal.cs" />
+    <Compile Include="ModelLayer\SignalModel\MinuteSignal.cs" />
+    <Compile Include="PresentationLayer\ChartStatistics.cs" />
+    <Compile Include="PresentationLayer\PLChart.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceLayer\Common\TradeDaysService.cs" />
+    <Compile Include="ServiceLayer\Core\Caches.cs" />
+    <Compile Include="ServiceLayer\Core\MyNLogConfig.cs" />
+    <Compile Include="ServiceLayer\Core\Platforms.cs" />
+    <Compile Include="Utilities\AccountOperator\Minute\maoheng\AccountUpdatingWithMinuteBar.cs" />
+    <Compile Include="Utilities\Common\CsvFileUtils.cs" />
+    <Compile Include="Utilities\Common\DataTableUtils.cs" />
+    <Compile Include="Utilities\Common\DateUtils.cs" />
+    <Compile Include="Utilities\Common\FileUtils.cs" />
+    <Compile Include="Utilities\Common\FreqTransferUtils.cs" />
+    <Compile Include="Utilities\Common\Kit.cs" />
+    <Compile Include="Utilities\Common\PerformanceStatisicsUtils.cs" />
+    <Compile Include="Utilities\Common\SequentialUtils.cs" />
+    <Compile Include="Utilities\DataApplication\KLineDataUtils.cs" />
+    <Compile Include="Utilities\Futures\FuturesMargin.cs" />
+    <Compile Include="Utilities\Option\OptionInfoReform.cs" />
+    <Compile Include="Utilities\Option\OptionMargin.cs" />
+    <Compile Include="Utilities\Transaction\Minute\maoheng\MinuteCloseAllWithBar.cs" />
+    <Compile Include="Utilities\Transaction\Minute\maoheng\MinuteTransactionWithBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ApplicationLayer\BackTestingSystem\" />
     <Folder Include="ApplicationLayer\MonitoringSystem\" />
     <Folder Include="ApplicationLayer\SimulationSystem\" />
     <Folder Include="ApplicationLayer\StatisticalSystem\" />
-    <Folder Include="DataAccessLayer\Common\" />
     <Folder Include="DataAccessLayer\DataFromLocalCSV\" />
     <Folder Include="DataAccessLayer\DataFromMSSQL\" />
     <Folder Include="DataAccessLayer\DataFromOtherSource\" />
     <Folder Include="DataAccessLayer\DataFromWind\" />
-    <Folder Include="ModelLayer\Common\" />
     <Folder Include="ModelLayer\DataModel\FinancialData\" />
     <Folder Include="ModelLayer\DataModel\MarketData\" />
-    <Folder Include="ModelLayer\PositionModel\" />
-    <Folder Include="ModelLayer\SignalModel\" />
-    <Folder Include="PresentationLayer\" />
     <Folder Include="ServiceLayer\DataProcessing\" />
-    <Folder Include="Utilities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License-LGPL.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
