@@ -8,7 +8,7 @@ using WAPIWrapperCSharp;
 using System.Data;
 using QuantitativeAnalysis.Utilities.Common;
 using QuantitativeAnalysis.ServiceLayer.Core;
-using MathNet.Numerics;
+using QuantitativeAnalysis.ModelLayer.Common;
 
 namespace QuantitativeAnalysis.DataAccessLayer.Common
 {

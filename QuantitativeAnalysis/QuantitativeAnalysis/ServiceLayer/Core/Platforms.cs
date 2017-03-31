@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using NLog;
+using QuantitativeAnalysis.ServiceLayer.Common;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

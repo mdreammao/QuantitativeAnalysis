@@ -78,6 +78,7 @@
     <Compile Include="DataAccessLayer\Futures\FuturesDailyRepository.cs" />
     <Compile Include="DataAccessLayer\Futures\FuturesMinuteRepository.cs" />
     <Compile Include="DataAccessLayer\Option\OptionInfoRepository.cs" />
+    <Compile Include="ModelLayer\Common\Constants.cs" />
     <Compile Include="ModelLayer\Common\HoldingStatus.cs" />
     <Compile Include="ModelLayer\Common\KLine.cs" />
     <Compile Include="ModelLayer\Common\NetValue.cs" />

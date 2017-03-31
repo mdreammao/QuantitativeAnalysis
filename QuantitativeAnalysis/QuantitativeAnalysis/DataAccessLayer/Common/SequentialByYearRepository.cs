@@ -1,6 +1,7 @@
 ﻿
 using NLog;
 using QuantitativeAnalysis.ModelLayer.Common;
+using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
