@@ -75,6 +75,7 @@
     <Folder Include="ModelLayer\SignalModel\" />
     <Folder Include="PresentationLayer\" />
     <Folder Include="ServiceLayer\DataProcessing\" />
+    <Folder Include="ServiceLayer\Initialization\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
