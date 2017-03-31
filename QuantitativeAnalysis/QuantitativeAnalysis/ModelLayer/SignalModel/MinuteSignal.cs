@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ModelLayer.SignalModel
 {
-    class MinuteSignal : BasicSignal
+    public class MinuteSignal : BasicSignal
     {
         public int minuteIndex { get; set; }
     }

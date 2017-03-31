@@ -82,7 +82,9 @@
     <Compile Include="ModelLayer\Common\KLine.cs" />
     <Compile Include="ModelLayer\Common\NetValue.cs" />
     <Compile Include="ModelLayer\Common\PerformanceStatisics.cs" />
+    <Compile Include="ModelLayer\Common\Position.cs" />
     <Compile Include="ModelLayer\Common\Sequential.cs" />
+    <Compile Include="ModelLayer\Common\Tick.cs" />
     <Compile Include="ModelLayer\Common\TimeLine.cs" />
     <Compile Include="ModelLayer\Futures\FuturesDaily.cs" />
     <Compile Include="ModelLayer\Futures\FuturesInfo.cs" />

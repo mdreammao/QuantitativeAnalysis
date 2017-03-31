@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WAPIWrapperCSharp;
 using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.Utilities.Common;
 
 namespace QuantitativeAnalysis.DataAccessLayer.Futures
 {

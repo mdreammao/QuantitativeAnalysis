@@ -1,4 +1,5 @@
 ﻿
+using BackTestingPlatform.AccountOperator.Minute.maoheng;
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.ModelLayer.SignalModel;

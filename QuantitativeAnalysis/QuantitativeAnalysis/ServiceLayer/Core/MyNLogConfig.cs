@@ -1,4 +1,4 @@
-﻿using BackTestingPlatform.Utilities;
+﻿
 using NLog;
 using NLog.Conditions;
 using NLog.Config;

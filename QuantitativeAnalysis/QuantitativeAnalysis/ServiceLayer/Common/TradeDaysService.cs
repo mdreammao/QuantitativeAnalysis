@@ -1,7 +1,6 @@
 ﻿using Autofac;
-using BackTestingPlatform.Core;
-using BackTestingPlatform.DataAccess.Common;
-using BackTestingPlatform.Model;
+using QuantitativeAnalysis.DataAccessLayer.Common;
+using QuantitativeAnalysis.ServiceLayer.Core;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
