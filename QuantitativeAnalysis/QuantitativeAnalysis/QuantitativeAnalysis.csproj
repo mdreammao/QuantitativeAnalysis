@@ -68,15 +68,21 @@
   <ItemGroup>
     <Compile Include="ApplicationLayer\BackTestingSystem\XiaoLong\DualThrustTest.cs" />
     <Compile Include="DataAccessLayer\Common\BasicDataRepository.cs" />
-    <Compile Include="DataAccessLayer\Common\SequentialByDayRepository.cs" />
-    <Compile Include="DataAccessLayer\Common\SequentialByYearRepository.cs" />
-    <Compile Include="DataAccessLayer\Common\SequentialRepository.cs" />
     <Compile Include="DataAccessLayer\Common\TradeDayRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromLocalCSV\Common\DataFromLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromLocalCSV\Futures\FuturesDailyFromLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromLocalCSV\Futures\FuturesMinuteFromLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromWind\Common\DataFromWindRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesDailyFromWindRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesMinuteFromWindRepository.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DataToLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DayToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\RecordUtil.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\ResultPathUtil.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Common\YearToLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Futures\FuturesDailyToLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Futures\FuturesMinuteToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Option\OptionRecordUtil.cs" />
-    <Compile Include="DataAccessLayer\Futures\FuturesDailyRepository.cs" />
-    <Compile Include="DataAccessLayer\Futures\FuturesMinuteRepository.cs" />
     <Compile Include="DataAccessLayer\Option\OptionInfoRepository.cs" />
     <Compile Include="ModelLayer\Common\Constants.cs" />
     <Compile Include="ModelLayer\Common\HoldingStatus.cs" />
@@ -109,6 +115,11 @@
     <Compile Include="ServiceLayer\Core\Caches.cs" />
     <Compile Include="ServiceLayer\Core\MyNLogConfig.cs" />
     <Compile Include="ServiceLayer\Core\Platforms.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Common\SequentialByDayService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Common\SequentialByYearService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Futures\FuturesDailyService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Futures\FuturesMinuteService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Test\DataAccessTests.cs" />
     <Compile Include="Utilities\AccountOperator\Minute\maoheng\AccountUpdatingWithMinuteBar.cs" />
     <Compile Include="Utilities\Common\CsvFileUtils.cs" />
     <Compile Include="Utilities\Common\DataTableUtils.cs" />
@@ -133,13 +144,11 @@
     <Folder Include="ApplicationLayer\MonitoringSystem\" />
     <Folder Include="ApplicationLayer\SimulationSystem\" />
     <Folder Include="ApplicationLayer\StatisticalSystem\" />
-    <Folder Include="DataAccessLayer\DataFromLocalCSV\" />
     <Folder Include="DataAccessLayer\DataFromMSSQL\" />
     <Folder Include="DataAccessLayer\DataFromOtherSource\" />
-    <Folder Include="DataAccessLayer\DataFromWind\" />
+    <Folder Include="DataAccessLayer\DataFromWind\Option\" />
     <Folder Include="ModelLayer\DataModel\FinancialData\" />
     <Folder Include="ModelLayer\DataModel\MarketData\" />
-    <Folder Include="ServiceLayer\DataProcessing\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

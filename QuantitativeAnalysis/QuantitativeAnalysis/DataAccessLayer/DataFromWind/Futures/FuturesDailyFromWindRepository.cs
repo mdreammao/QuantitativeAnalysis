@@ -1,5 +1,4 @@
-﻿
-using QuantitativeAnalysis.DataAccessLayer.Common;
+﻿using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.ModelLayer.Futures;
 using QuantitativeAnalysis.ServiceLayer.Core;
 using System;
@@ -9,16 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using WAPIWrapperCSharp;
 
-namespace QuantitativeAnalysis.DataAccessLayer.Futures
+namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Futures
 {
-    public class FuturesDailyRepository : SequentialByYearRepository<FuturesDaily>
+    public class FuturesDailyFromWindRepository : DataFromWindRepository<FuturesDaily>
     {
-        protected override List<FuturesDaily> readFromDefaultMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override List<FuturesDaily> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
+        public override List<FuturesDaily> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
             WindAPI w = Platforms.GetWindAPI();
             WindData wd = w.wsd(code, "open,high,low,close,volume,amt", dateStart, dateEnd, "Fill=Previous");
@@ -44,7 +38,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.Futures
                     });
                 }
             }
-
             return items;
         }
     }

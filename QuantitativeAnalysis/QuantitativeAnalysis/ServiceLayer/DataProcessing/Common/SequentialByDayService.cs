@@ -1,6 +1,10 @@
 ﻿
+using Autofac;
 using NLog;
+using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Common;
+using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.ModelLayer.Common;
+using QuantitativeAnalysis.ServiceLayer.Core;
 using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
@@ -10,14 +14,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.DataAccessLayer.Common
+namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
 {
     /// <summary>
     /// 按每天存取时间序列数据的Repository
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class SequentialByDayRepository<T> : SequentialRepository<T> where T : Sequential, new()
+    public abstract class SequentialByDayService<T>  where T : Sequential, new()
     {
         const string PATH_KEY = "CacheData.Path.SequentialByDay";
         static Logger log = LogManager.GetCurrentClassLogger();
@@ -29,7 +33,8 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         /// <param name="code"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        protected abstract List<T> readFromWind(string code, DateTime date);
+        //protected abstract List<T> readFromWind(string code, DateTime date);
+        public abstract List<T> getWindResult(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
 
         /// <summary>
         /// 尝试从默认MSSQL源获取数据,可能会抛出异常
@@ -46,12 +51,10 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> readFromLocalCsv(string code, DateTime date, string tag = null)
-        {
-            var path = _buildCacheDataFilePath(code, date, tag);
-            return readFromLocalCsv(path);
-        }
+        public abstract List<T> getLocalCSVResult(string code, DateTime date, string tag = null);
 
+        public abstract void saveToLocalCSV(IList<T> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false);
+        
         /// <summary>
         /// 尝试从本地csv文件，Wind获取数据。
         /// </summary>
@@ -169,7 +172,8 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
                 log.Debug("尝试从csv获取{0}...", code);
                 try
                 {
-                    result = readFromLocalCsv(code, date, tag);
+                    //result = getLocalCsvResult(code, date, tag);
+                    result = getLocalCSVResult(code, date, tag);
                 }
                 catch (Exception e)
                 {
@@ -185,7 +189,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
                 log.Debug("尝试从Wind获取{0}...", code);
                 try
                 {
-                    result = readFromWind(code, date);
+                    result = getWindResult(code, date,new DateTime(),null,null);
                 }
                 catch (Exception e)
                 {
@@ -212,7 +216,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             {
                 //如果数据不是从csv获取的，可保存至本地，存为csv文件
                 log.Debug("正在保存到本地csv文件...");
-                saveToLocalCsv(result, code, date, tag);
+                saveToLocalCSV(result, code, date, tag);
             }
             if (result != null && result.Count() > 0)
             {
@@ -225,8 +229,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             return result;
         }
 
-
-
         /// <summary>
         /// 将数据以csv文件的形式保存到CacheData文件夹下的预定路径。
         /// 默认不可以保存今天的数据，因为可能数据不全。
@@ -236,7 +238,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <param name="appendMode">是否为追加的文件尾部模式，否则是覆盖模式</param>\
         /// <param name="canSaveToday">是否可以保存今天的数据，默认不可以</param>
-        public void saveToLocalCsv(IList<T> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
+        /*public void saveToLocalCsv(IList<T> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
         {
             if (!canSaveToday && date.Date >= DateTime.Now.Date)
             {
@@ -244,7 +246,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             }
             var path = _buildCacheDataFilePath(code, date, tag);
             saveToLocalCsv(path, data, appendMode);
-        }
+        }*/
 
 
         private static string _buildCacheDataFilePath(string code, DateTime date, string tag)

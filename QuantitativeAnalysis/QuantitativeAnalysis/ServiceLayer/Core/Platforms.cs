@@ -1,5 +1,10 @@
 ﻿using Autofac;
 using NLog;
+using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Common;
+using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
+using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Futures;
+using QuantitativeAnalysis.ModelLayer.Common;
+using QuantitativeAnalysis.ModelLayer.Futures;
 using QuantitativeAnalysis.ServiceLayer.Common;
 using System;
 using System.Collections.Generic;
@@ -95,15 +100,16 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
 
             //cb.RegisterInstance(new ASharesInfoRepositoryFromWind()).As<ASharesInfoRepository>();
 
-
-
+            //cb.RegisterInstance(new FuturesDailyFromWind()).As<DataFromWind<FuturesDaily>>();
+            //cb.RegisterInstance(new FuturesMinuteFromWind()).As<DataFromWind<FuturesMinute>>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             //自动扫描注册
             cb.RegisterAssemblyTypes(assemblies).Where(t => t.Name.EndsWith("Repository")).AsSelf();
-            cb.RegisterAssemblyTypes(assemblies)
-                   .Where(t => t.Name.EndsWith("Service"))
-                   .AsImplementedInterfaces().AsSelf();
+            cb.RegisterAssemblyTypes(assemblies).Where(t => t.Name.EndsWith("Service")).AsSelf();
+            //cb.RegisterAssemblyTypes(assemblies)
+            //       .Where(t => t.Name.EndsWith("Service"))
+            //       .AsImplementedInterfaces().AsSelf();
 
 
         }

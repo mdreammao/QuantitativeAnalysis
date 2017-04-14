@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using BackTestingPlatform.Strategies.Futures.XiaoLong;
 using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.DataProcessing.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,10 @@ namespace Tester
         {
 
             Platforms.Initialize(); //初始化
+            //DataAccessTests test = new DataAccessTests();
+            //Console.WriteLine("start..........");
+            //test.testFromLocalCSVRepo();
+            //Console.WriteLine("end.......");
             (new LocalRunner()).run();
             Platforms.ShutDown();   //关闭
             //test();

@@ -9,18 +9,23 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
+using QuantitativeAnalysis.ServiceLayer.Core;
+using Autofac;
+using QuantitativeAnalysis.ModelLayer.Futures;
+using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Common;
+using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Futures;
 
-namespace QuantitativeAnalysis.DataAccessLayer.Common
+namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
 {
     /// <summary>
     /// 按每年存取时间序列数据的Repository
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class SequentialByYearRepository<T> : SequentialRepository<T> where T : Sequential, new()
+    public abstract class SequentialByYearService<T>  where T : Sequential, new()
     {
         const string PATH_KEY = "CacheData.Path.SequentialByYear";
         static Logger log = LogManager.GetCurrentClassLogger();
-
 
         /// <summary>
         /// 尝试从Wind获取数据,可能会抛出异常
@@ -31,8 +36,8 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <param name="options">其他选项</param>
         /// <returns></returns>
-        protected abstract List<T> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
-
+        //protected abstract List<T> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
+        public abstract List<T> getLocalCSVResult(String path);
 
         /// <summary>
         /// 尝试从默认MSSQL源获取数据,可能会抛出异常
@@ -45,23 +50,13 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         /// <returns></returns>
         protected abstract List<T> readFromDefaultMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
 
-
         /// <summary>
-        /// 尝试从本地csv文件获取数据,可能会抛出异常
-        /// </summary>
-        /// <param name="code">代码，如股票代码，期权代码</param>
-        /// <param name="dateStart">开始时间，包含本身</param>
-        /// <param name="dateEnd">结束时间，包含本身</param>
-        /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
-        /// <param name="options">其他选项</param>
-        /// <returns></returns>
-        public List<T> readFromLocalCsv(string code, DateTime date1, DateTime date2, string tag = null, IDictionary<string, object> options = null)
-        {
-            var filePath = _buildCacheDataFilePath(code, date1, date2, tag);
-            return readFromLocalCsv(filePath);
-        }
+        /// 尝试从本地csv文件获取数据
+        public abstract List<T> getWindResult(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
 
-        /// <summary>
+        public abstract void saveToLocalCSV(string path, IList<T> data, bool appendMode = false);
+        
+            /// <summary>
         /// 尝试从本地csv文件，Wind获取数据。
         /// </summary>
         /// <param name="code">代码，如股票代码，期权代码</param>
@@ -251,7 +246,10 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
                 {
                     log.Debug("尝试从csv文件{1}获取{0}...", code, Kit.ToShortName(pathThisYear));
                     //result返回空集表示本地csv文件中没有数据，null表示本地csv不存在
-                    result = readFromLocalCsv(pathThisYear);
+                    FuturesDailyFromLocalCSVRepository abc = new FuturesDailyFromLocalCSVRepository();
+                    //result = abc.readFromLocalCSV(pathThisYear);
+                    //result = Platforms.container.Resolve<FuturesDailyFromLocalCSVRepository>().readFromLocalCSV(pathThisYear);
+                    result = getLocalCSVResult(pathThisYear);
                 }
                 catch (Exception e)
                 {
@@ -265,7 +263,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
                 log.Debug("尝试从Wind获取{0}...", code);
                 try
                 {
-                    result = readFromWind(code, date1, date2, tag, options);
+                    result = getWindResult(code, date1, date2, tag, options);
                 }
                 catch (Exception e)
                 {
@@ -306,13 +304,11 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
                         }
                     }
 
-
                     //如果是year为今年，csv文件的取名以今天为结尾，表示非完整年度数据
                     var d2 = (year == DateTime.Now.Year) ? DateTime.Now : date2;
                     var pathToSave = _buildCacheDataFilePath(code, date1, d2, tag);
                     log.Debug("正在保存到本地csv文件...");
-                    saveToLocalCsv(pathToSave, result);
-
+                    saveToLocalCSV(pathToSave, result);
                 }
             }
             if (result != null && result.Count() > 0)
@@ -325,50 +321,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             }
             return result;
         }
-
-
-        /// <summary>
-        /// 将数据以csv文件的形式保存到CacheData文件夹下的预定路径。
-        /// 保存一整年的数据（1月1日-12月31日）。
-        /// 默认不可以保存今年的数据，因为可能数据不全。
-        /// </summary>
-        /// <param name="data">要保存的数据</param>
-        /// <param name="code">代码</param>
-        /// <param name="year">年</param>
-        /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
-        /// <param name="appendMode">是否为追加的文件尾部模式，否则是覆盖模式</param>
-        /// <param name="canSaveThisYear">是否可以保存今年的数据，默认不可以</param>
-        //[Obsolete]
-        //public void saveToLocalCsv(IList<T> data, string code, int year, string tag = null, bool appendMode = false, bool canSaveThisYear = false)
-        //{
-        //    if (!canSaveThisYear && year >= DateTime.Now.Year)
-        //    {
-        //        log.Debug("今年的{0}数据不保存，请在今年后保存。", Kit.ToShortName(tag));
-        //        return;
-        //    }
-        //    var path = _buildCacheDataFilePath(code, new DateTime(year, 1, 1), new DateTime(year, 12, 31), tag);
-        //    saveToLocalCsv(path, data, appendMode);
-        //}
-
-        /// <summary>
-        /// 将数据以csv文件的形式保存到CacheData文件夹下的预定路径。
-        /// 保存指定时间段的数据到同一个CSV文件。
-        /// </summary>
-        /// <param name="data">要保存的数据</param>
-        /// <param name="code">代码</param>
-        /// <param name="date1">开始时间，包含本身</param>
-        /// <param name="date2">结束时间，包含本身</param>
-        /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
-        /// <param name="appendMode">是否为追加的文件尾部模式，否则是覆盖模式</param>
-        /// <param name="canSaveThisYear">是否可以保存今年的数据，默认不可以</param>
-        //[Obsolete]
-        //private void saveToLocalCsv(IList<T> data, string code, DateTime date1, DateTime date2, string tag = null, bool appendMode = false)
-        //{
-        //    var path = _buildCacheDataFilePath(code, date1, date2, tag);
-        //    saveToLocalCsv(path, data, appendMode);
-        //}
-
-
 
         private static string _buildCacheDataFilePath(string code, DateTime date1, DateTime date2, string tag)
         {
