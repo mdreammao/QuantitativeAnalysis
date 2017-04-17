@@ -40,16 +40,7 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
             _RegisterComponents(builder);
             container = builder.Build();
 
-            //配置NLog日志模块
-            MyNLogConfig.Apply();
-
-            //初始化CacheData文件夹
-            var cdPath = ConfigurationManager.AppSettings["CacheData.RootPath"];
-            if (!Directory.Exists(cdPath)) Directory.CreateDirectory(cdPath);
-
-            //初始化交易日数据           
-            TradeDaysService tradeDaysService = container.Resolve<TradeDaysService>();
-            tradeDaysService.fetchFromLocalCsvOrWindAndSaveAndCache();
+            Initialization.__Initialize(container);
 
             log.Info("------ Platform初始化完成. ------");
         }

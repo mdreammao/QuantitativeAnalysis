@@ -17,10 +17,7 @@ namespace Tester
         {
 
             Platforms.Initialize(); //初始化
-            //DataAccessTests test = new DataAccessTests();
-            //Console.WriteLine("start..........");
-            //test.testFromLocalCSVRepo();
-            //Console.WriteLine("end.......");
+            //Initialization.__Initialize();
             (new LocalRunner()).run();
             Platforms.ShutDown();   //关闭
             //test();
@@ -36,12 +33,15 @@ namespace Tester
             list.Add(5);
             list.Add(4);
 
-            if (list.Count == 5) {
-                list.RemoveAt(0);
-                list.Insert(number-1, 6);
+            //if (list.Count == 5) {
+            //list.RemoveAt(0);
+            //list.Insert(number-1, 6);
+            //}
+            for (int i = 0; i < 5; i++) {
+                Console.WriteLine(list[i]);
             }
-            Console.WriteLine(list.Max());
-            Console.WriteLine(list.Min());
+            //Console.WriteLine(list[1]);
+            //Console.WriteLine(list[2]);
         }*/
     }
 
