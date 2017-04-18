@@ -29,7 +29,7 @@ namespace QuantitativeAnalysis.Utilities.Common
 
         public static string GetCacheDataDirPath()
         {
-            return ConfigurationManager.AppSettings["CacheData.RootPath"];
+            return ConfigurationManager.AppSettings["RootPath"]+ConfigurationManager.AppSettings["CacheData.RootPath"];
         }
         /// <summary>
         /// 根据key获取路径配置，列出所有匹配的文件路径，按文件名倒序排列
@@ -59,14 +59,14 @@ namespace QuantitativeAnalysis.Utilities.Common
         /// <returns>例如TradeDays_20160803.txt</returns>
         public static string GetCacheDataFilePath(string key, DateTime timestamp)
         {
-            return ConfigurationManager.AppSettings["CacheData.RootPath"]
+            return ConfigurationManager.AppSettings["RootPath"]+ConfigurationManager.AppSettings["CacheData.RootPath"]
                 + ConfigurationManager.AppSettings[key].Replace("{0}", timestamp.ToString("yyyyMMdd"));
         }
 
         public static string GetCacheDataFilePath(string key)
         {
             return
-                ConfigurationManager.AppSettings["CacheData.RootPath"]
+                ConfigurationManager.AppSettings["RootPath"]+ConfigurationManager.AppSettings["CacheData.RootPath"]
                + ConfigurationManager.AppSettings[key];
         }
 
