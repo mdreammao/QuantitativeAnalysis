@@ -22,7 +22,7 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
             MyNLogConfig.Apply();
 
             //初始化CacheData文件夹
-            var cdPath = ConfigurationManager.AppSettings["CacheData.RootPath"];
+            var cdPath = ConfigurationManager.AppSettings["RootPath"]+ConfigurationManager.AppSettings["CacheData.RootPath"];
             if (!Directory.Exists(cdPath)) Directory.CreateDirectory(cdPath);
 
             //初始化交易日数据           

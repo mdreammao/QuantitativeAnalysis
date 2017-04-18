@@ -14,7 +14,7 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
 {
     public class MyNLogConfig
     {
-        static string rootDir = ConfigurationManager.AppSettings["Log.RootPath"];
+        static string rootDir = ConfigurationManager.AppSettings["RootPath"]+ConfigurationManager.AppSettings["Log.RootPath"];
         const string conLayout = @"${date:format=yyyy-MM-dd HH\:mm\:ss} [${pad:padding=5:inner=${level:uppercase=true}}] ${message}${exception:format=toString}";
         const string conLayout1 = @"${date:format=yyyy-MM-dd HH\:mm\:ss} [${pad:padding=5:inner=${level:uppercase=true}}] ${logger:shortName=false}: ${message}";
         const string fileLayout = @"${date:format=yyyy-MM-dd HH\:mm\:ss} [${pad:padding=5:inner=${level:uppercase=true}}] ${logger:shortName=true}: ${message}${exception:format=toString}";

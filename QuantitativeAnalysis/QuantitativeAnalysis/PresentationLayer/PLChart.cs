@@ -295,7 +295,7 @@ namespace QuantitativeAnalysis.PresentationLayer
         public void SaveZed(string tag,string underlying,DateTime start,DateTime end,string netProfit,string anualSharp,string MDD)
         {
             //从配置文件读出来的“基本路径”
-            var fullPath= ConfigurationManager.AppSettings["CacheData.ResultPath"] + ConfigurationManager.AppSettings["CacheData.ImagePath"];
+            var fullPath= ConfigurationManager.AppSettings["RootPath"]+ConfigurationManager.AppSettings["CacheData.ResultPath"] + ConfigurationManager.AppSettings["CacheData.ImagePath"];
             
             //程序运行时间（作为文件夹的名称）
             var todayDate= Kit.ToInt_yyyyMMdd(DateTime.Now).ToString()+"_image";

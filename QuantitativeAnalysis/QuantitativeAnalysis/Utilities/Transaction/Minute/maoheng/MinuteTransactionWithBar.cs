@@ -219,6 +219,8 @@ namespace QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng
                         else if (volume < 0)
                         {
                             position0.ShortPosition.volume = volume;
+
+
                             position0.ShortPosition.totalCost = volume * (signal0.price - slip);
                             position0.ShortPosition.averagePrice = (signal0.price - slip);
                             position0.LongPosition = new PositionDetail();
