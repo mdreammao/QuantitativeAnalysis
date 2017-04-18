@@ -1,5 +1,4 @@
-﻿
-using QuantitativeAnalysis.DataAccessLayer.Common;
+﻿using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.ModelLayer.Option;
 using QuantitativeAnalysis.ServiceLayer.Core;
 using System;
@@ -9,12 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using WAPIWrapperCSharp;
 
-namespace QuantitativeAnalysis.DataAccessLayer.Option
+namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option
 {
-    public class OptionInfoRepository : BasicDataRepository<OptionInfo>
+    public class OptionInfoFromWindRepository : DataFromWindRepository<OptionInfo>
     {
+        public override List<OptionInfo> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
+        {
+            return readFromWind(code);
+        }
 
-        public List<OptionInfo> readFromWind(string underlying = "510050.SH", string market = "sse")
+        protected List<OptionInfo> readFromWind(string underlying = "510050.SH", string market = "sse")
         {
             DateTime timeOf50ETFDividend2016 = new DateTime(2016, 11, 29);//2016年50ETF分红时间
             double standardContractMultiplier = 10000;
@@ -58,11 +61,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.Option
                 items[i] = item;
             }
             return items;
-        }
-
-        protected override List<OptionInfo> readFromWind()
-        {
-            return readFromWind("510050.SH", "sse");
         }
     }
 }

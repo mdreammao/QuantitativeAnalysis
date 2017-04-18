@@ -75,6 +75,7 @@
     <Compile Include="DataAccessLayer\DataFromWind\Common\DataFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesDailyFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesMinuteFromWindRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromWind\Option\OptionInfoFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DataToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DayToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\RecordUtil.cs" />
@@ -83,7 +84,6 @@
     <Compile Include="DataAccessLayer\DataToLocalCSV\Futures\FuturesDailyToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Futures\FuturesMinuteToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Option\OptionRecordUtil.cs" />
-    <Compile Include="DataAccessLayer\Option\OptionInfoRepository.cs" />
     <Compile Include="ModelLayer\Common\Constants.cs" />
     <Compile Include="ModelLayer\Common\HoldingStatus.cs" />
     <Compile Include="ModelLayer\Common\KLine.cs" />
@@ -147,7 +147,6 @@
     <Folder Include="ApplicationLayer\StatisticalSystem\" />
     <Folder Include="DataAccessLayer\DataFromMSSQL\" />
     <Folder Include="DataAccessLayer\DataFromOtherSource\" />
-    <Folder Include="DataAccessLayer\DataFromWind\Option\" />
     <Folder Include="ModelLayer\DataModel\FinancialData\" />
     <Folder Include="ModelLayer\DataModel\MarketData\" />
   </ItemGroup>
