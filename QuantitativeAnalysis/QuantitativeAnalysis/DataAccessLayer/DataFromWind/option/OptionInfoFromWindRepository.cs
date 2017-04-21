@@ -14,7 +14,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option
     {
         public override List<OptionInfo> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return readFromWind(code);
+            return readFromWind("510050.SH", "sse");
         }
 
         protected List<OptionInfo> readFromWind(string underlying = "510050.SH", string market = "sse")

@@ -28,6 +28,10 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
             //初始化交易日数据           
             TradeDaysService tradeDaysService = container.Resolve<TradeDaysService>();
             tradeDaysService.fetchFromLocalCsvOrWindAndSaveAndCache();
+
+            
+
+
         }
 
         private static void _RegisterComponents(ContainerBuilder cb)

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Common
 {
-    public abstract class DataFromLocalCSVRepository<T> where T : Sequential, new()
+    public abstract class DataFromLocalCSVRepository<T> where T : new()
     {
         Logger log = LogManager.GetCurrentClassLogger();
         //public abstract List<T> readFromLocalCSV(String path);
