@@ -17,7 +17,8 @@ namespace Tester
         {
 
             Platforms.Initialize(); //初始化
-            //Initialization.__Initialize();
+            // LocalRunner runner = new LocalRunner();
+            // runner.run();
             (new LocalRunner()).run();
             Platforms.ShutDown();   //关闭
             //test();
@@ -50,8 +51,8 @@ namespace Tester
     {
         public void run()
         {
-            double[,] A = new double[2, 2] { { 3, -1 }, { 1, -3 } };
-            double[] b = new double[2] { 1, 1 };
+            //double[,] A = new double[2, 2] { { 3, -1 }, { 1, -3 } };
+            //double[] b = new double[2] { 1, 1 };
             //var x = MatrixInverse.getInverse(A, b);
             //readFromDataYes.getData("D:\\BTP\\OtherSource\\kline_dce_i.csv", "kline_dce_i.csv");
             DateTime now = DateTime.Now;
@@ -60,7 +61,7 @@ namespace Tester
             //StraddleWithHedge2 test = new StraddleWithHedge2(20150210, 20161206, 20);
             //var paras = new EfficiencyRatioWithParametersChoice(20150101, 20170218, "RB.SHF", 60, 20);
             //var test = new EfficiencyRatioWithSpecifiedParametres(20150101, 20170218, "RB.SHF", paras.parameters);
-            var test = new DualThrustTest(20150101, 20170218, "RB.SHF");
+            var test = new DualThrustTest(20150101, 20170509, "RB.SHF");
             DateTime now2 = DateTime.Now;
             Console.WriteLine(now2 - now);
         }

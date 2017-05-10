@@ -18,6 +18,9 @@ namespace QuantitativeAnalysis.ServiceLayer.Common
         {
             return tradeDayRepository.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration, appendMode, tag);
         }
-
+        public List<DateTime> fetchFromLocalCsvOnly(int localCsvExpiration = 180, bool appendMode = false, String tag = "TradeDays")
+        {
+            return tradeDayRepository.fetchFromLocalCsvOnly(localCsvExpiration, appendMode, tag);
+        }
     }
 }

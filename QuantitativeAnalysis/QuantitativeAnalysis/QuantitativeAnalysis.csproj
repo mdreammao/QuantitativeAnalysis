@@ -115,6 +115,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLayer\Common\TradeDaysService.cs" />
     <Compile Include="ServiceLayer\Core\Caches.cs" />
+    <Compile Include="ServiceLayer\Core\MySettings.cs" />
     <Compile Include="ServiceLayer\Core\Initialization.cs" />
     <Compile Include="ServiceLayer\Core\MyNLogConfig.cs" />
     <Compile Include="ServiceLayer\Core\Platforms.cs" />

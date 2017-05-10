@@ -141,6 +141,49 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             return data;
         }
 
+        public List<T> fetchFromLocalCsvOnly(int localCsvExpiration, bool appendMode = false, String tag = null)
+        {
+            if (tag == null) tag = typeof(T).Name;
+            List<T> data = null;
+            var filePathPattern = _buildCacheDataFilePath(tag, "*");
+            var todayFilePath = _buildCacheDataFilePath(tag, DateTime.Now.ToString("yyyyMMdd"));
+            var dirPath = Path.GetDirectoryName(filePathPattern);
+            var fileNamePattern = Path.GetFileName(filePathPattern);
+            var allFilePaths = Directory.EnumerateFiles(dirPath, fileNamePattern)
+                .OrderByDescending(fn => fn).ToList();
+
+            var lastestFilePath = (allFilePaths == null || allFilePaths.Count == 0) ? null : allFilePaths[0];
+            var daysdiff = FileUtils.GetCacheDataFileDaysPastTillToday(lastestFilePath);
+            //连接不上万德只能从本地CSV读取
+            log.Info("正在从本地csv文件{0}读取数据... ", lastestFilePath);
+            try
+            {
+
+                data = readFromLocalCsv(lastestFilePath);
+            }
+            catch (Exception e)
+            {
+                log.Error(e, "从本地csv文件读取数据失败！");
+            }
+
+
+
+            if (data != null)
+            {
+                //加载到内存缓存
+                Caches.put(tag, data);
+                log.Info("已将{0}加载到内存缓存.", tag);
+                log.Info("获取{0}数据列表成功.共{1}行.", tag, data.Count);
+            }
+            else
+            {
+                log.Warn("没有任何内容可以缓存！");
+            }
+
+            return data;
+        }
+
+
 
         /// <summary>
         /// 将数据以csv文件的形式保存到CacheData文件夹下的预定路径

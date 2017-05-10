@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WAPIWrapperCSharp;
 
 namespace QuantitativeAnalysis.ServiceLayer.Core
 {
@@ -19,17 +20,55 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
         public static void __Initialize(IContainer container)
         {
             //配置NLog日志模块
-            MyNLogConfig.Apply();
+            if (ConfigurationManager.AppSettings["ConsoleLog"] =="on")
+            {
+                MyNLogConfig.ApplyWithConsole();
+            }
+            else
+            {
+                MyNLogConfig.Apply();
+            }
 
             //初始化CacheData文件夹
             var cdPath = ConfigurationManager.AppSettings["RootPath"]+ConfigurationManager.AppSettings["CacheData.RootPath"];
             if (!Directory.Exists(cdPath)) Directory.CreateDirectory(cdPath);
 
+
+            //初始化wind连接
+            try
+            {
+                WindAPI wapi = Platforms.GetWindAPI();
+                Caches.WindConnection = true;
+            }
+            catch (Exception e)
+            {
+                log.Error(e, "Wind未连接！");
+            }
+            
+
+
             //初始化交易日数据           
             TradeDaysService tradeDaysService = container.Resolve<TradeDaysService>();
-            tradeDaysService.fetchFromLocalCsvOrWindAndSaveAndCache();
+            if (Caches.WindConnection==true)
+            {
+                tradeDaysService.fetchFromLocalCsvOrWindAndSaveAndCache();
+            }
+            else
+            {
+                tradeDaysService.fetchFromLocalCsvOnly();
+            }
 
-            
+            //初始化交易费用
+            switch (ConfigurationManager.AppSettings["FuturesSetting"])
+            {
+                case "common":
+                    MySettings.CommonSettings();
+                    break;
+                default:
+                    break;
+
+            }
+
 
 
         }

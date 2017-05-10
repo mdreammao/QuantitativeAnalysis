@@ -27,6 +27,9 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
         public static IContainer container;
         static Logger log = LogManager.GetCurrentClassLogger();
 
+        //万德API
+        private static WindAPI _windAPI;
+
         /// <summary>
         /// 整个应用的全局初始化
         /// </summary>
@@ -62,7 +65,7 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
         }
 
 
-        private static WindAPI _windAPI;
+        
         /// <summary>
         /// 获取可立即使用的WindAPI,如果处于未连接状态自动开启
         /// </summary>

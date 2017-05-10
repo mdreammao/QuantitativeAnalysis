@@ -34,6 +34,9 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
             return data;
         }
 
+        //------ 以下是一些常用的标记 ---------
+        public static bool WindConnection=false;
+        public static bool MSSQLConnection = false;
 
         //------ 以下是一些常用的变量get函数 ---------
         public static List<DateTime> getTradeDays()
