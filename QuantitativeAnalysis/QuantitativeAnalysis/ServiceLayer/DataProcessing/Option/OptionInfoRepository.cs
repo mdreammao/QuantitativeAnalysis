@@ -3,7 +3,7 @@ using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Option;
 using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option;
 using QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Option;
 using QuantitativeAnalysis.ModelLayer.Option;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Common;
 using System;
 using System.Collections.Generic;

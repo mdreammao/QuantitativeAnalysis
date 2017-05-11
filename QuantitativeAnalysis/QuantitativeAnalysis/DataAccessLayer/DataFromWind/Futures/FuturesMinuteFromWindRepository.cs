@@ -1,6 +1,6 @@
 ﻿using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.ModelLayer.Futures;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;

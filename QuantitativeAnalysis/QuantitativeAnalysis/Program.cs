@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using BackTestingPlatform.Strategies.Futures.XiaoLong;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Test;
 using System;
 using System.Collections.Generic;

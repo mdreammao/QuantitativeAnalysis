@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using Autofac;
 using QuantitativeAnalysis.ModelLayer.Futures;
 using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Common;

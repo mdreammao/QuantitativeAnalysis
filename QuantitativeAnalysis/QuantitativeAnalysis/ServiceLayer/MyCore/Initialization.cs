@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WAPIWrapperCSharp;
 
-namespace QuantitativeAnalysis.ServiceLayer.Core
+namespace QuantitativeAnalysis.ServiceLayer.MyCore
 {
     public class Initialization
     {
@@ -59,7 +59,7 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
             }
 
             //初始化交易费用
-            switch (ConfigurationManager.AppSettings["FuturesSetting"])
+            switch (ConfigurationManager.AppSettings["Setting"])
             {
                 case "common":
                     MySettings.CommonSettings();

@@ -1,4 +1,4 @@
-﻿using QuantitativeAnalysis.ServiceLayer.Core;
+﻿using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

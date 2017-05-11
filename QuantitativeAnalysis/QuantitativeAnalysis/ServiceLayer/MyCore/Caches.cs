@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.ServiceLayer.Core
+namespace QuantitativeAnalysis.ServiceLayer.MyCore
 {
     /// <summary>
     /// 作用于全局的变量缓存池

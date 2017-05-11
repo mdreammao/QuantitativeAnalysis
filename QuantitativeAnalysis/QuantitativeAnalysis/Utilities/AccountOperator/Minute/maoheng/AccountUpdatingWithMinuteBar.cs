@@ -8,7 +8,7 @@ using Autofac;
 using System.Text;
 using System.Threading.Tasks;
 using QuantitativeAnalysis.ModelLayer.Option;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Option;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.ModelLayer.Common;

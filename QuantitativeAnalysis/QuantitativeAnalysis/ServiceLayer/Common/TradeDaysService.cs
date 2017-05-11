@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using QuantitativeAnalysis.DataAccessLayer.Common;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

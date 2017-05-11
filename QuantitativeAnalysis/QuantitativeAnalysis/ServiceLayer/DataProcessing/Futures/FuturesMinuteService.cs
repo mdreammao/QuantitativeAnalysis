@@ -3,7 +3,7 @@ using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Futures;
 using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Futures;
 using QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Futures;
 using QuantitativeAnalysis.ModelLayer.Futures;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Common;
 using QuantitativeAnalysis.Utilities.Common;
 using System;

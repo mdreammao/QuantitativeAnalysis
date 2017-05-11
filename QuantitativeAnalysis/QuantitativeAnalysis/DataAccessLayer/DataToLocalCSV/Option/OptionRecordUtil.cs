@@ -1,7 +1,7 @@
 ﻿using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.Option;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

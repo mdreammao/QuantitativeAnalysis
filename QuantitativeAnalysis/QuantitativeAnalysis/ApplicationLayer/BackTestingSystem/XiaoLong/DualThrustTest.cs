@@ -3,7 +3,7 @@ using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.Futures;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.Utilities.Common;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +16,15 @@ using QuantitativeAnalysis.PresentationLayer;
 using QuantitativeAnalysis.Utilities.DataApplication;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Common;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures;
+using QuantitativeAnalysis.Utilities.Parameters;
 
 namespace BackTestingPlatform.Strategies.Futures.XiaoLong
 {
     public class DualThrustTest
     {
         //回测参数设置
-        private double initialCapital = 3000;
-        private double slipPoint = 0.3;
+        private double initialCapital = 5000;
+        private double slipPoint = 0;
         private DateTime startDate, endDate;
         //private double longLevel = 0.8, shortLevel = -0.8;
         private string underlying;
@@ -49,41 +50,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             this.endDate = Kit.ToDate(endDate);
             this.underlying = underlying;
             this.tradeDays = DateUtils.GetTradeDays(startDate, endDate);
-            if (underlying.IndexOf("RB") > -1) //螺纹钢手续费为每手万一，一手乘数为10
-            {
-                initialCapital = 3000;
-                slipPoint = initialCapital * 0.0001;
-            }
-            else if (underlying.IndexOf("RU") > -1)//橡胶的手续费为万分之0.45,一手乘数为10
-            {
-                initialCapital = 30000;
-                slipPoint = 2;//30000*0.000045=1.35约等于2
-            }
-            else if (underlying.IndexOf("A") > -1 && underlying.IndexOf("AU") < 0) //大豆的手续费为每手2块钱，一手乘数为10
-            {
-                initialCapital = 4000;
-                slipPoint = 0.2;
-            }
-            else if (underlying.IndexOf("M") > -1) //豆粕的手续费为每手1.5块钱，一手乘数为10
-            {
-                initialCapital = 3000;
-                slipPoint = 0.15;
-            }
-            else if (underlying.IndexOf("AU") > -1)
-            {
-                initialCapital = 300;
-                slipPoint = 0.02;
-            }
-            else if (underlying.IndexOf("NI") > -1)
-            {
-                initialCapital = 12000;
-                slipPoint = 1;
-            }
-            else if (underlying.IndexOf("IF") > -1)
-            {
-                initialCapital = 6000;
-                slipPoint = 1 * 6000 / 10000;
-            }
+            slipPoint = SlipPoint.getSlipRatio(underlying) * 3000;
             compute();
         }
 
@@ -108,10 +75,6 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             double k1 = 0.2;
             double k2 = -0.1;
             List<FuturesDaily> dailyData = new List<FuturesDaily>();
-            //dailyData = Platforms.container.Resolve<FuturesDailyRepository>().fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
-            //dailyData = Platforms.container.Resolve<SequentialByYearRepository<FuturesDaily>>().fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
-            //FuturesDailyService futuresDaily = new FuturesDailyService();
-            //dailyData = futuresDaily.fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
             dailyData = Platforms.container.Resolve<FuturesDailyService>().fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
 
             List<double> highList = new List<double>();

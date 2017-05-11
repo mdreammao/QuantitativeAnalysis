@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WAPIWrapperCSharp;
 
-namespace QuantitativeAnalysis.ServiceLayer.Core    
+namespace QuantitativeAnalysis.ServiceLayer.MyCore    
 {
     /// <summary>
     /// 提供一个全局可访问的类，存放各种重要变量

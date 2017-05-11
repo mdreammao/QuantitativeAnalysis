@@ -1,6 +1,6 @@
 ﻿using NLog;
 using QuantitativeAnalysis.DataAccessLayer.Common;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
