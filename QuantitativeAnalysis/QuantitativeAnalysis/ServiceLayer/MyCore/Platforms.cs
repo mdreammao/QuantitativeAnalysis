@@ -5,7 +5,7 @@ using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Futures;
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.Futures;
-using QuantitativeAnalysis.ServiceLayer.Common;
+using QuantitativeAnalysis.ServiceLayer.TradeDays;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

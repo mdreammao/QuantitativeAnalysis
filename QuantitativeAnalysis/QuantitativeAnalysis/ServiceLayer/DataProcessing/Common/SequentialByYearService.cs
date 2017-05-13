@@ -37,7 +37,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="options">其他选项</param>
         /// <returns></returns>
         //protected abstract List<T> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
-        public abstract List<T> getLocalCSVResult(String path);
+        public abstract List<T> getLocalCSVData(String path);
 
         /// <summary>
         /// 尝试从默认MSSQL源获取数据,可能会抛出异常
@@ -48,11 +48,11 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <param name="options">其他选项</param>
         /// <returns></returns>
-        protected abstract List<T> readFromDefaultMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
+        public abstract List<T> readFromDefaultMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
 
         /// <summary>
         /// 尝试从本地csv文件获取数据
-        public abstract List<T> getWindResult(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
+        public abstract List<T> getWindData(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
 
         public abstract void saveToLocalCSV(string path, IList<T> data, bool appendMode = false);
         
@@ -249,7 +249,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                     FuturesDailyFromLocalCSVRepository abc = new FuturesDailyFromLocalCSVRepository();
                     //result = abc.readFromLocalCSV(pathThisYear);
                     //result = Platforms.container.Resolve<FuturesDailyFromLocalCSVRepository>().readFromLocalCSV(pathThisYear);
-                    result = getLocalCSVResult(pathThisYear);
+                    result = getLocalCSVData(pathThisYear);
                 }
                 catch (Exception e)
                 {
@@ -263,7 +263,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                 log.Debug("尝试从Wind获取{0}...", code);
                 try
                 {
-                    result = getWindResult(code, date1, date2, tag, options);
+                    result = getWindData(code, date1, date2, tag, options);
                 }
                 catch (Exception e)
                 {

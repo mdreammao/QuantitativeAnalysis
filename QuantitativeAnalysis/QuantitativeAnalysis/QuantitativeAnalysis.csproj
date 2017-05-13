@@ -113,7 +113,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceLayer\Common\TradeDaysService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\TradeDays\TradeDaysService.cs" />
     <Compile Include="ServiceLayer\MyCore\Caches.cs" />
     <Compile Include="ServiceLayer\MyCore\MySettings.cs" />
     <Compile Include="ServiceLayer\MyCore\Initialization.cs" />
@@ -157,6 +157,7 @@
     <Folder Include="DataAccessLayer\DataFromOtherSource\" />
     <Folder Include="ModelLayer\DataModel\FinancialData\" />
     <Folder Include="ModelLayer\DataModel\MarketData\" />
+    <Folder Include="ServiceLayer\Common\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

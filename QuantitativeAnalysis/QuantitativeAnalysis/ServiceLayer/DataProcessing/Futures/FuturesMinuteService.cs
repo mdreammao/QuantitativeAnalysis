@@ -17,18 +17,18 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
     class FuturesMinuteService : SequentialByDayService<FuturesMinute>
     {
         const string PATH_KEY = "CacheData.Path.SequentialByDay";
-        public override List<FuturesMinute> getLocalCSVResult(string code, DateTime date, string tag = null)
+        public override List<FuturesMinute> readFromLocalCSVOnly(string code, DateTime date, string tag = null)
         {
             var path = _buildCacheDataFilePath(code, date, tag);
             return Platforms.container.Resolve<FuturesMinuteFromLocalCSVRepository>().readFromLocalCSV(path);
         }
 
-        public override List<FuturesMinute> getWindResult(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
+        public override List<FuturesMinute> readFromWindOnly(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
             return Platforms.container.Resolve<FuturesMinuteFromWindRepository>().readFromWind(code, dateStart, dateEnd, tag, options);
         }
 
-        protected override List<FuturesMinute> readFromDefaultMssql(string code, DateTime date)
+        public override List<FuturesMinute> readFromMSSQLOnly(string code, DateTime date)
         {
             throw new NotImplementedException();
         }

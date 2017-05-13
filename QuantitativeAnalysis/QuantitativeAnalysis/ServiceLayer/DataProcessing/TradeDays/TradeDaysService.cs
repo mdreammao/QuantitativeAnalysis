@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.ServiceLayer.Common
+namespace QuantitativeAnalysis.ServiceLayer.TradeDays
 {
     class TradeDaysService
     {
