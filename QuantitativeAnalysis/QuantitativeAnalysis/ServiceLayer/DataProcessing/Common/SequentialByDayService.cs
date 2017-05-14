@@ -52,7 +52,6 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public abstract List<T> readFromLocalCSVOnly(string code, DateTime date, string tag = null);
 
-
         /// <summary>
         /// 将从其他数据源读到的数据保存到本地CSV文件
         /// </summary>
@@ -166,6 +165,11 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
             List<T> result = null;
 
             result = fetchFromLocalCsv(code, date, tag);
+            if (Caches.WindConnection == false)
+            {
+                log.Error("无法连接Wind,无法从Wind获取失败！");
+                return result;
+            }
 
             if (result == null)
             {

@@ -37,7 +37,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="options">其他选项</param>
         /// <returns></returns>
         //protected abstract List<T> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
-        public abstract List<T> getLocalCSVData(String path);
+        public abstract List<T> readFromLocalCSVOnly(String path);
 
         /// <summary>
         /// 尝试从默认MSSQL源获取数据,可能会抛出异常
@@ -48,15 +48,21 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <param name="options">其他选项</param>
         /// <returns></returns>
-        public abstract List<T> readFromDefaultMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
+        public abstract List<T> readFromMSSQLOnly(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
 
         /// <summary>
         /// 尝试从本地csv文件获取数据
-        public abstract List<T> getWindData(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
+        public abstract List<T> readFromWindOnly(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
 
+        /// <summary>
+        /// 将其他来源的数据保存到本地CSV
+        /// </summary>
+        /// <param name="path">路径</param>
+        /// <param name="data">数据</param>
+        /// <param name="appendMode">添加模式</param>
         public abstract void saveToLocalCSV(string path, IList<T> data, bool appendMode = false);
         
-            /// <summary>
+        /// <summary>
         /// 尝试从本地csv文件，Wind获取数据。
         /// </summary>
         /// <param name="code">代码，如股票代码，期权代码</param>
@@ -67,7 +73,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public List<T> fetchFromLocalCsv(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return fetch1(code, dateStart, dateEnd, tag, options, true, false, false, false);
+            return fetchAll(code, dateStart, dateEnd, tag, options, true, false, false, false);
         }
 
         /// <summary>
@@ -81,7 +87,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public List<T> fetchFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return fetch1(code, dateStart, dateEnd, tag, options, false, true, false, false);
+            return fetchAll(code, dateStart, dateEnd, tag, options, false, true, false, false);
         }
 
         /// <summary>
@@ -95,7 +101,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public List<T> fetchFromMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return fetch1(code, dateStart, dateEnd, tag, options, false, false, true, false);
+            return fetchAll(code, dateStart, dateEnd, tag, options, false, false, true, false);
         }
 
         /// <summary>
@@ -109,8 +115,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public List<T> fetchFromLocalCsvOrWindAndSave(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return fetch1(code, dateStart, dateEnd, tag, options, true, true, false, true);
+            return fetchAll(code, dateStart, dateEnd, tag, options, true, true, false, true);
         }
+
         /// <summary>
         /// 先后尝试从本地csv文件，默认MSSQL数据库源获取数据。
         /// </summary>
@@ -122,7 +129,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public List<T> fetchFromLocalCsvOrMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return fetch1(code, dateStart, dateEnd, tag, options, true, false, true, false);
+            return fetchAll(code, dateStart, dateEnd, tag, options, true, false, true, false);
         }
 
         /// <summary>
@@ -136,7 +143,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public List<T> fetchFromLocalCsvOrMssqlAndSave(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return fetch1(code, dateStart, dateEnd, tag, options, true, false, true, true);
+            return fetchAll(code, dateStart, dateEnd, tag, options, true, false, true, true);
         }
 
         /// <summary>
@@ -151,7 +158,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <returns></returns>
         public List<T> fetchFromWindAndSave(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
-            return fetch1(code, dateStart, dateEnd, tag, options, false, true, false, true);
+            return fetchAll(code, dateStart, dateEnd, tag, options, false, true, false, true);
         }
 
         /// <summary>
@@ -168,7 +175,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="tryMssql0"></param>
         /// <param name="saveToCsv"></param>
         /// <returns></returns>
-        private List<T> fetch1(string code, DateTime dateStart, DateTime dateEnd, string tag, IDictionary<string, object> options, bool tryCsv, bool tryWind, bool tryMssql0, bool saveToCsv)
+        private List<T> fetchAll(string code, DateTime dateStart, DateTime dateEnd, string tag, IDictionary<string, object> options, bool tryCsv, bool tryWind, bool tryMssql0, bool saveToCsv)
         {
             int year0 = dateStart.Year, year2 = dateEnd.Year;
             List<T> result = new List<T>();
@@ -177,21 +184,21 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                 var year0_1231 = new DateTime(year0, 12, 31);
                 var year2_0101 = new DateTime(year2, 1, 1);
 
-                var year0all = fetch0(code, year0, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
+                var year0all = fetchOneYearOnly(code, year0, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
                 result.AddRange(SequentialUtils.GetRange(year0all, dateStart, year0_1231));
 
                 for (int y = year0 + 1; y < year2; y++)
                 {
-                    var year1all = fetch0(code, y, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
+                    var year1all = fetchOneYearOnly(code, y, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
                     result.AddRange(year1all);
                 }
 
-                var year2all = fetch0(code, year2, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
+                var year2all = fetchOneYearOnly(code, year2, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
                 result.AddRange(SequentialUtils.GetRange(year2all, year2_0101, dateEnd));
             }
             else
             {
-                var year0all = fetch0(code, year0, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
+                var year0all = fetchOneYearOnly(code, year0, tag, options, tryCsv, tryWind, tryMssql0, saveToCsv);
                 return SequentialUtils.GetRange(year0all, dateStart, dateEnd);
             }
 
@@ -210,7 +217,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="tryMssql0"></param>
         /// <param name="saveToCsv"></param>
         /// <returns></returns>
-        private List<T> fetch0(string code, int year, string tag, IDictionary<string, object> options, bool tryCsv, bool tryWind, bool tryMssql0, bool saveToCsv)
+        private List<T> fetchOneYearOnly(string code, int year, string tag, IDictionary<string, object> options, bool tryCsv, bool tryWind, bool tryMssql0, bool saveToCsv)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -249,7 +256,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                     FuturesDailyFromLocalCSVRepository abc = new FuturesDailyFromLocalCSVRepository();
                     //result = abc.readFromLocalCSV(pathThisYear);
                     //result = Platforms.container.Resolve<FuturesDailyFromLocalCSVRepository>().readFromLocalCSV(pathThisYear);
-                    result = getLocalCSVData(pathThisYear);
+                    result = readFromLocalCSVOnly(pathThisYear);
                 }
                 catch (Exception e)
                 {
@@ -257,13 +264,13 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                 }
                 if (result != null) csvHasData = true;
             }
-            if (result == null && tryWind)
+            if (result == null && tryWind && Caches.WindConnection==true)
             {
                 //尝试从Wind获取
                 log.Debug("尝试从Wind获取{0}...", code);
                 try
                 {
-                    result = getWindData(code, date1, date2, tag, options);
+                    result = readFromWindOnly(code, date1, date2, tag, options);
                 }
                 catch (Exception e)
                 {
@@ -276,7 +283,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                 {
                     //尝试从默认MSSQL源获取
                     log.Debug("尝试从默认MSSQL源获取{0}...", code);
-                    result = readFromDefaultMssql(code, date1, date2, tag, options);
+                    result = readFromMSSQLOnly(code, date1, date2, tag, options);
                 }
                 catch (Exception e)
                 {

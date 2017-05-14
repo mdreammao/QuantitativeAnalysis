@@ -21,7 +21,7 @@ namespace BackTestingPlatform.AccountOperator.Minute.maoheng
     {
         //初始化log组件
         static Logger log = LogManager.GetCurrentClassLogger();
-        static Dictionary<string, OptionInfo> optionInfoList = OptionInfoReform.ReformByCode(Platforms.container.Resolve<OptionInfoRepository>().fetchFromLocalCsvOrWindAndSaveAndCache(0));
+        static Dictionary<string, OptionInfo> optionInfoList = OptionInfoReform.ReformByCode(Platforms.container.Resolve<OptionInfoService>().fetchFromLocalCsvOrWindAndSaveAndCache(0));
         public static void computeAccount(ref BasicAccount myAccount, SortedDictionary<DateTime, Dictionary<string, PositionsWithDetail>> positions, DateTime now, int nowIndex, Dictionary<string, List<KLine>> data)
         {
             myAccount.time = now;

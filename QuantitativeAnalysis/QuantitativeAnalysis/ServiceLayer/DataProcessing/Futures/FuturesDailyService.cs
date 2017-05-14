@@ -15,12 +15,12 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
 {
     class FuturesDailyService : SequentialByYearService<FuturesDaily>
     {
-        public override List<FuturesDaily> getLocalCSVData(String path)
+        public override List<FuturesDaily> readFromLocalCSVOnly(String path)
         {
             return Platforms.container.Resolve<FuturesDailyFromLocalCSVRepository>().readFromLocalCSV(path);
         }
 
-        public override List<FuturesDaily> getWindData(string code, DateTime date1, DateTime date2, string tag = null, IDictionary<string, object> options = null)
+        public override List<FuturesDaily> readFromWindOnly(string code, DateTime date1, DateTime date2, string tag = null, IDictionary<string, object> options = null)
         {
             return Platforms.container.Resolve<FuturesDailyFromWindRepository>().readFromWind(code, date1, date2, tag, options);
         }
@@ -30,7 +30,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
             Platforms.container.Resolve<FuturesDailyToLocalCSVRepository>().saveToLocalCsv(path, data, appendMode);
         }
 
-        public override List<FuturesDaily> readFromDefaultMssql(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
+        public override List<FuturesDaily> readFromMSSQLOnly(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
             throw new NotImplementedException();
         }

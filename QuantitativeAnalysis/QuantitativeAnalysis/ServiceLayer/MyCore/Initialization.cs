@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using NLog;
+using QuantitativeAnalysis.ServiceLayer.DataProcessing.Option;
 using QuantitativeAnalysis.ServiceLayer.TradeDays;
 using System;
 using System.Collections.Generic;
@@ -69,7 +70,15 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
 
             }
 
-
+            switch (ConfigurationManager.AppSettings["OptionInfoRecord"])
+            {
+                case "on":
+                    OptionInfoService optionInfoService = container.Resolve<OptionInfoService>();
+                    optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache();
+                    break;
+                default:
+                    break;
+            }
 
         }
 

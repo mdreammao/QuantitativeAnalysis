@@ -27,6 +27,10 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option
                 marketStr = ".SH";
             }
             WindAPI wapi = Platforms.GetWindAPI();
+            if (Caches.WindConnection==false)
+            {
+                return null;
+            }
             WindData wd = wapi.wset("optioncontractbasicinfo", "exchange=" + market + ";windcode=" + underlying + ";status=all");
             int len = wd.codeList.Length;
             int fieldLen = wd.fieldList.Length;

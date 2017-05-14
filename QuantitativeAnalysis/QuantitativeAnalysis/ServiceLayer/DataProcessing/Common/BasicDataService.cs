@@ -17,7 +17,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         static Logger log = LogManager.GetCurrentClassLogger();
 
         public abstract List<T> readFromWind();
+
         public abstract void saveToLocalCsvFile(IList<T> data, string path, bool appendMode = false, string tag = null);
+
         public abstract List<T> readFromLocalCsv(String path);
         /// <summary>
         /// 
@@ -25,7 +27,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="appendMode">是否为append模式，否则为new模式</param>
         /// <param name="localCsvExpiration">CacheData中本地csv文件的保鲜期（天数）</param>
         /// <param name="tag"></param>
-        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration, bool appendMode = false, String tag = null)
+        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration=10, bool appendMode = false, String tag = null)
         {
 
             if (tag == null) tag = typeof(T).Name;
@@ -39,7 +41,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
 
             var lastestFilePath = (allFilePaths == null || allFilePaths.Count == 0) ? null : allFilePaths[0];
             var daysdiff = FileUtils.GetCacheDataFileDaysPastTillToday(lastestFilePath);
-            if (daysdiff > localCsvExpiration)
+            if (daysdiff > localCsvExpiration && Caches.WindConnection == true)
             {   //CacheData太旧，需要远程更新，然后保存到本地CacheData目录
                 var txt = (daysdiff == int.MaxValue) ? "不存在" : "已过期" + daysdiff + "天";
                 log.Info("本地csv文件{0}，尝试Wind读取新数据...", txt);

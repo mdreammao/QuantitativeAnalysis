@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 {
-    class OptionInfoRepository : BasicDataService<OptionInfo>
+    class OptionInfoService : BasicDataService<OptionInfo>
     {
         public override List<OptionInfo> readFromLocalCsv(string path)
         {
