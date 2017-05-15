@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Option
 {
-    public class OptionRecordUtil
+    public class OptionRecordUtility_50ETF
     {
         public static List<HoldingStatus> Transfer(SortedDictionary<DateTime, Dictionary<string, PositionsWithDetail>> positions)
         {
-            List<OptionInfo> optionInfo = (List<OptionInfo>)Caches.get("OptionInfo");
+            List<OptionInfo> optionInfo = (List<OptionInfo>)Caches.get("50ETFOptionInfo");
             List<HoldingStatus> myRecord = new List<HoldingStatus>();
             var positionShot = positions.Last().Value;
             foreach (var item in positionShot)

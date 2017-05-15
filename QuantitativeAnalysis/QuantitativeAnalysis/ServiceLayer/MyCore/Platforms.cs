@@ -72,13 +72,24 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
         /// <returns></returns>
         public static WindAPI GetWindAPI()
         {
+
             if (_windAPI == null)
             {
                 _windAPI = new WindAPI();
             }
-            if (!_windAPI.isconnected())
+
+            if (!_windAPI.isconnected() && Caches.WindConnectionTry==false)
             {
-                _windAPI.start();
+               int myStart=_windAPI.start();
+                Caches.WindConnectionTry = true;    
+                if (myStart==0)
+                {
+                    Caches.WindConnection = true;
+                }
+                else
+                {
+                    Caches.WindConnection = false;
+                }
             }
             return _windAPI;
         }

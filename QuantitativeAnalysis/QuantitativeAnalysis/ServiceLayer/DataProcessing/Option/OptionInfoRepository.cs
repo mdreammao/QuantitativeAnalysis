@@ -20,9 +20,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
             return Platforms.container.Resolve<OptionInfoFromLocalCSVRepository>().readFromLocalCSV(path);
         }
 
-        public override List<OptionInfo> readFromWind()
+        public override List<OptionInfo> readFromWind(string code,DateTime startDate,DateTime endDate)
         {
-            return Platforms.container.Resolve<OptionInfoFromWindRepository>().readFromWind(null,new DateTime(),new DateTime(),null,null);
+            return Platforms.container.Resolve<OptionInfoFromWindRepository>().readFromWind(code,startDate,endDate,null,null);
         }
 
         public override void saveToLocalCsvFile(IList<OptionInfo> data, string path, bool appendMode = false, string tag = null)

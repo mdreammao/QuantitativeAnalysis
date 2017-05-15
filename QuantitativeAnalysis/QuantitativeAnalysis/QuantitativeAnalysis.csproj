@@ -126,7 +126,7 @@
     <Compile Include="ServiceLayer\DataProcessing\Futures\FuturesMinuteService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Option\OptionInfoRepository.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Test\DataAccessTests.cs" />
-    <Compile Include="Utilities\AccountOperator\Minute\maoheng\AccountUpdatingWithMinuteBar.cs" />
+    <Compile Include="Utilities\AccountOperator\Minute\AccountUpdatingWithMinuteBar.cs" />
     <Compile Include="Utilities\Common\CsvFileUtils.cs" />
     <Compile Include="Utilities\Common\DataTableUtils.cs" />
     <Compile Include="Utilities\Common\DateUtils.cs" />
@@ -140,8 +140,8 @@
     <Compile Include="Utilities\Option\OptionInfoReform.cs" />
     <Compile Include="Utilities\Option\OptionMargin.cs" />
     <Compile Include="Utilities\Parameters\SlipPoint.cs" />
-    <Compile Include="Utilities\Transaction\Minute\maoheng\MinuteCloseAllWithBar.cs" />
-    <Compile Include="Utilities\Transaction\Minute\maoheng\MinuteTransactionWithBar.cs" />
+    <Compile Include="Utilities\Transaction\Minute\MinuteCloseAllWithBar.cs" />
+    <Compile Include="Utilities\Transaction\Minute\MinuteTransactionWithBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

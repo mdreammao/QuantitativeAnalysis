@@ -15,13 +15,13 @@ using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.Utilities.Futures;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Option;
 
-namespace BackTestingPlatform.AccountOperator.Minute.maoheng
+namespace QuantitativeAnalysis.Utilities.AccountOperator.Minute
 {
     public class AccountUpdatingWithMinuteBar
     {
         //初始化log组件
         static Logger log = LogManager.GetCurrentClassLogger();
-        static Dictionary<string, OptionInfo> optionInfoList = OptionInfoReform.ReformByCode(Platforms.container.Resolve<OptionInfoService>().fetchFromLocalCsvOrWindAndSaveAndCache(0));
+        static Dictionary<string, OptionInfo> optionInfoList = OptionInfoReform.ReformByCode(Platforms.container.Resolve<OptionInfoService>().fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration:0,tag:"50ETFOptionInfo"));
         public static void computeAccount(ref BasicAccount myAccount, SortedDictionary<DateTime, Dictionary<string, PositionsWithDetail>> positions, DateTime now, int nowIndex, Dictionary<string, List<KLine>> data)
         {
             myAccount.time = now;

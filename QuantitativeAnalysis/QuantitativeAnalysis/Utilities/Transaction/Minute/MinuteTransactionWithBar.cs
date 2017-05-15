@@ -1,5 +1,5 @@
 ﻿
-using BackTestingPlatform.AccountOperator.Minute.maoheng;
+using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.ModelLayer.SignalModel;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng
+namespace QuantitativeAnalysis.Utilities.AccountOperator.Minute
 {
     /// <summary>
     /// 根据分钟K线图来判断成交。具体的，如果开多仓，开仓价格必须大于等于K线中的最低价格，如果开空仓，开仓价格必须小于等于K线中的最高价格。

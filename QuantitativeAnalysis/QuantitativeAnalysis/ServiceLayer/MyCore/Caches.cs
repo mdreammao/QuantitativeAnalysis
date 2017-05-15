@@ -35,7 +35,8 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
         }
 
         //------ 以下是一些常用的标记 ---------
-        public static bool WindConnection=false;
+        public static bool WindConnection = false;
+        public static bool WindConnectionTry = false;
         public static bool MSSQLConnection = false;
 
         //------ 以下是一些常用的变量get函数 ---------

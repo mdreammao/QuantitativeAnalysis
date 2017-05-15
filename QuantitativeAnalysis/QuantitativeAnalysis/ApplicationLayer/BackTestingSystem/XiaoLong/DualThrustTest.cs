@@ -10,13 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng;
+using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 using QuantitativeAnalysis.ModelLayer.SignalModel;
 using QuantitativeAnalysis.PresentationLayer;
 using QuantitativeAnalysis.Utilities.DataApplication;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Common;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures;
 using QuantitativeAnalysis.Utilities.Parameters;
+using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 
 namespace BackTestingPlatform.Strategies.Futures.XiaoLong
 {
@@ -224,7 +225,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                 if (dataOnlyToday.Count > 0)
                 {
                     //更新当日属性信息
-                    AccountOperator.Minute.maoheng.AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, dataOnlyToday.Last().time, dataOnlyToday.Count() - 1, dataToday);
+                    AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, dataOnlyToday.Last().time, dataOnlyToday.Count() - 1, dataToday);
 
                     //记录历史仓位信息
                     accountHistory.Add(new BasicAccount(myAccount.time, myAccount.totalAssets, myAccount.freeCash, myAccount.positionValue, myAccount.margin, myAccount.initialAssets));

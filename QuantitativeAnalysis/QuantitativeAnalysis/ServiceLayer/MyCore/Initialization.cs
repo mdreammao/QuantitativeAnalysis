@@ -39,7 +39,6 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             try
             {
                 WindAPI wapi = Platforms.GetWindAPI();
-                Caches.WindConnection = true;
             }
             catch (Exception e)
             {
@@ -70,15 +69,25 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
 
             }
 
-            switch (ConfigurationManager.AppSettings["OptionInfoRecord"])
+            switch (ConfigurationManager.AppSettings["50ETFOptionInfoRecord"])
             {
                 case "on":
                     OptionInfoService optionInfoService = container.Resolve<OptionInfoService>();
-                    optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache();
+                    optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(tag:"50ETFOptionInfo",code:"510050.SH");
                     break;
                 default:
                     break;
             }
+
+            //switch (ConfigurationManager.AppSettings["CommodityOptionInfoRecord"])
+            //{
+            //    case "on":
+            //        OptionInfoService optionInfoService = container.Resolve<OptionInfoService>();
+            //        optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(tag:"MDCEOptionInfo",code:"M1707.DCE",startDate:new DateTime(2017,05,15),endDate:new DateTime(2017,5,15));
+            //        break;
+            //    default:
+            //        break;
+            //}
 
         }
 

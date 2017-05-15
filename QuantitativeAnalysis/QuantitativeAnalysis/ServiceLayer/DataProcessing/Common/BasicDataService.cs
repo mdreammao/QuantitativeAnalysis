@@ -16,7 +16,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         const string PATH_KEY = "CacheData.Path.Basic";
         static Logger log = LogManager.GetCurrentClassLogger();
 
-        public abstract List<T> readFromWind();
+        public abstract List<T> readFromWind(string code,DateTime startDate,DateTime endDate);
 
         public abstract void saveToLocalCsvFile(IList<T> data, string path, bool appendMode = false, string tag = null);
 
@@ -27,7 +27,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="appendMode">是否为append模式，否则为new模式</param>
         /// <param name="localCsvExpiration">CacheData中本地csv文件的保鲜期（天数）</param>
         /// <param name="tag"></param>
-        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration=10, bool appendMode = false, String tag = null)
+        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration=5, bool appendMode = false, String tag = null, string code=null, DateTime startDate=new DateTime(), DateTime endDate=new DateTime())
         {
 
             if (tag == null) tag = typeof(T).Name;
@@ -47,7 +47,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                 log.Info("本地csv文件{0}，尝试Wind读取新数据...", txt);
                 try
                 {
-                    data = readFromWind();
+                    data = readFromWind(code,startDate,endDate);
                 }
                 catch (Exception e)
                 {

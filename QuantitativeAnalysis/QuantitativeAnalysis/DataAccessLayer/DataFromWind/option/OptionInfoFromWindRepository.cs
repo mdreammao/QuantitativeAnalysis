@@ -1,6 +1,7 @@
 ﻿using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.ModelLayer.Option;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
+using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,42 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option
 {
     public class OptionInfoFromWindRepository : DataFromWindRepository<OptionInfo>
     {
-        public override List<OptionInfo> readFromWind(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
+        public override List<OptionInfo> readFromWind(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)
         {
-            return readFromWind("510050.SH", "sse");
+            switch (code.ToUpper())
+            {
+                case "510050.SH":
+                    return readFromWindOnly50ETFOption("510050.SH", "sse");
+                default:
+                    break;
+            }
+            return readFromWindOnlyCommonOption(code.ToUpper(), startDate, endDate);
+        }
+        
+        protected List<OptionInfo> readFromWindOnlyCommonOption(string underlying,DateTime startDate,DateTime endDate)
+        {
+            if (Caches.WindConnection == false)
+            {
+                return null;
+            }
+            underlying = underlying.ToUpper();
+            var tradeDays = DateUtils.GetTradeDays(startDate, endDate);
+            WindAPI wapi = Platforms.GetWindAPI();
+            List<OptionInfo> items = new List<OptionInfo>();
+            foreach (var date in tradeDays)
+            {
+                string dateStr = date.ToString("yyyy-MM-dd");
+                WindData wd = wapi.wset("optionchain", "date=" + dateStr + ";us_code=" + underlying + ";option_var=全部;call_put=全部");
+                int len = wd.codeList.Length;
+                int fieldLen = wd.fieldList.Length;
+                //未完待续
+            }
+           
+           
+            return items;
         }
 
-        protected List<OptionInfo> readFromWind(string underlying = "510050.SH", string market = "sse")
+        protected List<OptionInfo> readFromWindOnly50ETFOption(string underlying = "510050.SH", string market = "sse")
         {
             DateTime timeOf50ETFDividend2016 = new DateTime(2016, 11, 29);//2016年50ETF分红时间
             double standardContractMultiplier = 10000;
@@ -26,11 +57,11 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option
             {
                 marketStr = ".SH";
             }
-            WindAPI wapi = Platforms.GetWindAPI();
-            if (Caches.WindConnection==false)
+            if (Caches.WindConnection == false)
             {
                 return null;
             }
+            WindAPI wapi = Platforms.GetWindAPI();
             WindData wd = wapi.wset("optioncontractbasicinfo", "exchange=" + market + ";windcode=" + underlying + ";status=all");
             int len = wd.codeList.Length;
             int fieldLen = wd.fieldList.Length;
