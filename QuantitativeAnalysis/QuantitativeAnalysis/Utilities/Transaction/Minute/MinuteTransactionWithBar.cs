@@ -276,7 +276,7 @@ namespace QuantitativeAnalysis.Utilities.AccountOperator.Minute
             }
             //更新持仓的头寸信息
             if (positions.Count != 0)
-                AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, now, nowIndex, data);
+               AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, now, nowIndex, data);
             return tradingFeedback;
         }
     }

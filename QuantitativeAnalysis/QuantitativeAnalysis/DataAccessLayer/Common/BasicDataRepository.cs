@@ -62,13 +62,13 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         /// <param name="appendMode">是否为append模式，否则为new模式</param>
         /// <param name="localCsvExpiration">CacheData中本地csv文件的保鲜期（天数）</param>
         /// <param name="tag"></param>
-        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration, bool appendMode = false, String tag = null)
+        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration, bool appendMode = false, String tag = null,string code=null)
         {
 
             if (tag == null) tag = typeof(T).Name;
             List<T> data = null;
-            var filePathPattern = _buildCacheDataFilePath(tag, "*");
-            var todayFilePath = _buildCacheDataFilePath(tag, DateTime.Now.ToString("yyyyMMdd"));
+            var filePathPattern = _buildCacheDataFilePath(tag,code, "*");
+            var todayFilePath = _buildCacheDataFilePath(tag, code,DateTime.Now.ToString("yyyyMMdd"));
             var dirPath = Path.GetDirectoryName(filePathPattern);
             var fileNamePattern = Path.GetFileName(filePathPattern);
             var allFilePaths = Directory.EnumerateFiles(dirPath, fileNamePattern)
@@ -141,12 +141,12 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             return data;
         }
 
-        public List<T> fetchFromLocalCsvOnly(int localCsvExpiration, bool appendMode = false, String tag = null)
+        public List<T> fetchFromLocalCsvOnly(int localCsvExpiration, bool appendMode = false, String tag = null,string code=null)
         {
             if (tag == null) tag = typeof(T).Name;
             List<T> data = null;
-            var filePathPattern = _buildCacheDataFilePath(tag, "*");
-            var todayFilePath = _buildCacheDataFilePath(tag, DateTime.Now.ToString("yyyyMMdd"));
+            var filePathPattern = _buildCacheDataFilePath(tag, code,"*");
+            var todayFilePath = _buildCacheDataFilePath(tag, code,DateTime.Now.ToString("yyyyMMdd"));
             var dirPath = Path.GetDirectoryName(filePathPattern);
             var fileNamePattern = Path.GetFileName(filePathPattern);
             var allFilePaths = Directory.EnumerateFiles(dirPath, fileNamePattern)
@@ -212,12 +212,21 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
 
         }
 
-        private static string _buildCacheDataFilePath(string tag, string date)
+        private static string _buildCacheDataFilePath(string tag, string code,string date)
         {
             if (tag == null) tag = typeof(T).ToString();
+            if (tag=="TradeDays")
+            {
+                return FileUtils.GetCacheDataFilePath("CacheData.Path.TradeDays", new Dictionary<string, string>
+                {
+                    ["{tag}"] = tag,
+                    ["{date}"] = date
+                });
+            }
             return FileUtils.GetCacheDataFilePath(PATH_KEY, new Dictionary<string, string>
             {
                 ["{tag}"] = tag,
+                ["{code}"]=code,
                 ["{date}"] = date
             });
         }

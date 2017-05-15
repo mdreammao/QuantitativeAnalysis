@@ -14,7 +14,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Option
     {
         public static List<HoldingStatus> Transfer(SortedDictionary<DateTime, Dictionary<string, PositionsWithDetail>> positions)
         {
-            List<OptionInfo> optionInfo = (List<OptionInfo>)Caches.get("50ETFOptionInfo");
+            List<OptionInfo> optionInfo = (List<OptionInfo>)Caches.get("OptionInfo_510050.SH");
             List<HoldingStatus> myRecord = new List<HoldingStatus>();
             var positionShot = positions.Last().Value;
             foreach (var item in positionShot)

@@ -73,7 +73,7 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             {
                 case "on":
                     OptionInfoService optionInfoService = container.Resolve<OptionInfoService>();
-                    optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(tag:"50ETFOptionInfo",code:"510050.SH");
+                    optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(tag:"OptionInfo",code:"510050.SH");
                     break;
                 default:
                     break;

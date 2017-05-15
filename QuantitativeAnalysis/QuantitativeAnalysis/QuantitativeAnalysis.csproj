@@ -124,8 +124,7 @@
     <Compile Include="ServiceLayer\DataProcessing\Common\SequentialByYearService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Futures\FuturesDailyService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Futures\FuturesMinuteService.cs" />
-    <Compile Include="ServiceLayer\DataProcessing\Option\OptionInfoRepository.cs" />
-    <Compile Include="ServiceLayer\DataProcessing\Test\DataAccessTests.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Option\OptionInfoService.cs" />
     <Compile Include="Utilities\AccountOperator\Minute\AccountUpdatingWithMinuteBar.cs" />
     <Compile Include="Utilities\Common\CsvFileUtils.cs" />
     <Compile Include="Utilities\Common\DataTableUtils.cs" />

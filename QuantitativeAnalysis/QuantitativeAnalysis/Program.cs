@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using BackTestingPlatform.Strategies.Futures.XiaoLong;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
-using QuantitativeAnalysis.ServiceLayer.DataProcessing.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,26 +23,6 @@ namespace Tester
             //test();
 
         }
-
-        /*static void test() {
-            int number = 5;
-            List<double> list = new List<double>();
-            list.Add(2);
-            list.Add(3);
-            list.Add(1);
-            list.Add(5);
-            list.Add(4);
-
-            //if (list.Count == 5) {
-            //list.RemoveAt(0);
-            //list.Insert(number-1, 6);
-            //}
-            for (int i = 0; i < 5; i++) {
-                Console.WriteLine(list[i]);
-            }
-            //Console.WriteLine(list[1]);
-            //Console.WriteLine(list[2]);
-        }*/
     }
 
 

@@ -32,9 +32,13 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
 
             if (tag == null) tag = typeof(T).Name;
             List<T> data = null;
-            var filePathPattern = _buildCacheDataFilePath(tag, "*");
-            var todayFilePath = _buildCacheDataFilePath(tag, DateTime.Now.ToString("yyyyMMdd"));
+            var filePathPattern = _buildCacheDataFilePath(tag,code, "*");
+            var todayFilePath = _buildCacheDataFilePath(tag, code,DateTime.Now.ToString("yyyyMMdd"));
             var dirPath = Path.GetDirectoryName(filePathPattern);
+            if (Directory.Exists(dirPath) == false)
+            {
+                Directory.CreateDirectory(dirPath);
+            }
             var fileNamePattern = Path.GetFileName(filePathPattern);
             var allFilePaths = Directory.EnumerateFiles(dirPath, fileNamePattern)
                 .OrderByDescending(fn => fn).ToList();
@@ -94,6 +98,10 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
             if (data != null)
             {
                 //加载到内存缓存
+                if (tag!="TradeDays")
+                {
+                    tag = tag + '_' + code;
+                }
                 Caches.put(tag, data);
                 log.Info("已将{0}加载到内存缓存.", tag);
                 log.Info("获取{0}数据列表成功.共{1}行.", tag, data.Count);
@@ -106,12 +114,21 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
             return data;
         }
 
-        private static string _buildCacheDataFilePath(string tag, string date)
+        private static string _buildCacheDataFilePath(string tag, string code, string date)
         {
             if (tag == null) tag = typeof(T).ToString();
+            if (tag == "TradeDays")
+            {
+                return FileUtils.GetCacheDataFilePath("CacheData.Path.TradeDays", new Dictionary<string, string>
+                {
+                    ["{tag}"] = tag,
+                    ["{date}"] = date
+                });
+            }
             return FileUtils.GetCacheDataFilePath(PATH_KEY, new Dictionary<string, string>
             {
                 ["{tag}"] = tag,
+                ["{code}"] = code,
                 ["{date}"] = date
             });
         }
