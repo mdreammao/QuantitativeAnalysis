@@ -22,7 +22,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 
         public override List<OptionInfo> readFromWind(string code,DateTime startDate,DateTime endDate)
         {
-            return Platforms.container.Resolve<OptionInfoFromWindRepository>().readFromWind(code,startDate,endDate,null,null);
+            return Platforms.container.Resolve<OptionInfoFromWindRepository>().readFromWindEntirely(code,null,null);
         }
 
         public override void saveToLocalCsvFile(IList<OptionInfo> data, string path, bool appendMode = false, string tag = null)

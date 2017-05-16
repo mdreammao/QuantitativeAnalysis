@@ -79,15 +79,15 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
                     break;
             }
 
-            //switch (ConfigurationManager.AppSettings["CommodityOptionInfoRecord"])
-            //{
-            //    case "on":
-            //        OptionInfoService optionInfoService = container.Resolve<OptionInfoService>();
-            //        optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(tag:"MDCEOptionInfo",code:"M1707.DCE",startDate:new DateTime(2017,05,15),endDate:new DateTime(2017,5,15));
-            //        break;
-            //    default:
-            //        break;
-            //}
+            switch (ConfigurationManager.AppSettings["CommodityOptionInfoRecord"])
+            {
+                case "on":
+                    OptionInfoDailyService optionInfoService = container.Resolve<OptionInfoDailyService>();  
+                    optionInfoService.fetchFromLocalCsvOrWindAndSave(tag: null, code: "M1707.DCE",date: new DateTime(2017, 05, 15));
+                    break;
+                default:
+                    break;
+            }
 
         }
 

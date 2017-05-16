@@ -23,7 +23,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
     /// <typeparam name="T"></typeparam>
     public abstract class SequentialByDayService<T>  where T : Sequential, new()
     {
-       // const string PATH_KEY = "CacheData.Path.SequentialByDay";
+        /// <summary>
+        /// 保存日志记录的变量
+        /// </summary>
         static Logger log = LogManager.GetCurrentClassLogger();
 
         /// <summary>

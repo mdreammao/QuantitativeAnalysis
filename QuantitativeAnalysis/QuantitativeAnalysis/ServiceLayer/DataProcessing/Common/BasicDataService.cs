@@ -21,6 +21,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         public abstract void saveToLocalCsvFile(IList<T> data, string path, bool appendMode = false, string tag = null);
 
         public abstract List<T> readFromLocalCsv(String path);
+
         /// <summary>
         /// 
         /// </summary>
