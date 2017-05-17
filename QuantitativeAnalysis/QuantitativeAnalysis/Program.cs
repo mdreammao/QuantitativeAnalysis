@@ -40,7 +40,7 @@ namespace Tester
             //StraddleWithHedge2 test = new StraddleWithHedge2(20150210, 20161206, 20);
             //var paras = new EfficiencyRatioWithParametersChoice(20150101, 20170218, "RB.SHF", 60, 20);
             //var test = new EfficiencyRatioWithSpecifiedParametres(20150101, 20170218, "RB.SHF", paras.parameters);
-            var test = new DualThrustTest(20150101, 20150516, "RB.SHF");
+            var test = new DualThrustTest(20150101, 20170516, "RB.SHF");
             DateTime now2 = DateTime.Now;
             Console.WriteLine(now2 - now);
         }

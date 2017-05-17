@@ -243,7 +243,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             }
 
             ChartStatistics chart = new ChartStatistics();
-            chart.showChart(accountHistory, positions, benchmark, underlying, initialCapital, netValue, startDate, endDate, frequency);
+            chart.showChart(accountHistory, positions, benchmark, underlying, initialCapital, netValue, startDate, endDate, frequency,GetType().FullName);
 
         }
 

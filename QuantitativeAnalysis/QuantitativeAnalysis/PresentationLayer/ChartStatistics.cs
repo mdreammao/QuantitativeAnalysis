@@ -16,7 +16,7 @@ namespace QuantitativeAnalysis.PresentationLayer
     class ChartStatistics
     {
         public void showChart(List<BasicAccount> accountHistory, SortedDictionary<DateTime, Dictionary<string, PositionsWithDetail>> positions,
-            List<double> benchmark, string underlying, double initialCapital, List<NetValue> netValue, DateTime startDate, DateTime endDate, int frequency) {
+            List<double> benchmark, string underlying, double initialCapital, List<NetValue> netValue, DateTime startDate, DateTime endDate, int frequency,string tag) {
             //策略绩效统计及输出
             PerformanceStatisics myStgStats = new PerformanceStatisics();
             //TODO:了解该函数中计算出了那些评价标准
@@ -27,15 +27,15 @@ namespace QuantitativeAnalysis.PresentationLayer
             line.Add("NetWorth", netWorth);
             string recordName = underlying.Replace(".", "_") + "_DH_" /*+ "numbers_" + numbers.ToString()*/ + "_frequency_" + frequency.ToString();
             //记录净值数据
-            RecordUtil.recordToCsv(accountHistory, GetType().FullName, "account", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
-            RecordUtil.recordToCsv(netValue, GetType().FullName, "netvalue", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
+            RecordUtil.recordToCsv(accountHistory, tag, "account", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
+            RecordUtil.recordToCsv(netValue, tag, "netvalue", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
             //记录持仓变化
             var positionStatus = OptionRecordUtility_50ETF.Transfer(positions);
-            RecordUtil.recordToCsv(positionStatus, GetType().FullName, "positions", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
+            RecordUtil.recordToCsv(positionStatus, tag, "positions", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
             //记录统计指标
             var performanceList = new List<PerformanceStatisics>();
             performanceList.Add(myStgStats);
-            RecordUtil.recordToCsv(performanceList, GetType().FullName, "performance", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
+            RecordUtil.recordToCsv(performanceList, tag, "performance", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
             //统计指标在console 上输出
             Console.WriteLine("--------Strategy Performance Statistics--------\n");
             Console.WriteLine(" netProfit:{0,5:F4} \n totalReturn:{1,-5:F4} \n anualReturn:{2,-5:F4} \n anualSharpe :{3,-5:F4} \n winningRate:{4,-5:F4} \n PnLRatio:{5,-5:F4} \n maxDrawDown:{6,-5:F4} \n maxProfitRatio:{7,-5:F4} \n informationRatio:{8,-5:F4} \n alpha:{9,-5:F4} \n beta:{10,-5:F4} \n averageHoldingRate:{11,-5:F4} \n", myStgStats.netProfit, myStgStats.totalReturn, myStgStats.anualReturn, myStgStats.anualSharpe, myStgStats.winningRate, myStgStats.PnLRatio, myStgStats.maxDrawDown, myStgStats.maxProfitRatio, myStgStats.informationRatio, myStgStats.alpha, myStgStats.beta, myStgStats.averageHoldingRate);
@@ -59,7 +59,7 @@ namespace QuantitativeAnalysis.PresentationLayer
             }
             
             //保存图像
-            plc.SaveZed(GetType().FullName, underlying, startDate, endDate, myStgStats.netProfit.ToString(), myStgStats.anualSharpe.ToString(), myStgStats.maxDrawDown.ToString());
+            plc.SaveZed(tag, underlying, startDate, endDate, myStgStats.netProfit.ToString(), myStgStats.anualSharpe.ToString(), myStgStats.maxDrawDown.ToString());
             //Application.Run(new PLChart(line, datestr));
         }
     }
