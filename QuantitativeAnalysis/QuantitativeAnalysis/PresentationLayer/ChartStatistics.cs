@@ -2,6 +2,7 @@
 using QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Option;
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
@@ -50,8 +51,13 @@ namespace QuantitativeAnalysis.PresentationLayer
                 + "\r\n" + "\r\n" + "参数包含: frequency，numbers，lossPercent，K1，K2";
             //生成图像
             PLChart plc = new PLChart(line, datestr, formTitle: formTitle);
+            
             //运行图像
-            Application.Run(plc);
+            if (Caches.DisplayNetWorth==true)
+            {
+                Application.Run(plc);
+            }
+            
             //保存图像
             plc.SaveZed(GetType().FullName, underlying, startDate, endDate, myStgStats.netProfit.ToString(), myStgStats.anualSharpe.ToString(), myStgStats.maxDrawDown.ToString());
             //Application.Run(new PLChart(line, datestr));

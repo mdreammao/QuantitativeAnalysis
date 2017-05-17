@@ -69,6 +69,16 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
 
             }
 
+            switch (ConfigurationManager.AppSettings["DisplayNetWorth"])
+            {
+                case "on":
+                    Caches.DisplayNetWorth = true;
+                    break;
+                default:
+                    break;
+
+            }
+
             switch (ConfigurationManager.AppSettings["50ETFOptionInfoRecord"])
             {
                 case "on":
