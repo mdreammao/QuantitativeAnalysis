@@ -1,24 +1,24 @@
-﻿
+﻿using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.ModelLayer.Futures;
-using QuantitativeAnalysis.DataAccessLayer.Common;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
+using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WAPIWrapperCSharp;
-using QuantitativeAnalysis.ServiceLayer.Core;
 
-namespace QuantitativeAnalysis.DataAccessLayer.Futures
+namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Futures
 {
-    public class FuturesMinuteRepository : SequentialByDayRepository<FuturesMinute>
+    public class FuturesMinuteFromWindRepository : DataFromWindRepository<FuturesMinute>
     {
-        protected override List<FuturesMinute> readFromDefaultMssql(string code, DateTime date)
+        public override List<FuturesMinute> readFromWind(string code, DateTime dateStart, DateTime dateEnd = new DateTime(), string tag = null, IDictionary<string, object> options = null)
         {
-            throw new NotImplementedException();
+            return readFromWind(code, dateStart);
         }
 
-        protected override List<FuturesMinute> readFromWind(string code, DateTime date)
+        protected List<FuturesMinute> readFromWind(string code, DateTime date)
         {
             List<FuturesMinute> items = new List<FuturesMinute>();
             string[] str = code.Split('.');
@@ -118,6 +118,8 @@ namespace QuantitativeAnalysis.DataAccessLayer.Futures
             return items;
         }
 
+
+
         private List<FuturesMinute> readByParameters(string code, DateTime date, string paramters)
         {
             WindAPI w = Platforms.GetWindAPI();
@@ -177,4 +179,3 @@ namespace QuantitativeAnalysis.DataAccessLayer.Futures
         }
     }
 }
-    

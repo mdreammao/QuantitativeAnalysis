@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng
+namespace QuantitativeAnalysis.Utilities.AccountOperator.Minute
 {
     public class MinuteCloseAllWithBar
     {

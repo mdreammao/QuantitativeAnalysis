@@ -1,7 +1,6 @@
 ﻿using Autofac;
-using BackTestingPlatform.Core;
-using BackTestingPlatform.DataAccess.Common;
-using BackTestingPlatform.Model;
+using QuantitativeAnalysis.DataAccessLayer.Common;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.ServiceLayer.Common
+namespace QuantitativeAnalysis.ServiceLayer.TradeDays
 {
     class TradeDaysService
     {
@@ -19,6 +18,9 @@ namespace QuantitativeAnalysis.ServiceLayer.Common
         {
             return tradeDayRepository.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration, appendMode, tag);
         }
-
+        public List<DateTime> fetchFromLocalCsvOnly(int localCsvExpiration = 180, bool appendMode = false, String tag = "TradeDays")
+        {
+            return tradeDayRepository.fetchFromLocalCsvOnly(localCsvExpiration, appendMode, tag);
+        }
     }
 }

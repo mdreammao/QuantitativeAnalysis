@@ -29,7 +29,7 @@ namespace QuantitativeAnalysis.PresentationLayer
             RecordUtil.recordToCsv(accountHistory, GetType().FullName, "account", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
             RecordUtil.recordToCsv(netValue, GetType().FullName, "netvalue", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
             //记录持仓变化
-            var positionStatus = OptionRecordUtil.Transfer(positions);
+            var positionStatus = OptionRecordUtility_50ETF.Transfer(positions);
             RecordUtil.recordToCsv(positionStatus, GetType().FullName, "positions", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
             //记录统计指标
             var performanceList = new List<PerformanceStatisics>();

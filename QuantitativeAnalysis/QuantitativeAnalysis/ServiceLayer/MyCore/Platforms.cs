@@ -1,5 +1,11 @@
 ﻿using Autofac;
 using NLog;
+using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Common;
+using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
+using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Futures;
+using QuantitativeAnalysis.ModelLayer.Common;
+using QuantitativeAnalysis.ModelLayer.Futures;
+using QuantitativeAnalysis.ServiceLayer.TradeDays;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WAPIWrapperCSharp;
 
-namespace QuantitativeAnalysis.ServiceLayer.Core    
+namespace QuantitativeAnalysis.ServiceLayer.MyCore    
 {
     /// <summary>
     /// 提供一个全局可访问的类，存放各种重要变量
@@ -20,6 +26,9 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
         //Autofac容器
         public static IContainer container;
         static Logger log = LogManager.GetCurrentClassLogger();
+
+        //万德API
+        private static WindAPI _windAPI;
 
         /// <summary>
         /// 整个应用的全局初始化
@@ -34,16 +43,7 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
             _RegisterComponents(builder);
             container = builder.Build();
 
-            //配置NLog日志模块
-            MyNLogConfig.Apply();
-
-            //初始化CacheData文件夹
-            var cdPath = ConfigurationManager.AppSettings["CacheData.RootPath"];
-            if (!Directory.Exists(cdPath)) Directory.CreateDirectory(cdPath);
-
-            //初始化交易日数据           
-            TradeDaysService tradeDaysService = container.Resolve<TradeDaysService>();
-            tradeDaysService.fetchFromLocalCsvOrWindAndSaveAndCache();
+            Initialization.__Initialize(container);
 
             log.Info("------ Platform初始化完成. ------");
         }
@@ -65,20 +65,31 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
         }
 
 
-        private static WindAPI _windAPI;
+        
         /// <summary>
         /// 获取可立即使用的WindAPI,如果处于未连接状态自动开启
         /// </summary>
         /// <returns></returns>
         public static WindAPI GetWindAPI()
         {
+
             if (_windAPI == null)
             {
                 _windAPI = new WindAPI();
             }
-            if (!_windAPI.isconnected())
+
+            if (!_windAPI.isconnected() && Caches.WindConnectionTry==false)
             {
-                _windAPI.start();
+               int myStart=_windAPI.start();
+                Caches.WindConnectionTry = true;    
+                if (myStart==0)
+                {
+                    Caches.WindConnection = true;
+                }
+                else
+                {
+                    Caches.WindConnection = false;
+                }
             }
             return _windAPI;
         }
@@ -94,15 +105,16 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
 
             //cb.RegisterInstance(new ASharesInfoRepositoryFromWind()).As<ASharesInfoRepository>();
 
-
-
+            //cb.RegisterInstance(new FuturesDailyFromWind()).As<DataFromWind<FuturesDaily>>();
+            //cb.RegisterInstance(new FuturesMinuteFromWind()).As<DataFromWind<FuturesMinute>>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             //自动扫描注册
             cb.RegisterAssemblyTypes(assemblies).Where(t => t.Name.EndsWith("Repository")).AsSelf();
-            cb.RegisterAssemblyTypes(assemblies)
-                   .Where(t => t.Name.EndsWith("Service"))
-                   .AsImplementedInterfaces().AsSelf();
+            cb.RegisterAssemblyTypes(assemblies).Where(t => t.Name.EndsWith("Service")).AsSelf();
+            //cb.RegisterAssemblyTypes(assemblies)
+            //       .Where(t => t.Name.EndsWith("Service"))
+            //       .AsImplementedInterfaces().AsSelf();
 
 
         }

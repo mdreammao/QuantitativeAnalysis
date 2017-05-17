@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.ServiceLayer.Core
+namespace QuantitativeAnalysis.ServiceLayer.MyCore
 {
     /// <summary>
     /// 作用于全局的变量缓存池
@@ -34,6 +34,10 @@ namespace QuantitativeAnalysis.ServiceLayer.Core
             return data;
         }
 
+        //------ 以下是一些常用的标记 ---------
+        public static bool WindConnection = false;
+        public static bool WindConnectionTry = false;
+        public static bool MSSQLConnection = false;
 
         //------ 以下是一些常用的变量get函数 ---------
         public static List<DateTime> getTradeDays()

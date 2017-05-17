@@ -8,20 +8,20 @@ using Autofac;
 using System.Text;
 using System.Threading.Tasks;
 using QuantitativeAnalysis.ModelLayer.Option;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Option;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
-using QuantitativeAnalysis.DataAccessLayer.Option;
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.Utilities.Futures;
+using QuantitativeAnalysis.ServiceLayer.DataProcessing.Option;
 
-namespace BackTestingPlatform.AccountOperator.Minute.maoheng
+namespace QuantitativeAnalysis.Utilities.AccountOperator.Minute
 {
     public class AccountUpdatingWithMinuteBar
     {
         //初始化log组件
         static Logger log = LogManager.GetCurrentClassLogger();
-        static Dictionary<string, OptionInfo> optionInfoList = OptionInfoReform.ReformByCode(Platforms.container.Resolve<OptionInfoRepository>().fetchFromLocalCsvOrWindAndSaveAndCache(0));
+        static Dictionary<string, OptionInfo> optionInfoList = OptionInfoReform.ReformByCode(Platforms.container.Resolve<OptionInfoService>().fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration:0,tag:"OptionInfo",code:"510050.SH"));
         public static void computeAccount(ref BasicAccount myAccount, SortedDictionary<DateTime, Dictionary<string, PositionsWithDetail>> positions, DateTime now, int nowIndex, Dictionary<string, List<KLine>> data)
         {
             myAccount.time = now;

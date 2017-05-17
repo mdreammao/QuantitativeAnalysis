@@ -1,6 +1,6 @@
 ﻿
 using NLog;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
@@ -62,13 +62,13 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         /// <param name="appendMode">是否为append模式，否则为new模式</param>
         /// <param name="localCsvExpiration">CacheData中本地csv文件的保鲜期（天数）</param>
         /// <param name="tag"></param>
-        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration, bool appendMode = false, String tag = null)
+        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration, bool appendMode = false, String tag = null,string code=null)
         {
 
             if (tag == null) tag = typeof(T).Name;
             List<T> data = null;
-            var filePathPattern = _buildCacheDataFilePath(tag, "*");
-            var todayFilePath = _buildCacheDataFilePath(tag, DateTime.Now.ToString("yyyyMMdd"));
+            var filePathPattern = _buildCacheDataFilePath(tag,code, "*");
+            var todayFilePath = _buildCacheDataFilePath(tag, code,DateTime.Now.ToString("yyyyMMdd"));
             var dirPath = Path.GetDirectoryName(filePathPattern);
             var fileNamePattern = Path.GetFileName(filePathPattern);
             var allFilePaths = Directory.EnumerateFiles(dirPath, fileNamePattern)
@@ -141,6 +141,49 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             return data;
         }
 
+        public List<T> fetchFromLocalCsvOnly(int localCsvExpiration, bool appendMode = false, String tag = null,string code=null)
+        {
+            if (tag == null) tag = typeof(T).Name;
+            List<T> data = null;
+            var filePathPattern = _buildCacheDataFilePath(tag, code,"*");
+            var todayFilePath = _buildCacheDataFilePath(tag, code,DateTime.Now.ToString("yyyyMMdd"));
+            var dirPath = Path.GetDirectoryName(filePathPattern);
+            var fileNamePattern = Path.GetFileName(filePathPattern);
+            var allFilePaths = Directory.EnumerateFiles(dirPath, fileNamePattern)
+                .OrderByDescending(fn => fn).ToList();
+
+            var lastestFilePath = (allFilePaths == null || allFilePaths.Count == 0) ? null : allFilePaths[0];
+            var daysdiff = FileUtils.GetCacheDataFileDaysPastTillToday(lastestFilePath);
+            //连接不上万德只能从本地CSV读取
+            log.Info("正在从本地csv文件{0}读取数据... ", lastestFilePath);
+            try
+            {
+
+                data = readFromLocalCsv(lastestFilePath);
+            }
+            catch (Exception e)
+            {
+                log.Error(e, "从本地csv文件读取数据失败！");
+            }
+
+
+
+            if (data != null)
+            {
+                //加载到内存缓存
+                Caches.put(tag, data);
+                log.Info("已将{0}加载到内存缓存.", tag);
+                log.Info("获取{0}数据列表成功.共{1}行.", tag, data.Count);
+            }
+            else
+            {
+                log.Warn("没有任何内容可以缓存！");
+            }
+
+            return data;
+        }
+
+
 
         /// <summary>
         /// 将数据以csv文件的形式保存到CacheData文件夹下的预定路径
@@ -169,12 +212,21 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
 
         }
 
-        private static string _buildCacheDataFilePath(string tag, string date)
+        private static string _buildCacheDataFilePath(string tag, string code,string date)
         {
             if (tag == null) tag = typeof(T).ToString();
+            if (tag=="TradeDays")
+            {
+                return FileUtils.GetCacheDataFilePath("CacheData.Path.TradeDays", new Dictionary<string, string>
+                {
+                    ["{tag}"] = tag,
+                    ["{date}"] = date
+                });
+            }
             return FileUtils.GetCacheDataFilePath(PATH_KEY, new Dictionary<string, string>
             {
                 ["{tag}"] = tag,
+                ["{code}"]=code,
                 ["{date}"] = date
             });
         }

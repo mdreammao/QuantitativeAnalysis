@@ -3,26 +3,29 @@ using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.Futures;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.Utilities.Common;
-using QuantitativeAnalysis.ServiceLayer.Core;
+using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using QuantitativeAnalysis.DataAccessLayer.Futures;
-using QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng;
+using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 using QuantitativeAnalysis.ModelLayer.SignalModel;
 using QuantitativeAnalysis.PresentationLayer;
 using QuantitativeAnalysis.Utilities.DataApplication;
+using QuantitativeAnalysis.ServiceLayer.DataProcessing.Common;
+using QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures;
+using QuantitativeAnalysis.Utilities.Parameters;
+using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 
 namespace BackTestingPlatform.Strategies.Futures.XiaoLong
 {
     public class DualThrustTest
     {
         //回测参数设置
-        private double initialCapital = 3000;
-        private double slipPoint = 0.3;
+        private double initialCapital = 5000;
+        private double slipPoint = 0;
         private DateTime startDate, endDate;
         //private double longLevel = 0.8, shortLevel = -0.8;
         private string underlying;
@@ -48,41 +51,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             this.endDate = Kit.ToDate(endDate);
             this.underlying = underlying;
             this.tradeDays = DateUtils.GetTradeDays(startDate, endDate);
-            if (underlying.IndexOf("RB") > -1) //螺纹钢手续费为每手万一，一手乘数为10
-            {
-                initialCapital = 3000;
-                slipPoint = initialCapital * 0.0001;
-            }
-            else if (underlying.IndexOf("RU") > -1)//橡胶的手续费为万分之0.45,一手乘数为10
-            {
-                initialCapital = 30000;
-                slipPoint = 2;//30000*0.000045=1.35约等于2
-            }
-            else if (underlying.IndexOf("A") > -1 && underlying.IndexOf("AU") < 0) //大豆的手续费为每手2块钱，一手乘数为10
-            {
-                initialCapital = 4000;
-                slipPoint = 0.2;
-            }
-            else if (underlying.IndexOf("M") > -1) //豆粕的手续费为每手1.5块钱，一手乘数为10
-            {
-                initialCapital = 3000;
-                slipPoint = 0.15;
-            }
-            else if (underlying.IndexOf("AU") > -1)
-            {
-                initialCapital = 300;
-                slipPoint = 0.02;
-            }
-            else if (underlying.IndexOf("NI") > -1)
-            {
-                initialCapital = 12000;
-                slipPoint = 1;
-            }
-            else if (underlying.IndexOf("IF") > -1)
-            {
-                initialCapital = 6000;
-                slipPoint = 1 * 6000 / 10000;
-            }
+            slipPoint = SlipPoint.getSlipRatio(underlying) * 3000;
             compute();
         }
 
@@ -107,7 +76,8 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             double k1 = 0.2;
             double k2 = -0.1;
             List<FuturesDaily> dailyData = new List<FuturesDaily>();
-            dailyData = Platforms.container.Resolve<FuturesDailyRepository>().fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
+            dailyData = Platforms.container.Resolve<FuturesDailyService>().fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
+
             List<double> highList = new List<double>();
             List<double> closeList = new List<double>();
             List<double> lowList = new List<double>();
@@ -255,7 +225,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                 if (dataOnlyToday.Count > 0)
                 {
                     //更新当日属性信息
-                    AccountOperator.Minute.maoheng.AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, dataOnlyToday.Last().time, dataOnlyToday.Count() - 1, dataToday);
+                    AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, dataOnlyToday.Last().time, dataOnlyToday.Count() - 1, dataToday);
 
                     //记录历史仓位信息
                     accountHistory.Add(new BasicAccount(myAccount.time, myAccount.totalAssets, myAccount.freeCash, myAccount.positionValue, myAccount.margin, myAccount.initialAssets));
@@ -275,46 +245,6 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             ChartStatistics chart = new ChartStatistics();
             chart.showChart(accountHistory, positions, benchmark, underlying, initialCapital, netValue, startDate, endDate, frequency);
 
-            ////策略绩效统计及输出
-            //PerformanceStatisics myStgStats = new PerformanceStatisics();
-            ////TODO:了解该函数中计算出了那些评价标准
-            //myStgStats = PerformanceStatisicsUtils.compute(accountHistory, positions, benchmark.ToArray());
-            ////画图
-            //Dictionary<string, double[]> line = new Dictionary<string, double[]>();
-            //double[] netWorth = accountHistory.Select(a => a.totalAssets / initialCapital).ToArray();
-            //line.Add("NetWorth", netWorth);
-            //string recordName = underlying.Replace(".", "_") + "_DH_" /*+ "numbers_" + numbers.ToString()*/ + "_frequency_" + frequency.ToString() + "_k2_" + k2.ToString();
-            ////记录净值数据
-            //RecordUtil.recordToCsv(accountHistory, GetType().FullName, "account", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
-            //RecordUtil.recordToCsv(netValue, GetType().FullName, "netvalue", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
-            ////记录持仓变化
-            //var positionStatus = OptionRecordUtil.Transfer(positions);
-            //RecordUtil.recordToCsv(positionStatus, GetType().FullName, "positions", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
-            ////记录统计指标
-            //var performanceList = new List<PerformanceStatisics>();
-            //performanceList.Add(myStgStats);
-            //RecordUtil.recordToCsv(performanceList, GetType().FullName, "performance", parameters: recordName, performance: myStgStats.anualSharpe.ToString("N").Replace(".", "_"));
-            ////统计指标在console 上输出
-            //Console.WriteLine("--------Strategy Performance Statistics--------\n");
-            //Console.WriteLine(" netProfit:{0,5:F4} \n totalReturn:{1,-5:F4} \n anualReturn:{2,-5:F4} \n anualSharpe :{3,-5:F4} \n winningRate:{4,-5:F4} \n PnLRatio:{5,-5:F4} \n maxDrawDown:{6,-5:F4} \n maxProfitRatio:{7,-5:F4} \n informationRatio:{8,-5:F4} \n alpha:{9,-5:F4} \n beta:{10,-5:F4} \n averageHoldingRate:{11,-5:F4} \n", myStgStats.netProfit, myStgStats.totalReturn, myStgStats.anualReturn, myStgStats.anualSharpe, myStgStats.winningRate, myStgStats.PnLRatio, myStgStats.maxDrawDown, myStgStats.maxProfitRatio, myStgStats.informationRatio, myStgStats.alpha, myStgStats.beta, myStgStats.averageHoldingRate);
-            //Console.WriteLine("-----------------------------------------------\n");
-            ////benchmark净值
-            //List<double> netWorthOfBenchmark = benchmark.Select(x => x / benchmark[0]).ToList();
-            //line.Add("Base", netWorthOfBenchmark.ToArray());
-            //string[] datestr = accountHistory.Select(a => a.time.ToString("yyyyMMdd")).ToArray();
-
-            ////绘制图形的标题
-            //string formTitle = this.startDate.ToShortDateString() + "--" + this.endDate.ToShortDateString() + "  " + this.underlying + " 净值曲线"
-            //    + "\r\n" + "\r\n" + "净利润：" + myStgStats.netProfit + "  " + "夏普率：" + myStgStats.anualSharpe + "  " + "最大回撤：" + myStgStats.maxDrawDown
-            //    + "\r\n" + "\r\n" + "参数包含: frequency，numbers，lossPercent，K1，K2";
-            ////生成图像
-            //PLChart plc = new PLChart(line, datestr, formTitle: formTitle);
-            ////运行图像
-            //Application.Run(plc);
-            ////保存图像
-            //plc.SaveZed(GetType().FullName, this.underlying, this.startDate, this.endDate, myStgStats.netProfit.ToString(), myStgStats.anualSharpe.ToString(), myStgStats.maxDrawDown.ToString());
-            ////Application.Run(new PLChart(line, datestr));
-          
         }
 
         /// <summary>
@@ -345,7 +275,10 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
         /// <returns></returns>
         private List<FuturesMinute> getData(DateTime today, string code)
         {
-            List<FuturesMinute> orignalList = Platforms.container.Resolve<FuturesMinuteRepository>().fetchFromLocalCsvOrWindAndSave(code, today);
+            //FuturesMinuteService futuresMinute = new FuturesMinuteService();
+            //List<FuturesMinute> orignalList = Platforms.container.Resolve<FuturesMinuteRepository>().fetchFromLocalCsvOrWindAndSave(code, today);
+            //List<FuturesMinute> orignalList = futuresMinute.fetchFromLocalCsvOrWindAndSave(code, today);
+            List<FuturesMinute> orignalList = Platforms.container.Resolve<FuturesMinuteService>().fetchFromLocalCsvOrWindAndSave(code, today);
             List<FuturesMinute> data = KLineDataUtils.leakFilling(orignalList);
 
             //从本地csv 或者 wind获取数据，从wind拿到额数据会保存在本地

@@ -1,4 +1,5 @@
 ﻿
+using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.ModelLayer.SignalModel;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng
+namespace QuantitativeAnalysis.Utilities.AccountOperator.Minute
 {
     /// <summary>
     /// 根据分钟K线图来判断成交。具体的，如果开多仓，开仓价格必须大于等于K线中的最低价格，如果开空仓，开仓价格必须小于等于K线中的最高价格。
@@ -218,6 +219,8 @@ namespace QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng
                         else if (volume < 0)
                         {
                             position0.ShortPosition.volume = volume;
+
+
                             position0.ShortPosition.totalCost = volume * (signal0.price - slip);
                             position0.ShortPosition.averagePrice = (signal0.price - slip);
                             position0.LongPosition = new PositionDetail();
@@ -273,7 +276,7 @@ namespace QuantitativeAnalysis.Utilities.Transaction.Minute.maoheng
             }
             //更新持仓的头寸信息
             if (positions.Count != 0)
-                AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, now, nowIndex, data);
+               AccountUpdatingWithMinuteBar.computeAccount(ref myAccount, positions, now, nowIndex, data);
             return tradingFeedback;
         }
     }
