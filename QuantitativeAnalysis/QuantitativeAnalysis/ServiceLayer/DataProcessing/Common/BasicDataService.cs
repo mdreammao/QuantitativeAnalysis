@@ -13,7 +13,6 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
 {
     public abstract class BasicDataService<T> where T : new()
     {
-        const string PATH_KEY = "CacheData.Path.Basic";
         static Logger log = LogManager.GetCurrentClassLogger();
 
         public abstract List<T> readFromWind(string code,DateTime startDate,DateTime endDate);
@@ -28,9 +27,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="appendMode">是否为append模式，否则为new模式</param>
         /// <param name="localCsvExpiration">CacheData中本地csv文件的保鲜期（天数）</param>
         /// <param name="tag"></param>
-        public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration=5, bool appendMode = false, String tag = null, string code=null, DateTime startDate=new DateTime(), DateTime endDate=new DateTime())
+        virtual public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration=5, bool appendMode = false, String tag = null, string code=null, DateTime startDate=new DateTime(), DateTime endDate=new DateTime())
         {
-
+            
             if (tag == null) tag = typeof(T).Name;
             List<T> data = null;
             var filePathPattern = _buildCacheDataFilePath(tag,code, "*");
@@ -126,7 +125,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
                     ["{date}"] = date
                 });
             }
-            return FileUtils.GetCacheDataFilePath(PATH_KEY, new Dictionary<string, string>
+            return FileUtils.GetCacheDataFilePath("CacheData.Path.Basic", new Dictionary<string, string>
             {
                 ["{tag}"] = tag,
                 ["{code}"] = code,
