@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ModelLayer.Futures
 {
-    public struct FuturesInfo
+    public class FuturesInfo
     {
         public string code { get; set; }
         public DateTime endDate { get; set; }

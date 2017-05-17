@@ -46,6 +46,7 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             return get<List<DateTime>>("TradeDays");
         }
 
-
+        public static DateTime TRADE_DAY_START = new DateTime(2007, 1, 1, 0, 0, 0);
+        public static DateTime TRADE_DAY_END = new DateTime(2016, 12, 31, 23, 59, 59);
     }
 }

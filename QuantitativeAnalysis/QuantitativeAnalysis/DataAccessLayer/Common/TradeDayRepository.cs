@@ -46,7 +46,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         protected override List<DateTime> readFromWind()
         {
             var endDate = DateTime.Now.AddYears(1);
-            return readFromWind(Constants.TRADE_DAY_START, endDate);
+            return readFromWind(Caches.TRADE_DAY_START, endDate);
         }
     }
 }
