@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ModelLayer.Common
 {
-    public class Factor
+    public class Factor : Sequential
     {
         public string code { get; set;}
-        public DateTime date { get; set; }
+        public DateTime time { get; set; }
     }
 }

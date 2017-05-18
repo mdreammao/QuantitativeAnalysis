@@ -39,6 +39,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Common
             }
 
         }
+
         public virtual DataColumn[] toCsvColumnsFromEntity(Type t)
         {
             return DataTableUtils.toColumnsDefaultFunc(t);

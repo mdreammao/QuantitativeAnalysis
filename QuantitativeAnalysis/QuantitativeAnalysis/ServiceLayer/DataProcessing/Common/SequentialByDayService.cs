@@ -35,7 +35,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="code"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public abstract List<T> readFromWindOnly(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null);
+        public abstract List<T> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null);
 
         /// <summary>
         /// 仅从默认MSSQL源获取数据,可能会抛出异常

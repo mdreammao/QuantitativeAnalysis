@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using NLog;
+using QuantitativeAnalysis.ModelLayer.Stock.MultiFactor.Market;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Option;
+using QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock;
 using QuantitativeAnalysis.ServiceLayer.TradeDays;
 using System;
 using System.Collections.Generic;
@@ -98,6 +100,10 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             //    default:
             //        break;
             //}
+
+            StockDailyMarketService test = container.Resolve<StockDailyMarketService>();
+            test.fetchFromWind("600000.SH", new DateTime(2017, 5, 17));
+
 
         }
 

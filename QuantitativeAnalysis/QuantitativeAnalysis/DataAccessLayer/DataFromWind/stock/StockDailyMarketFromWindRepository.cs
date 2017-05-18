@@ -10,29 +10,30 @@ using WAPIWrapperCSharp;
 
 namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
 {
-    public class StockDailyKLineFromWindRepository : DataFromWindRepository<StockDailyKLine>
+    public class StockDailyMarketFromWindRepository : DataFromWindRepository<StockDailyMarket>
     {
-        public override List<StockDailyKLine> readFromWind(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)
+        public override List<StockDailyMarket> readFromWind(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)
         {
             if (Caches.WindConnection==false && Caches.WindConnectionTry==true)
             {
                 return null;
             }
             WindAPI w = Platforms.GetWindAPI();
-            WindData wd = w.wsd(code, "open,high,low,close,volume,amt", startDate,endDate, "Fill=Previous");
+            WindData wd = w.wsd(code, "pre_close,open,high,low,close,volume,amt,dealnum," +
+                "chg,pct_chg,swing,vwap,adjfactor,turn,free_turn,trade_status,susp_reason,maxupordown", startDate, endDate, "");
             int len = wd.timeList.Length;
             int fieldLen = wd.fieldList.Length;
 
-            var items = new List<StockDailyKLine>(len * fieldLen);
+            var items = new List<StockDailyMarket>(len * fieldLen);
             if (wd.data is double[])
             {
                 double[] dataList = (double[])wd.data;
                 DateTime[] timeList = wd.timeList;
                 for (int k = 0; k < len; k++)
                 {
-                    items.Add(new StockDailyKLine
+                    items.Add(new StockDailyMarket
                     {
-                        date = timeList[k],
+                        time = timeList[k],
                         open = (double)dataList[k * fieldLen + 0],
                         high = (double)dataList[k * fieldLen + 1],
                         low = (double)dataList[k * fieldLen + 2],
