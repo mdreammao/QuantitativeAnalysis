@@ -78,6 +78,7 @@
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesDailyFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesMinuteFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Option\OptionInfoFromWindRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromWind\stock\StockDailyKLineFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DataToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DayToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\RecordUtil.cs" />
@@ -108,7 +109,7 @@
     <Compile Include="ModelLayer\PositionModel\TransactionRecord.cs" />
     <Compile Include="ModelLayer\SignalModel\BasicSignal.cs" />
     <Compile Include="ModelLayer\SignalModel\MinuteSignal.cs" />
-    <Compile Include="ModelLayer\Stock\MultiFactor\Market\DailyKLine.cs" />
+    <Compile Include="ModelLayer\Stock\MultiFactor\Market\StockDailyKLine.cs" />
     <Compile Include="PresentationLayer\ChartStatistics.cs" />
     <Compile Include="PresentationLayer\PLChart.cs">
       <SubType>Form</SubType>
@@ -158,7 +159,6 @@
     <Folder Include="ApplicationLayer\StatisticalSystem\" />
     <Folder Include="DataAccessLayer\DataFromMSSQL\" />
     <Folder Include="DataAccessLayer\DataFromOtherSource\" />
-    <Folder Include="DataAccessLayer\DataFromWind\stock\" />
     <Folder Include="ServiceLayer\Common\" />
   </ItemGroup>
   <ItemGroup>

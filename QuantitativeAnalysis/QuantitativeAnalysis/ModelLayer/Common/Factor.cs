@@ -8,7 +8,7 @@ namespace QuantitativeAnalysis.ModelLayer.Common
 {
     public class Factor
     {
-        string code { get; set;}
-        DateTime date { get; set; }
+        public string code { get; set;}
+        public DateTime date { get; set; }
     }
 }
