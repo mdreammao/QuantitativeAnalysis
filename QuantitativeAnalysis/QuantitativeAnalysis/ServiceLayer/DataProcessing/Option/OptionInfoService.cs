@@ -28,7 +28,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 
         public override void saveToLocalCsvFile(IList<OptionInfo> data, string path, bool appendMode = false, string tag = null)
         {
-            Platforms.container.Resolve<OptionInfoToLocalCSVRepository>().saveToLocalCsvFile(data,path,appendMode,tag);
+            Platforms.container.Resolve<OptionInfoToLocalCSVRepository>().saveToLocalCsv(path,data,appendMode);
         }
     }
 }

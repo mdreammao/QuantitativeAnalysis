@@ -7,17 +7,12 @@ using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 using QuantitativeAnalysis.ModelLayer.SignalModel;
 using QuantitativeAnalysis.PresentationLayer;
 using QuantitativeAnalysis.Utilities.DataApplication;
-using QuantitativeAnalysis.ServiceLayer.DataProcessing.Common;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures;
 using QuantitativeAnalysis.Utilities.Parameters;
-using QuantitativeAnalysis.Utilities.AccountOperator.Minute;
 
 namespace BackTestingPlatform.Strategies.Futures.XiaoLong
 {
@@ -154,7 +149,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                         else if ((maxIncome - incomeNow) > lossPercent * Math.Abs(dataOnlyToday[j].open) || incomeNow < -lossPercent * Math.Abs(dataOnlyToday[j].open)) //从最高点跌下来3%，就止损
                         {
                             positionVolume = 0;
-                            Console.WriteLine("追踪止损！平仓价格: {0}", dataOnlyToday[j].open);
+                           // Console.WriteLine("追踪止损！平仓价格: {0}", dataOnlyToday[j].open);
                             MinuteCloseAllWithBar.CloseAllPosition(dataToday, ref positions, ref myAccount, now, j, slipPoint);
                             maxIncome = 0;
                         }
@@ -170,7 +165,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                         if (positionVolume == -1)
                         {
                             positionVolume = 0;
-                            Console.WriteLine("追踪止损！平仓价格: {0}", dataOnlyToday[j].open);
+                            //Console.WriteLine("追踪止损！平仓价格: {0}", dataOnlyToday[j].open);
                             MinuteCloseAllWithBar.CloseAllPosition(dataToday, ref positions, ref myAccount, now, j, slipPoint);
                         }
                         //如果没有仓位，则直接多仓
@@ -183,7 +178,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                             Dictionary<string, MinuteSignal> signal = new Dictionary<string, MinuteSignal>();
                             signal.Add(underlying, longSignal);
                             MinuteTransactionWithBar.ComputePosition(signal, dataToday, ref positions, ref myAccount, slipPoint: slipPoint, now: now, nowIndex: longSignal.minuteIndex);
-                            Console.WriteLine("做多期货！多头开仓价格: {0}", dataOnlyToday[j].open);
+                            //Console.WriteLine("做多期货！多头开仓价格: {0}", dataOnlyToday[j].open);
                             //头寸量叠加
                             positionVolume += volume;
                         }
@@ -196,7 +191,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                         if (positionVolume == 1)
                         {
                             positionVolume = 0;
-                            Console.WriteLine("追踪止损！平仓价格: {0}", dataOnlyToday[j].open);
+                           // Console.WriteLine("追踪止损！平仓价格: {0}", dataOnlyToday[j].open);
                             MinuteCloseAllWithBar.CloseAllPosition(dataToday, ref positions, ref myAccount, now, j, slipPoint);
                         }
                         //如果没有仓位，则直接空仓
@@ -204,7 +199,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                         {
                             double volume = -1;
                             MinuteSignal shortSignal = new MinuteSignal() { code = underlying, volume = volume, time = now, tradingVarieties = "futures", price = dataOnlyToday[j].open, minuteIndex = j };
-                            Console.WriteLine("做空期货！空头开仓价格: {0}", dataOnlyToday[j].open);
+                           // Console.WriteLine("做空期货！空头开仓价格: {0}", dataOnlyToday[j].open);
                             Dictionary<string, MinuteSignal> signal = new Dictionary<string, MinuteSignal>();
                             signal.Add(underlying, shortSignal);
                             positionVolume += volume;
@@ -219,7 +214,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
                 {
                     positionVolume = 0;
                     MinuteCloseAllWithBar.CloseAllPosition(dataToday, ref positions, ref myAccount, dataOnlyToday[closeIndex].time, closeIndex, slipPoint);
-                    Console.WriteLine("{2}   每日收盘前强制平仓，平仓价格:{0},账户价值:{1}", dataOnlyToday[closeIndex].open, myAccount.totalAssets, today);
+                   // Console.WriteLine("{2}   每日收盘前强制平仓，平仓价格:{0},账户价值:{1}", dataOnlyToday[closeIndex].open, myAccount.totalAssets, today);
                 }
 
                 if (dataOnlyToday.Count > 0)

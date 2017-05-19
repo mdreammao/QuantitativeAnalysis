@@ -37,7 +37,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
         public override void saveToLocalCSV(IList<OptionInfo> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
         {
             string path = _buildCacheDataFilePath(code, date, tag);
-            Platforms.container.Resolve<OptionInfoToLocalCSVRepository>().saveToLocalCsvFile(data, path, appendMode, tag);
+            Platforms.container.Resolve<OptionInfoToLocalCSVRepository>().saveToLocalCsv(path,data,appendMode);
         }
 
 
