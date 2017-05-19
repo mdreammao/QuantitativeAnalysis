@@ -101,7 +101,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> fetchFromWind(string code, DateTime date, string tag = null)
+        virtual public List<T> fetchFromWind(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -115,13 +115,13 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
             log.Debug("尝试从Wind获取{0}...", code);
             try
             {
-                result = readFromWindOnly(code, date, new DateTime(), null, null);
+                result = readFromWindOnly(code, date, date, null, null);
             }
             catch (Exception e)
             {
                 log.Error(e, "尝试从Wind获取失败！");
                 //debug 输出失败信息
-                Console.WriteLine("尝试从本地csv失败！品种{0},时间{1}", code, date.ToShortDateString());
+                Console.WriteLine("尝试从wind读取数据失败！品种{0},时间{1}", code, date.ToShortDateString());
             }
             logInfo(code, date, tag, result);
             return result;

@@ -26,6 +26,7 @@ namespace QuantitativeAnalysis.ModelLayer.Stock.MultiFactor.Market
         public double free_turn { get; set; }
         public string trade_status { get; set; }
         public string susp_reason { get; set; }
+        public double susp_days { get; set; }
         public double maxUpOrDown { get; set; }
     }
 }

@@ -102,7 +102,7 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             //}
 
             StockDailyMarketService test = container.Resolve<StockDailyMarketService>();
-            //test.fetchFromWind("600000.SH", new DateTime(2017, 5, 17));
+            test.fetchFromWind("600000.SH", new DateTime(2017, 5, 17));
 
 
         }
