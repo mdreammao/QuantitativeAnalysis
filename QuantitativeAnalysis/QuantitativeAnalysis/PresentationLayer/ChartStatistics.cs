@@ -4,6 +4,7 @@ using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Common;
+using QuantitativeAnalysisQuantitativeAnalysis.Utilities.DataApplication;
 using System;
 using System.Collections.Generic;
 using System.Linq;

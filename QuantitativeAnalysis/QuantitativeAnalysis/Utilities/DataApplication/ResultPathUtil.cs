@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Common
+namespace QuantitativeAnalysis.Utilities.DataApplication
 {
     public class ResultPathUtil
     {

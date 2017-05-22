@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Futures
 {
-    class FuturesMinuteToLocalCSVRepository : DayToLocalCSVRepository<FuturesMinute>
+    public class FuturesMinuteToLocalCSVRepository : DayToLocalCSVRepository<FuturesMinute>
     {
 
     }

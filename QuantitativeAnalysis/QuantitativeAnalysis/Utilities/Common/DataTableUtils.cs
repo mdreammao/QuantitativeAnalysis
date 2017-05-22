@@ -24,7 +24,13 @@ namespace QuantitativeAnalysis.Utilities.Common
         {
             return ToDataTable(items, toColumnsDefaultFunc, toRowValuesDefaultFunc);
         }
-        public static DataTable ToDataTable<T>(IList<T> items, Func<Type, DataColumn[]> toColumnsFunc, Func<T, object[]> toRowValuesFunc)
+
+        public static DataTable ToDataTableOneRowOnly<T>(T item)
+        {
+            return ToDataTableOneRowOnly(item, toColumnsDefaultFunc, toRowValuesDefaultFunc);
+        }
+
+        private static DataTable ToDataTable<T>(IList<T> items, Func<Type, DataColumn[]> toColumnsFunc, Func<T, object[]> toRowValuesFunc)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
             //build columns
@@ -36,6 +42,19 @@ namespace QuantitativeAnalysis.Utilities.Common
             {
                 dataTable.Rows.Add(toRowValuesFunc(item));
             }
+
+            return dataTable;
+        }
+
+        private static DataTable ToDataTableOneRowOnly<T>(T item, Func<Type, DataColumn[]> toColumnsFunc, Func<T, object[]> toRowValuesFunc)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+            //build columns
+            var cols = toColumnsFunc(typeof(T));
+            dataTable.Columns.AddRange(cols);
+
+            //fill one row
+           dataTable.Rows.Add(toRowValuesFunc(item));
 
             return dataTable;
         }

@@ -12,6 +12,7 @@ using System.IO;
 using QuantitativeAnalysis.Utilities.Common;
 using QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Common;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
+using QuantitativeAnalysis.Utilities.DataApplication;
 
 namespace QuantitativeAnalysis.PresentationLayer
 {

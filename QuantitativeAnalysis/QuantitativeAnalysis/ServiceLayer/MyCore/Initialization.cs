@@ -102,9 +102,8 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             //}
 
             StockDailyMarketService test = container.Resolve<StockDailyMarketService>();
-            test.fetchFromWind("600000.SH", new DateTime(2017, 5, 17));
-
-
+            var a=test.fetchFromLocalCsvOrWindAndSave("600000.SH", new DateTime(2007, 1, 1), new DateTime(2017, 5, 21));
+            
         }
 
         private static void _RegisterComponents(ContainerBuilder cb)

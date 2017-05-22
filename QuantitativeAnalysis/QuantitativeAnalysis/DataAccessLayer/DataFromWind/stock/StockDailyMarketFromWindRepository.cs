@@ -22,7 +22,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
             WindData wd = w.wsd(code, "pre_close,open,high,low,close,volume,amt,dealnum,chg,pct_chg,swing,vwap,adjfactor,turn,free_turn,trade_status,susp_reason,susp_days,maxupordown", startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), "");
             int len = wd.timeList.Length;
             int fieldLen = wd.fieldList.Length;
-
             var items = new List<StockDailyMarket>(len * fieldLen);
             DateTime[] timeList = wd.timeList;
             object[] dataList = (object[])wd.data;

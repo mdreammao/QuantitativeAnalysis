@@ -14,41 +14,24 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
 {
-    class StockDailyMarketService : SequentialByDayService<StockDailyMarket>
+    class StockDailyMarketService : StockDailyFactorService<StockDailyMarket>
     {
-        public override List<StockDailyMarket> readFromLocalCSVOnly(string code, DateTime date, string tag = null)
+        protected override List<StockDailyMarket> readFromLocalCSVOnly(string code, DateTime startDate, DateTime endDate,string tag = null)
         {
-            var path = _buildCacheDataFilePath(code, date, tag);
-            return Platforms.container.Resolve<StockDailyMarketFromLocalCSVRepository>().readFromLocalCSV(path);
+            return Platforms.container.Resolve<StockDailyMarketFromLocalCSVRepository>().ReadFromLocalCSVForDays(code,startDate,endDate);
         }
 
-        public override List<StockDailyMarket> readFromMSSQLOnly(string code, DateTime date)
+        protected override List<StockDailyMarket> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)
         {
-            throw new NotImplementedException();
+            return Platforms.container.Resolve<StockDailyMarketFromWindRepository>().readFromWind(code, startDate, endDate);
         }
 
-        public override List<StockDailyMarket> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)
+        protected override void saveToLocalCSV(IList<StockDailyMarket> data, string tag = null, bool appendMode = false, bool canSaveToday = false)
         {
-            return Platforms.container.Resolve<StockDailyMarketFromWindRepository>().readFromWind(code, startDate, endDate, tag, options);
+            Platforms.container.Resolve<StockDailyMarketToLocalCSVRepository>().saveToLocalCsv(data);
         }
 
-        public override void saveToLocalCSV(IList<StockDailyMarket> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
-        {
 
-            var path = _buildCacheDataFilePath(code, date, tag);
-            Platforms.container.Resolve<StockDailyMarketToLocalCSVRepository>().saveToLocalCsv(path, data);
-        }
 
-        private static string _buildCacheDataFilePath(string code, DateTime date, string tag)
-        {
-            const string PATH_KEY = "CacheData.Path.StockFactor";
-            if (tag == null) tag = typeof(StockDailyMarket).ToString();
-            return FileUtils.GetCacheDataFilePath(PATH_KEY, new Dictionary<string, string>
-            {
-                ["{tag}"] = tag,
-                ["{code}"] = code,
-                ["{date}"] = date.ToString("yyyyMMdd")
-            });
-        }
     }
 }

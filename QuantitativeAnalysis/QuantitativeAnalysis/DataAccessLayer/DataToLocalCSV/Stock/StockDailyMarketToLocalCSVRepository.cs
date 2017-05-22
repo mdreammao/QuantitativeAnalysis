@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Stock
 {
-    public class StockDailyMarketToLocalCSVRepository : DataToLocalCSVRepository<StockDailyMarket>
+    public class StockDailyMarketToLocalCSVRepository : StockDailyFactorToLocalCSVRepository<StockDailyMarket>
     {
 
     }

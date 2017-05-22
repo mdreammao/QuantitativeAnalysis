@@ -196,7 +196,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
                 log.Warn("没有任何内容可以保存到csv！");
                 return;
             }
-            var dt = DataTableUtils.ToDataTable(data, toCsvColumnsFromEntity, toCsvRowValuesFromEntity);
+            var dt = DataTableUtils.ToDataTable(data);
             try
             {
                 var s = (File.Exists(path)) ? "覆盖" : "新增";

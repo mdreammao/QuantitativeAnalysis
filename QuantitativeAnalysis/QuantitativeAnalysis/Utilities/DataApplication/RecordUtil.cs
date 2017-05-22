@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Configuration;
 using ZedGraph;
 using QuantitativeAnalysis.Utilities.Common;
+using QuantitativeAnalysis.Utilities.DataApplication;
 
-namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Common
+namespace QuantitativeAnalysisQuantitativeAnalysis.Utilities.DataApplication
 {
     public class RecordUtil
     {

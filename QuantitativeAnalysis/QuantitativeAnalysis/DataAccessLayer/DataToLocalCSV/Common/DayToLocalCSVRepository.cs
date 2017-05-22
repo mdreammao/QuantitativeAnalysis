@@ -11,7 +11,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Common
 {
     public abstract class DayToLocalCSVRepository<T> : DataToLocalCSVRepository<T> where T : Sequential, new()
     {
-        const string PATH_KEY = "CacheData.Path.SequentialByDay";
         static Logger log = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 将数据以csv文件的形式保存到CacheData文件夹下的预定路径。
@@ -35,7 +34,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Common
         private static string _buildCacheDataFilePath(string code, DateTime date, string tag)
         {
             if (tag == null) tag = typeof(T).ToString();
-            return FileUtils.GetCacheDataFilePath(PATH_KEY, new Dictionary<string, string>
+            return FileUtils.GetCacheDataFilePath("CacheData.Path.SequentialByDay", new Dictionary<string, string>
             {
                 ["{tag}"] = tag,
                 ["{code}"] = code,

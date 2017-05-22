@@ -74,6 +74,7 @@
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Futures\FuturesDailyFromLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Futures\FuturesMinuteFromLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Option\OptionInfoFromLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromLocalCSV\Stock\StockDailyFactorFromLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Stock\StockDailyMarketFromLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Common\DataFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesDailyFromWindRepository.cs" />
@@ -82,8 +83,11 @@
     <Compile Include="DataAccessLayer\DataFromWind\stock\StockDailyMarketFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DataToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DayToLocalCSVRepository.cs" />
-    <Compile Include="DataAccessLayer\DataToLocalCSV\Common\RecordUtil.cs" />
-    <Compile Include="DataAccessLayer\DataToLocalCSV\Common\ResultPathUtil.cs" />
+    <Compile Include="DataAccessLayer\DataToLocalCSV\Stock\StockDailyFactorToLocalCSVRepository.cs" />
+    <Compile Include="ModelLayer\Stock\BasicInfo\StockIPOInfo.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Stock\StockDailyFactorService.cs" />
+    <Compile Include="Utilities\DataApplication\RecordUtil.cs" />
+    <Compile Include="Utilities\DataApplication\ResultPathUtil.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\YearToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Futures\FuturesDailyToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Futures\FuturesMinuteToLocalCSVRepository.cs" />

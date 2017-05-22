@@ -128,7 +128,62 @@ namespace QuantitativeAnalysis.Utilities.Common
             return dt;
         }
 
+        /// <summary>
+        /// 从CSV获取数据，添加入已有的datable
+        /// </summary>
+        /// <param name="dt">数据</param>
+        /// <param name="filePath">CSV的地址</param>
+        /// <param name="firstRowAsHeader">第一行为表头</param>
+        /// <param name="columns">列信息</param>
+        /// <returns></returns>
+        public static DataTable ReadFromCsvFile(DataTable dt,string filePath, bool firstRowAsHeader = true, string columns = "")
+        {
+            if (dt.Rows.Count==0)
+            {
+                return ReadFromCsvFile(filePath, firstRowAsHeader, columns);
+            }
+            try
+            {
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    using (StreamReader sr = new StreamReader(fs, Encoding.UTF8))
+                    {
+                        if (!sr.EndOfStream && firstRowAsHeader)
+                        {
+                            string[] headers = sr.ReadLine().Split(',');
+                            foreach (string header in headers)
+                            {
+                                if (dt.Columns.Contains(header)==false)
+                                {
+                                    dt.Columns.Add(header);
+                                }
+                            }
+                        }
 
+                        if (!sr.EndOfStream && firstRowAsHeader == false && columns != "")
+                        {
+                            string[] headers = columns.Split(',');
+                            foreach (string header in headers)
+                            {
+                                dt.Columns.Add(header);
+                            }
+                        }
+
+                        while (!sr.EndOfStream)
+                        {
+                            string[] rows = sr.ReadLine().Split(',').Select(toNonDoubleQuotedString).ToArray();
+                            dt.Rows.Add(rows);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+                return null;
+            }
+            return dt;
+        }
 
         /// <summary>
         /// 将values转换为csv文件的一行，包含一些默认的类型转换，例如：
