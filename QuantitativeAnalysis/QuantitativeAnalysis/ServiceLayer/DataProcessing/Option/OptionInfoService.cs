@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Option;
 using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option;
-using QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Option;
+using QuantitativeAnalysisQuantitativeAnalysis.Utilities.DataApplication;
 using QuantitativeAnalysis.ModelLayer.Option;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Common;

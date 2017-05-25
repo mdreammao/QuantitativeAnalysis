@@ -1,5 +1,5 @@
 ﻿using QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Common;
-using QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Option;
+using QuantitativeAnalysisQuantitativeAnalysis.Utilities.DataApplication;
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ModelLayer.PositionModel;
 using QuantitativeAnalysis.ServiceLayer.MyCore;

@@ -41,6 +41,8 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             try
             {
                 WindAPI wapi = Platforms.GetWindAPI();
+
+
             }
             catch (Exception e)
             {
@@ -91,6 +93,8 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
                     break;
             }
 
+            StockBasicInfoService stockInfoService = container.Resolve<StockBasicInfoService>();
+            stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration:180,tag: "StockBasicInfo",code:"allStock");
             //switch (ConfigurationManager.AppSettings["CommodityOptionInfoRecord"])
             //{
             //    case "on":
@@ -101,9 +105,9 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             //        break;
             //}
 
-            StockDailyMarketService test = container.Resolve<StockDailyMarketService>();
-            var a=test.fetchFromLocalCsvOrWindAndSave("600000.SH", new DateTime(2007, 1, 1), new DateTime(2017, 5, 21));
-            
+            //StockDailyMarketService test = container.Resolve<StockDailyMarketService>();
+            //var a=test.fetchFromLocalCsvOrWindAndSave("600000.SH", new DateTime(2007, 1, 1), new DateTime(2017, 5, 21));
+
         }
 
         private static void _RegisterComponents(ContainerBuilder cb)

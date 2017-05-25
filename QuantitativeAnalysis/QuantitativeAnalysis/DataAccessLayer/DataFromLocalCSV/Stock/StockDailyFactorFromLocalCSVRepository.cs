@@ -17,7 +17,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Stock
     {
 
         public List<T> ReadFromLocalCSVForDays(string code, DateTime startDate, DateTime endDate)
-        {
+        { 
             List<T> list = new List<T>();
             var tradeDays = DateUtils.GetTradeDays(startDate, endDate);
             for (int i = 0; i < tradeDays.Count(); i++)

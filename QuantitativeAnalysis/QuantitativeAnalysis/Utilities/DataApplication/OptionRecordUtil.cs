@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.DataAccessLayer.DataToLocalCSV.Option
+namespace QuantitativeAnalysisQuantitativeAnalysis.Utilities.DataApplication
 {
     public class OptionRecordUtility_50ETF
     {
