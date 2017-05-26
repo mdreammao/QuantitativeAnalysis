@@ -14,7 +14,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
     {
         
 
-        public List<StockBasicInfo> readFromWind(DateTime date,string tag=null, IDictionary<string, object> options = null)
+        public List<StockBasicInfo> readFromWind(DateTime date,string tag=null, List<string> existCode=null,List<string> nonexistCode=null,IDictionary<string, object> options = null)
         {
             if (Caches.WindConnection == false && Caches.WindConnectionTry == true)
             {
@@ -47,6 +47,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
                 dataList = (object[])wd.data;
                 items.Add(new StockBasicInfo
                 {
+                    code=code,
                     name = dataList[0].ToString(),
                     listDate = (DateTime)dataList[1],
                     delistDate = dataList[2] is DBNull ? new DateTime(2099, 12, 31) : (DateTime)dataList[2]

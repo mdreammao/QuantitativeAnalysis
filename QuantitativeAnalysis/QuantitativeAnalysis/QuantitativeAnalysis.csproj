@@ -155,6 +155,7 @@
     <Compile Include="Utilities\Option\OptionInfoReform.cs" />
     <Compile Include="Utilities\Option\OptionMargin.cs" />
     <Compile Include="Utilities\Parameters\SlipPoint.cs" />
+    <Compile Include="Utilities\Stock\StockBasicInfoUtils.cs" />
     <Compile Include="Utilities\Transaction\Minute\MinuteCloseAllWithBar.cs" />
     <Compile Include="Utilities\Transaction\Minute\MinuteTransactionWithBar.cs" />
   </ItemGroup>

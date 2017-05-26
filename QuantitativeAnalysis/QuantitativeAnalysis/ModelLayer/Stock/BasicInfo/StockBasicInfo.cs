@@ -8,8 +8,10 @@ namespace QuantitativeAnalysis.ModelLayer.Stock.BasicInfo
 {
     public class StockBasicInfo
     {
+        public string code { get; set; }
         public DateTime listDate { get; set; }
         public DateTime delistDate { get; set; }
         public string name { get; set; }
+
     }
 }

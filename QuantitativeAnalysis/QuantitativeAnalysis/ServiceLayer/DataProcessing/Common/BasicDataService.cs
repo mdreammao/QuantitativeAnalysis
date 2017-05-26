@@ -27,7 +27,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="appendMode">是否为append模式，否则为new模式</param>
         /// <param name="localCsvExpiration">CacheData中本地csv文件的保鲜期（天数）</param>
         /// <param name="tag"></param>
-        virtual public List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration=5, bool appendMode = false, String tag = null, string code=null, DateTime startDate=new DateTime(), DateTime endDate=new DateTime())
+        public virtual List<T> fetchFromLocalCsvOrWindAndSaveAndCache(int localCsvExpiration=5, bool appendMode = false, String tag = null, string code=null, DateTime startDate=new DateTime(), DateTime endDate=new DateTime())
         {
             
             if (tag == null) tag = typeof(T).Name;
