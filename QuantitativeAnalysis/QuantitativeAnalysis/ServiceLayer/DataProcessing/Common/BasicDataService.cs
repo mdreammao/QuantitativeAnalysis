@@ -15,11 +15,11 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
     {
         static Logger log = LogManager.GetCurrentClassLogger();
 
-        public abstract List<T> readFromWind(string code,DateTime startDate,DateTime endDate);
+        protected abstract List<T> readFromWind(string code,DateTime startDate,DateTime endDate);
 
-        public abstract void saveToLocalCsvFile(IList<T> data, string path, bool appendMode = false, string tag = null);
+        protected abstract void saveToLocalCsvFile(IList<T> data, string path, bool appendMode = false, string tag = null);
 
-        public abstract List<T> readFromLocalCsv(String path);
+        protected abstract List<T> readFromLocalCsv(String path);
 
         /// <summary>
         /// 

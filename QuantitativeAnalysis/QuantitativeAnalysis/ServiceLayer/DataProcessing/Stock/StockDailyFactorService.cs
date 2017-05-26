@@ -2,6 +2,7 @@
 using QuantitativeAnalysis.ModelLayer.Common;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Common;
+using QuantitativeAnalysis.Utilities.Stock;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +65,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 return result;
             }
             //尝试从Wind获取
+            //根据股票的上市退市日期来调整获取数据的日期
+            startDate = startDate > StockBasicInfoUtils.getStockListDate(code) ? startDate : StockBasicInfoUtils.getStockListDate(code);
+            endDate = endDate > StockBasicInfoUtils.getStockDelistDate(code) ? StockBasicInfoUtils.getStockDelistDate(code) : endDate;
             log.Debug("尝试从Wind获取{0}...", code);
             try
             {
@@ -142,7 +146,6 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
             bool csvHasData = false;
-            var tradeDays = DateUtils.GetTradeDays(startDate, endDate);
             result = fetchFromLocalCsv(code, startDate,endDate,tag);
             if (result != null) csvHasData = true;
             if (result == null && Caches.WindConnection == false && Caches.WindConnectionTry==true)
@@ -151,7 +154,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 return result;
             }
 
-            if (result == null || result.Count()<tradeDays.Count()) //数据不完整，必须去万德获取数据
+            if (result == null) //数据不完整，必须去万德获取数据
             {
                 result = fetchFromWind(code, startDate, endDate);
             }

@@ -97,7 +97,7 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             {
                 case "on":
                     StockBasicInfoService stockInfoService = container.Resolve<StockBasicInfoService>();
-                    stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 30, tag: "StockBasicInfo", code: "allStock");
+                    stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 0, tag: "StockBasicInfo", code: "allStock");
                     break;
                 default:
                     break;

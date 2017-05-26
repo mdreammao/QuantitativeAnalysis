@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Stock
 {
-    public abstract class StockBasicInfoFromLocalCsvRepository : DataFromLocalCSVRepository<StockBasicInfo> 
+    public class StockBasicInfoFromLocalCsvRepository : DataFromLocalCSVRepository<StockBasicInfo> 
     {
 
     }

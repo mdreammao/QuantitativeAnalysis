@@ -16,17 +16,17 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 {
     class OptionInfoService : BasicDataService<OptionInfo>
     {
-        public override List<OptionInfo> readFromLocalCsv(string path)
+        protected override List<OptionInfo> readFromLocalCsv(string path)
         {
             return Platforms.container.Resolve<OptionInfoFromLocalCSVRepository>().readFromLocalCSV(path);
         }
 
-        public override List<OptionInfo> readFromWind(string code,DateTime startDate,DateTime endDate)
+        protected override List<OptionInfo> readFromWind(string code,DateTime startDate,DateTime endDate)
         {
             return Platforms.container.Resolve<OptionInfoFromWindRepository>().readFromWindEntirely(code,null,null);
         }
 
-        public override void saveToLocalCsvFile(IList<OptionInfo> data, string path, bool appendMode = false, string tag = null)
+        protected override void saveToLocalCsvFile(IList<OptionInfo> data, string path, bool appendMode = false, string tag = null)
         {
             Platforms.container.Resolve<OptionInfoToLocalCSVRepository>().saveToLocalCsv(path,data,appendMode);
         }

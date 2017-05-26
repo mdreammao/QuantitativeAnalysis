@@ -14,7 +14,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
     {
         
 
-        public List<StockBasicInfo> readFromWind(DateTime date,string tag=null, List<string> existCode=null,List<string> nonexistCode=null,IDictionary<string, object> options = null)
+        public List<StockBasicInfo> readFromWind(DateTime date,string tag=null, List<string> existCode=null,List<StockBasicInfo> preList=null,IDictionary<string, object> options = null)
         {
             if (Caches.WindConnection == false && Caches.WindConnectionTry == true)
             {
@@ -29,14 +29,22 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
             object[] dataList = (object[])delist.data;
             for (int k = 0; k < len; k++)
             {
-                codeList.Add(dataList[k * fieldLen + 1].ToString());
+                var code = dataList[k * fieldLen + 1].ToString();
+                if ((existCode!=null && existCode.Contains(code)==true) || existCode==null)
+                {
+                    codeList.Add(code);
+                }
             }
             len = list.codeList.Length;
             fieldLen = list.fieldList.Length;
             dataList = (object[])list.data;
             for (int k = 0; k < len; k++)
             {
-                codeList.Add(dataList[k * fieldLen + 1].ToString());
+                var code = dataList[k * fieldLen + 1].ToString();
+                if ((existCode!=null && existCode.Contains(code)==false) || existCode==null)
+                {
+                    codeList.Add(code);
+                }
             }
             codeList.Sort();
             List<StockBasicInfo> items = new List<StockBasicInfo>();
@@ -53,7 +61,17 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
                     delistDate = dataList[2] is DBNull ? new DateTime(2099, 12, 31) : (DateTime)dataList[2]
                 });
             }
-            return items;
+            if (preList!=null)
+            {
+                foreach (var stock in preList)
+                {
+                    if (items.Find(x => x.code == stock.code) == null)
+                    {
+                        items.Add(stock);
+                    }
+                }
+            }
+            return items.OrderBy(x=>x.code).ToList();
         }
 
         public override List<StockBasicInfo> readFromWind(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)

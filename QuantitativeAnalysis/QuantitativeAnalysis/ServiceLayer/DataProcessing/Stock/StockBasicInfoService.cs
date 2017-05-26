@@ -20,17 +20,22 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
     {
         static Logger log = LogManager.GetCurrentClassLogger();
 
-        public override List<StockBasicInfo> readFromLocalCsv(string path)
+        protected override List<StockBasicInfo> readFromLocalCsv(string path)
         {
             return Platforms.container.Resolve<StockBasicInfoFromLocalCsvRepository>().readFromLocalCSV(path);
         }
 
-        public override List<StockBasicInfo> readFromWind(string code, DateTime startDate, DateTime endDate)
+        protected List<StockBasicInfo> readFromWind(DateTime date,string tag=null,List<string> existCode=null,List<StockBasicInfo> preList=null)
         {
-            return Platforms.container.Resolve<StockBasicInfoFromWindRepository>().readFromWind(DateTime.Today);
+            return Platforms.container.Resolve<StockBasicInfoFromWindRepository>().readFromWind(date:date,tag:tag,existCode:existCode,preList:preList);
         }
 
-        public override void saveToLocalCsvFile(IList<StockBasicInfo> data, string path, bool appendMode = false, string tag = null)
+        protected override List<StockBasicInfo> readFromWind(string code, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void saveToLocalCsvFile(IList<StockBasicInfo> data, string path, bool appendMode = false, string tag = null)
         {
             Platforms.container.Resolve<StockBasicInfoToLocalCSVRepository>().saveToLocalCsv(path,data);
         }
@@ -39,6 +44,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
         {
             if (tag == null) tag = typeof(StockBasicInfo).Name;
             List<StockBasicInfo> data = null;
+            List<StockBasicInfo> preList = null;
+            List<string> existCode = null;
+            DateTime today = DateTime.Today;
             var filePathPattern = _buildCacheDataFilePath(tag, code, "*");
             var todayFilePath = _buildCacheDataFilePath(tag, code, DateTime.Now.ToString("yyyyMMdd"));
             var dirPath = Path.GetDirectoryName(filePathPattern);
@@ -51,14 +59,26 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 .OrderByDescending(fn => fn).ToList();
 
             var lastestFilePath = (allFilePaths == null || allFilePaths.Count == 0) ? null : allFilePaths[0];
+            if (lastestFilePath!=null)
+            {
+                try
+                {
+                    preList = readFromLocalCsv(lastestFilePath);
+                    existCode = preList.Where(x => x.delistDate > today).Select(x => x.code).ToList();
+                }
+                catch (Exception e)
+                {
+                    log.Error(e, "股票基本信息历史数据读取错误！");
+                }
+            }
             var daysdiff = FileUtils.GetCacheDataFileDaysPastTillToday(lastestFilePath);
             if (daysdiff > localCsvExpiration && Caches.WindConnection == true)
             {   //CacheData太旧，需要远程更新，然后保存到本地CacheData目录
                 var txt = (daysdiff == int.MaxValue) ? "不存在" : "已过期" + daysdiff + "天";
-                log.Info("本地csv文件{0}，尝试Wind读取新数据...", txt);
+                log.Info("本地csv文件{0}，尝试Wind读取新数据...", txt); 
                 try
                 {
-                    data = readFromWind(code, startDate, endDate);
+                    data = readFromWind(date:today,tag:tag,existCode:existCode,preList:preList);
                 }
                 catch (Exception e)
                 {
@@ -131,5 +151,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 ["{date}"] = date
             });
         }
+
+        
     }
 }
