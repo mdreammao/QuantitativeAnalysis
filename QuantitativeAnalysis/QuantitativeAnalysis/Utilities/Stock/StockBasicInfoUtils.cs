@@ -51,7 +51,7 @@ namespace QuantitativeAnalysis.Utilities.Stock
         public static List<StockBasicInfo> getStockListByDate(DateTime date)
         {
             List<StockBasicInfo> list = new List<StockBasicInfo>();
-            foreach (var stock in _stockBasicInfo)
+            foreach (var stock in getStockBasicInfo())
             {
                 if (stock.listDate<=date && stock.delistDate>date)
                 {
@@ -68,7 +68,7 @@ namespace QuantitativeAnalysis.Utilities.Stock
         /// <returns></returns>
         public static DateTime getStockListDate(string code)
         {
-            return _stockBasicInfo.Find(x => x.code == code).listDate;
+            return getStockBasicInfo().Find(x => x.code == code).listDate;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace QuantitativeAnalysis.Utilities.Stock
         /// <returns></returns>
         public static DateTime getStockDelistDate(string code)
         {
-            return _stockBasicInfo.Find(x => x.code == code).delistDate;
+            return getStockBasicInfo().Find(x => x.code == code).delistDate;
         }
     }
 }

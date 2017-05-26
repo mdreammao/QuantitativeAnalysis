@@ -25,7 +25,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromLocalCSV.Stock
                 var today = tradeDays[i];
                 var path = _buildCacheDataFilePath(code, today);
                 var list0 = readFromLocalCSV(path);
-                if (list0.Count!=0)
+                if (list0!=null && list0.Count!=0)
                 {
                     list.AddRange(list0);
                 }

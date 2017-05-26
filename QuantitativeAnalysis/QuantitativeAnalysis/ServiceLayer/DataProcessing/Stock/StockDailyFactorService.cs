@@ -145,6 +145,15 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
+            List<T> lackedInfo = new List<T>();
+            //记录本地获取的数据
+            List<DateTime> exitsDates = new List<DateTime>();
+            List<DateTime> lackedDates = new List<DateTime>();
+            //根据股票的上市退市日期来调整获取数据的日期
+            startDate = startDate > StockBasicInfoUtils.getStockListDate(code) ? startDate : StockBasicInfoUtils.getStockListDate(code);
+            endDate = endDate > StockBasicInfoUtils.getStockDelistDate(code) ? StockBasicInfoUtils.getStockDelistDate(code) : endDate;
+            var tradeDays = DateUtils.GetTradeDays(startDate, endDate);
+
             bool csvHasData = false;
             result = fetchFromLocalCsv(code, startDate,endDate,tag);
             if (result != null) csvHasData = true;
@@ -153,16 +162,39 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 log.Error("本地无CSV数据并且wind无法连接，故无法获得数据！");
                 return result;
             }
-
+            if (result!=null)
+            {
+                exitsDates = result.Select(x => x.time).ToList();
+                foreach (var date in tradeDays)
+                {
+                    if (exitsDates.Contains(date)==false)
+                    {
+                        lackedDates.Add(date);
+                    }
+                }
+            }
             if (result == null) //数据不完整，必须去万德获取数据
             {
                 result = fetchFromWind(code, startDate, endDate);
+            }
+            if (result!=null && lackedDates.Count!=0)
+            {
+                foreach (var date in lackedDates)
+                {
+                    lackedInfo.AddRange(fetchFromWind(code, date, date));   
+                }
             }
             if (!csvHasData && result != null && result.Count() > 0)
             {
                 //如果数据不是从csv获取的，可保存至本地，存为csv文件
                 log.Debug("正在保存到本地csv文件...");
                 saveToLocalCSV(result);
+            }
+            if (lackedInfo.Count>0)
+            {
+                saveToLocalCSV(lackedInfo);
+                result.AddRange(lackedInfo);
+                result.OrderBy(x => x.time).ToList();
             }
             return result;
         }
