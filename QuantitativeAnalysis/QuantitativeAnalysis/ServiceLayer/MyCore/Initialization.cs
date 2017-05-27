@@ -97,7 +97,7 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             {
                 case "on":
                     StockBasicInfoService stockInfoService = container.Resolve<StockBasicInfoService>();
-                    stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 0, tag: "StockBasicInfo", code: "allStock");
+                    stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 0, tag: "StockBasicInfo", code: "allStocks");
                     break;
                 default:
                     break;
@@ -115,7 +115,6 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
 
             StockDailyMarketService test = container.Resolve<StockDailyMarketService>();
             var a=test.fetchFromLocalCsvOrWindAndSave("600000.SH", new DateTime(2007, 1, 1), DateTime.Today);
-
         }
 
         private static void _RegisterComponents(ContainerBuilder cb)

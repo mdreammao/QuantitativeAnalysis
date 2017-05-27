@@ -46,7 +46,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             List<StockBasicInfo> data = null;
             List<StockBasicInfo> preList = null;
             List<string> existCode = null;
-            DateTime today = DateTime.Today;
+            DateTime today =DateUtils.PreviousOrCurrentTradeDay(DateTime.Today);
             var filePathPattern = _buildCacheDataFilePath(tag, code, "*");
             var todayFilePath = _buildCacheDataFilePath(tag, code, DateTime.Now.ToString("yyyyMMdd"));
             var dirPath = Path.GetDirectoryName(filePathPattern);
@@ -113,7 +113,6 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 log.Info("正在从本地csv文件{0}读取数据... ", lastestFilePath);
                 try
                 {
-
                     data = readFromLocalCsv(lastestFilePath);
                 }
                 catch (Exception e)

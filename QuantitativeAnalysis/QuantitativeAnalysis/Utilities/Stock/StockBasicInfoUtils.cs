@@ -32,12 +32,12 @@ namespace QuantitativeAnalysis.Utilities.Stock
                 }
                 catch (Exception e)
                 {
-                    log.Error(e,"内存未保持数据,需重新获取数据！{0}");
+                    log.Error(e,"未将股票基本信息数据存入内存,需重新获取数据！{0}");
                 }
                 if (_stockBasicInfo==null)
                 {
                     StockBasicInfoService stockInfoService = Platforms.container.Resolve<StockBasicInfoService>();
-                    _stockBasicInfo=stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 180, tag: "StockBasicInfo", code: "allStock");
+                    _stockBasicInfo=stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 180, tag: "StockBasicInfo", code: "allStocks");
                 }
             }
             return _stockBasicInfo;

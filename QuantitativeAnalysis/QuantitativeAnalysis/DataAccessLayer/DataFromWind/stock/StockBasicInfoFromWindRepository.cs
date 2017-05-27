@@ -1,6 +1,7 @@
 ﻿using QuantitativeAnalysis.DataAccessLayer.DataFromWind.Common;
 using QuantitativeAnalysis.ModelLayer.Stock.BasicInfo;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
+using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.stock
             {
                 return null;
             }
+            date = DateUtils.PreviousOrCurrentTradeDay(date);//获取最近的交易日
             WindAPI w = Platforms.GetWindAPI();
             WindData  delist= w.wset("sectorconstituent", "date="+date.ToString("yyyy-MM-dd")+";sectorid=a001010m00000000");
             WindData list = w.wset("sectorconstituent", "date=" + date.ToString("yyyy-MM-dd") + ";sectorid=a001010100000000");
