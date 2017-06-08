@@ -90,6 +90,7 @@
     <Compile Include="ModelLayer\Stock\BasicInfo\StockBasicInfo.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockBasicInfoService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockDailyFactorService.cs" />
+    <Compile Include="Utilities\Common\MSSQLUtils.cs" />
     <Compile Include="Utilities\DataApplication\RecordUtil.cs" />
     <Compile Include="Utilities\DataApplication\ResultPathUtil.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\YearToLocalCSVRepository.cs" />
@@ -166,11 +167,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ApplicationLayer\DataProcessingSystem\" />
     <Folder Include="ApplicationLayer\MonitoringSystem\" />
     <Folder Include="ApplicationLayer\SimulationSystem\" />
     <Folder Include="ApplicationLayer\StatisticalSystem\" />
     <Folder Include="DataAccessLayer\DataFromMSSQL\" />
-    <Folder Include="DataAccessLayer\DataFromOtherSource\" />
+    <Folder Include="DataAccessLayer\DateToMSSQL\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Finance\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Technique\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Valuation\" />
