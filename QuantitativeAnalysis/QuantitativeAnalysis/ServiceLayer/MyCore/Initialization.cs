@@ -4,6 +4,7 @@ using QuantitativeAnalysis.ModelLayer.Stock.MultiFactor.Market;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Option;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock;
 using QuantitativeAnalysis.ServiceLayer.TradeDays;
+using QuantitativeAnalysis.Utilities.Stock;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -93,16 +94,22 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
                     break;
             }
 
+            //程序有问题，暂时注释
             switch (ConfigurationManager.AppSettings["StockBasicInfoRecord"])
             {
                 case "on":
                     StockBasicInfoService stockInfoService = container.Resolve<StockBasicInfoService>();
                     stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 0, tag: "StockBasicInfo", code: "allStocks");
+                    //var stockInfoList = StockBasicInfoUtils.getAllStockList();
+                    //foreach (var stock in stockInfoList)
+                    //{
+                    //    container.Resolve<StockDailyMarketService>().fetchFromLocalCsvOrWindAndSave(stock.code, new DateTime(2007, 1, 1), DateTime.Today);
+                    //}
                     break;
                 default:
                     break;
             }
-            
+
             //switch (ConfigurationManager.AppSettings["CommodityOptionInfoRecord"])
             //{
             //    case "on":
@@ -112,9 +119,6 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             //    default:
             //        break;
             //}
-
-            StockDailyMarketService test = container.Resolve<StockDailyMarketService>();
-            var a=test.fetchFromLocalCsvOrWindAndSave("600000.SH", new DateTime(2007, 1, 1), DateTime.Today);
         }
 
         private static void _RegisterComponents(ContainerBuilder cb)

@@ -68,6 +68,15 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             //根据股票的上市退市日期来调整获取数据的日期
             startDate = startDate > StockBasicInfoUtils.getStockListDate(code) ? startDate : StockBasicInfoUtils.getStockListDate(code);
             endDate = endDate > StockBasicInfoUtils.getStockDelistDate(code) ? StockBasicInfoUtils.getStockDelistDate(code) : endDate;
+            if (endDate>=DateTime.Today)
+            {
+                endDate =DateUtils.PreviousTradeDay(DateTime.Today);
+            }
+            if(endDate<startDate)
+            {
+                log.Error("退市时间过早，无法读取数据！");
+                return result;
+            }
             log.Debug("尝试从Wind获取{0}...", code);
             try
             {
@@ -153,7 +162,6 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             startDate = startDate > StockBasicInfoUtils.getStockListDate(code) ? startDate : StockBasicInfoUtils.getStockListDate(code);
             endDate = endDate > StockBasicInfoUtils.getStockDelistDate(code) ? StockBasicInfoUtils.getStockDelistDate(code) : endDate;
             var tradeDays = DateUtils.GetTradeDays(startDate, endDate);
-
             bool csvHasData = false;
             result = fetchFromLocalCsv(code, startDate,endDate,tag);
             if (result != null) csvHasData = true;

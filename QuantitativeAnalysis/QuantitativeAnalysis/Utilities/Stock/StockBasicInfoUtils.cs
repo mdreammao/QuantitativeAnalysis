@@ -43,6 +43,10 @@ namespace QuantitativeAnalysis.Utilities.Stock
             return _stockBasicInfo;
         }
 
+        public static List<StockBasicInfo> getAllStockList()
+        {
+            return getStockBasicInfo();
+        }
         /// <summary>
         /// 根据给定日期，获取当日存续的股票
         /// </summary>
