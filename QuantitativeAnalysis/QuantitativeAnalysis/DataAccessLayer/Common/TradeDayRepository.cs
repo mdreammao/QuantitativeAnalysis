@@ -22,7 +22,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
         public override object[] toCsvRowValuesFromEntity(DateTime t)
         {
             return new object[] { Kit.ToInt_yyyyMMdd(t) };
-        }
+        } 
         public override DataColumn[] toCsvColumnsFromEntity(Type t)
         {
             return new DataColumn[] { new DataColumn("trade_days", typeof(int)) };
@@ -39,7 +39,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.Common
             WindAPI wapi = Platforms.GetWindAPI();
             WindData wd = wapi.tdays(startTime, endTime, "");
             var wdd = (object[])wd.data;
-            return wdd.Select(x => (DateTime)x).ToList();
+            return wdd.Select(x => Convert.ToDateTime(x)).ToList();
 
         }
 

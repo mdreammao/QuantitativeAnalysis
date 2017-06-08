@@ -167,7 +167,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 exitsDates = result.Select(x => x.time).ToList();
                 foreach (var date in tradeDays)
                 {
-                    if (exitsDates.Contains(date)==false)
+                    if (exitsDates.Contains(date)==false && date<DateTime.Today)
                     {
                         lackedDates.Add(date);
                     }
@@ -181,7 +181,11 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             {
                 foreach (var date in lackedDates)
                 {
-                    lackedInfo.AddRange(fetchFromWind(code, date, date));   
+                    var lackedList = fetchFromWind(code, date, date);
+                    if (lackedList!=null)
+                    {
+                        lackedInfo.AddRange(lackedList);
+                    }
                 }
             }
             if (!csvHasData && result != null && result.Count() > 0)

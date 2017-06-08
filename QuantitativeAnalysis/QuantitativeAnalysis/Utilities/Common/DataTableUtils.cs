@@ -30,7 +30,7 @@ namespace QuantitativeAnalysis.Utilities.Common
             return ToDataTableOneRowOnly(item, toColumnsDefaultFunc, toRowValuesDefaultFunc);
         }
 
-        private static DataTable ToDataTable<T>(IList<T> items, Func<Type, DataColumn[]> toColumnsFunc, Func<T, object[]> toRowValuesFunc)
+        public static DataTable ToDataTable<T>(IList<T> items, Func<Type, DataColumn[]> toColumnsFunc, Func<T, object[]> toRowValuesFunc)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
             //build columns
