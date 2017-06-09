@@ -71,7 +71,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             double k1 = 0.2;
             double k2 = -0.1;
             List<FuturesDaily> dailyData = new List<FuturesDaily>();
-            dailyData = Platforms.container.Resolve<FuturesDailyService>().fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
+            dailyData = Platforms.container.Resolve<FuturesDailyDataService>().fetchFromLocalCsvOrWindAndSave(underlying, startDate, endDate);
 
             List<double> highList = new List<double>();
             List<double> closeList = new List<double>();
@@ -273,7 +273,7 @@ namespace BackTestingPlatform.Strategies.Futures.XiaoLong
             //FuturesMinuteService futuresMinute = new FuturesMinuteService();
             //List<FuturesMinute> orignalList = Platforms.container.Resolve<FuturesMinuteRepository>().fetchFromLocalCsvOrWindAndSave(code, today);
             //List<FuturesMinute> orignalList = futuresMinute.fetchFromLocalCsvOrWindAndSave(code, today);
-            List<FuturesMinute> orignalList = Platforms.container.Resolve<FuturesMinuteService>().fetchFromLocalCsvOrWindAndSave(code, today);
+            List<FuturesMinute> orignalList = Platforms.container.Resolve<FuturesMinuteDataService>().fetchFromLocalCsvOrWindAndSave(code, today);
             List<FuturesMinute> data = KLineDataUtils.leakFilling(orignalList);
 
             //从本地csv 或者 wind获取数据，从wind拿到额数据会保存在本地

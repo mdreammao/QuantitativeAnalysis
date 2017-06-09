@@ -7,41 +7,23 @@ using System.Threading.Tasks;
 namespace QuantitativeAnalysis.ModelLayer.Common
 {
 
-    public class Tick : Sequential, ICloneable
+    public class Tick : Sequential
     {
         public string code { get; set; }
         public DateTime time { get; set; }
         public double lastPrice { get; set; }
-        public Position[] ask { get; set; }
-        public Position[] bid { get; set; }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
-        public override string ToString()
-        {
-            return String.Format("t={0},code={1},lastp={2}", time, code, lastPrice);
-        }
     }
 
     public class TickFromMssql : Tick
     {
-        public double high { get; set; }
-        public double low { get; set; }
-
         public double volume { get; set; }
         public double amount { get; set; }
         public double preSettle { get; set; }
-
         public double preClose { get; set; }
-
+        public double openInterest { get; set; }
         //包含交易日字段和自然日字段
-        public int date { get; set; }
-        public int ndate { get; set; }
-
-        public int moment { get; set; }
-
+        public int tdate { get; set; }
+        public int ttime { get; set; }
         public double ask1 { get; set; }
         public double askv1 { get; set; }
         public double ask2 { get; set; }

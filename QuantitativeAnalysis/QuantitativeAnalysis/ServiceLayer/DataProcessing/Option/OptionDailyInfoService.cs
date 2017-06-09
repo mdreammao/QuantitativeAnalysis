@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 {
-    class OptionInfoDailyService : InformationByDayService<OptionInfo>
+    class OptionDailyInfoService : InformationByDayService<OptionInfo>
     {
         const string PATH_KEY = "CacheData.Path.SequentialByDay";
 

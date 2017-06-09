@@ -35,7 +35,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="code"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public abstract List<T> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null);
+        protected abstract List<T> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null);
 
         /// <summary>
         /// 仅从默认MSSQL源获取数据,可能会抛出异常
@@ -43,7 +43,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="code"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public abstract List<T> readFromMSSQLOnly(string code, DateTime date);
+        protected abstract List<T> readFromMSSQLOnly(string code, DateTime date);
 
         /// <summary>
         ///  尝试从本地csv文件获取数据,可能会抛出异常
@@ -52,7 +52,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public abstract List<T> readFromLocalCSVOnly(string code, DateTime date, string tag = null);
+        protected abstract List<T> readFromLocalCSVOnly(string code, DateTime date, string tag = null);
 
         /// <summary>
         /// 将从其他数据源读到的数据保存到本地CSV文件
@@ -63,7 +63,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="tag">数据标签</param>
         /// <param name="appendMode">添加模式</param>
         /// <param name="canSaveToday">是否需保存今日数据</param>
-        public abstract void saveToLocalCSV(IList<T> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false);
+        protected abstract void saveToLocalCSV(IList<T> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false);
         
         /// <summary>
         /// 尝试从本地csv文件，获取数据。
@@ -101,7 +101,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        virtual public List<T> fetchFromWind(string code, DateTime date, string tag = null)
+        public virtual List<T> fetchFromWind(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -134,7 +134,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> fetchFromMssql(string code, DateTime date, string tag = null)
+        public virtual List<T> fetchFromMssql(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -161,7 +161,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> fetchFromLocalCsvOrWind(string code, DateTime date, string tag = null)
+        public virtual List<T> fetchFromLocalCsvOrWind(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -195,7 +195,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> fetchFromLocalCsvOrWindAndSave(string code, DateTime date, string tag = null)
+        public virtual List<T> fetchFromLocalCsvOrWindAndSave(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -221,7 +221,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
             }
             return result;
         }
-        
+
         /// <summary>
         /// 先后尝试从本地csv文件，默认MSSQL数据库源获取数据。
         /// </summary>
@@ -229,7 +229,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> fetchFromLocalCsvOrMssql(string code, DateTime date, string tag = null)
+        public virtual List<T> fetchFromLocalCsvOrMssql(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -251,7 +251,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> fetchFromLocalCsvOrMssqlAndSave(string code, DateTime date, string tag = null)
+        public virtual List<T> fetchFromLocalCsvOrMssqlAndSave(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;
@@ -282,7 +282,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="date">指定的日期</param>
         /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
         /// <returns></returns>
-        public List<T> fetchFromWindAndSave(string code, DateTime date, string tag = null)
+        public virtual List<T> fetchFromWindAndSave(string code, DateTime date, string tag = null)
         {
             if (tag == null) tag = typeof(T).ToString();
             List<T> result = null;

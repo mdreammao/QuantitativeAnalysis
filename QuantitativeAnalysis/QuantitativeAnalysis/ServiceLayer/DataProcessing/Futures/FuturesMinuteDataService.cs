@@ -14,21 +14,21 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
 {
-    class FuturesMinuteService : SequentialByDayService<FuturesMinute>
+    class FuturesMinuteDataService : SequentialByDayService<FuturesMinute>
     {
         const string PATH_KEY = "CacheData.Path.SequentialByDay";
-        public override List<FuturesMinute> readFromLocalCSVOnly(string code, DateTime date, string tag = null)
+        protected override List<FuturesMinute> readFromLocalCSVOnly(string code, DateTime date, string tag = null)
         {
             var path = _buildCacheDataFilePath(code, date, tag);
             return Platforms.container.Resolve<FuturesMinuteFromLocalCSVRepository>().readFromLocalCSV(path);
         }
 
-        public override List<FuturesMinute> readFromWindOnly(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
+        protected override List<FuturesMinute> readFromWindOnly(string code, DateTime dateStart, DateTime dateEnd, string tag = null, IDictionary<string, object> options = null)
         {
             return Platforms.container.Resolve<FuturesMinuteFromWindRepository>().readFromWind(code, dateStart, dateEnd, tag, options);
         }
 
-        public override List<FuturesMinute> readFromMSSQLOnly(string code, DateTime date)
+        protected override List<FuturesMinute> readFromMSSQLOnly(string code, DateTime date)
         {
             throw new NotImplementedException();
         }
@@ -44,7 +44,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
             });
         }
 
-        public override void saveToLocalCSV(IList<FuturesMinute> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
+        protected override void saveToLocalCSV(IList<FuturesMinute> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
         {
             Platforms.container.Resolve<FuturesMinuteToLocalCSVRepository>().saveToLocalCsv(data, code, date, tag);
         }

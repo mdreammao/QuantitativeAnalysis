@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using BackTestingPlatform.Strategies.Futures.XiaoLong;
+using QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickDataProcessing;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace Tester
             //var paras = new EfficiencyRatioWithParametersChoice(20150101, 20170218, "RB.SHF", 60, 20);
             //var test = new EfficiencyRatioWithSpecifiedParametres(20150101, 20170218, "RB.SHF", paras.parameters);
             //var test = new DualThrustTest(20150101, 20170516, "RB.SHF");
+            var test = new OptionTickDataArrangement();
             DateTime now2 = DateTime.Now;
             Console.WriteLine(now2 - now);
         }

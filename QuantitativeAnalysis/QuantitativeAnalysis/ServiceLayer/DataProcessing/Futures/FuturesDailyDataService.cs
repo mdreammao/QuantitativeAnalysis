@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
 {
-    class FuturesDailyService : SequentialByYearService<FuturesDaily>
+    class FuturesDailyDataService : SequentialByYearService<FuturesDaily>
     {
         public override List<FuturesDaily> readFromLocalCSVOnly(String path)
         {

@@ -19,6 +19,64 @@ namespace QuantitativeAnalysis.Utilities.Common
         static Logger log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// 新建数据库函数。
+        /// </summary>
+        /// <param name="dataBaseName">需新建的数据库名称</param>
+        /// <param name="connectString">连接字符串</param>
+        public static void CreateDataBase(string dataBaseName, string connectString,string commandText=null)
+        {
+            using (SqlConnection conn = new SqlConnection(connectString))
+            {
+                conn.Open();//打开数据库  
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText =commandText==null? "CREATE DATABASE " + dataBaseName + " ON PRIMARY (NAME = '" + dataBaseName + "', FILENAME = 'D:\\HFDB\\" + dataBaseName + ".dbf',SIZE = 1024MB,MaxSize = 512000MB,FileGrowth = 1024MB) LOG ON (NAME = '" + dataBaseName + "Log',FileName = 'D:\\HFDB\\" + dataBaseName + ".ldf',Size = 20MB,MaxSize = 1024MB,FileGrowth = 10MB)":commandText;
+                try
+                {
+                    cmd.ExecuteReader();
+                }
+                catch (Exception myerror)
+                {
+                    System.Console.WriteLine(myerror.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 新建数据表。
+        /// </summary>
+        /// <param name="tableName">表名</param>
+        /// <param name="connectString">连接字符串</param>
+        public static void CreateTable(string tableName, string connectString,string commmandText=null)
+        {
+            using (SqlConnection conn = new SqlConnection(connectString))
+            {
+                conn.Open();//打开数据库  
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText =commmandText==null? "CREATE TABLE [dbo].[" + tableName + "]([code] [char](11) NOT NULL,[tdate] [int] NOT NULL," +
+                    "[ttime] [int] NOT NULL,[lastPrice] [decimal](12,3) NULL,[ask1] [decimal](12,3) NULL,[ask2] [decimal](12,3) NULL," +
+                    "[ask3] [decimal](12,3) NULL,[ask4] [decimal](12,3) NULL,[ask5] [decimal](12,3) NULL,[bid1] [decimal](12,3) NULL," +
+                    "[bid2] [decimal](12,3) NULL,[bid3] [decimal](12,3) NULL,[bid4] [decimal](12,3) NULL,[bid5] [decimal](12,3) NULL," +
+                    "[askv1] [decimal](10, 0) NULL,[askv2] [decimal](10, 0) NULL,[askv3] [decimal](10, 0) NULL,[askv4] [decimal](10, 0) NULL," +
+                    "[askv5] [decimal](10, 0) NULL,[bidv1] [decimal](10, 0) NULL,[bidv2] [decimal](10, 0) NULL,[bidv3] [decimal](10, 0) NULL," +
+                    "[bidv4] [decimal](10, 0) NULL,[bidv5] [decimal](10, 0) NULL,[volume] [decimal](20, 0) NULL,[amount] [decimal](20, 3) NULL," +
+                    "[openInterest] [decimal](20, 0) NULL,[preClose] [decimal](12,3) NULL,[preSettle] [decimal](12,3) NULL,CONSTRAINT[PK_" + tableName + "] " +
+                    "PRIMARY KEY NONCLUSTERED([code] ASC,[tdate] ASC,[ttime] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, " +
+                    "IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON [PRIMARY] CREATE CLUSTERED " +
+                    "INDEX[IX_" + tableName + "_TDATE] ON[dbo].[" + tableName + "]([tdate] ASC,[ttime] ASC)WITH(PAD_INDEX = OFF, " +
+                    "STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, " +
+                    "ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]":commmandText;
+                try
+                {
+                    cmd.ExecuteReader();
+                }
+                catch (Exception myerror)
+                {
+                    System.Console.WriteLine(myerror.Message);
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取app.config里配置的ConnectionString
         /// 如果以“server=”开头，则原样返回
         /// </summary>
@@ -408,7 +466,9 @@ namespace QuantitativeAnalysis.Utilities.Common
             SqlBulkCopy bulkCopy = new SqlBulkCopy(conn);   //用其它源的数据有效批量加载sql server表中
             bulkCopy.DestinationTableName = targetTable;    //服务器上目标表的名称
             bulkCopy.BatchSize = sourceDt.Rows.Count;   //每一批次中的行数
-
+            bulkCopy.ColumnMappings.Add("ttime", "ttime");
+            bulkCopy.ColumnMappings.Add("tdate", "tdate");
+            bulkCopy.ColumnMappings.Add("code", "code");
             try
             {
                 conn.Open();
