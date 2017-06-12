@@ -21,15 +21,14 @@ namespace QuantitativeAnalysis.Utilities.Common
         /// <summary>
         /// 新建数据库函数。
         /// </summary>
-        /// <param name="dataBaseName">需新建的数据库名称</param>
         /// <param name="connectString">连接字符串</param>
-        public static void CreateDataBase(string dataBaseName, string connectString,string commandText=null)
+        public static void CreateDataBase(string connectString,string commandText)
         {
             using (SqlConnection conn = new SqlConnection(connectString))
             {
                 conn.Open();//打开数据库  
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText =commandText==null? "CREATE DATABASE " + dataBaseName + " ON PRIMARY (NAME = '" + dataBaseName + "', FILENAME = 'D:\\HFDB\\" + dataBaseName + ".dbf',SIZE = 1024MB,MaxSize = 512000MB,FileGrowth = 1024MB) LOG ON (NAME = '" + dataBaseName + "Log',FileName = 'D:\\HFDB\\" + dataBaseName + ".ldf',Size = 20MB,MaxSize = 1024MB,FileGrowth = 10MB)":commandText;
+                cmd.CommandText = commandText;
                 try
                 {
                     cmd.ExecuteReader();
@@ -37,6 +36,7 @@ namespace QuantitativeAnalysis.Utilities.Common
                 catch (Exception myerror)
                 {
                     System.Console.WriteLine(myerror.Message);
+                    log.Error(myerror);
                 }
             }
         }
@@ -44,27 +44,14 @@ namespace QuantitativeAnalysis.Utilities.Common
         /// <summary>
         /// 新建数据表。
         /// </summary>
-        /// <param name="tableName">表名</param>
         /// <param name="connectString">连接字符串</param>
-        public static void CreateTable(string tableName, string connectString,string commmandText=null)
+        public static void CreateTable(string connectString,string commmandText)
         {
             using (SqlConnection conn = new SqlConnection(connectString))
             {
                 conn.Open();//打开数据库  
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText =commmandText==null? "CREATE TABLE [dbo].[" + tableName + "]([code] [char](11) NOT NULL,[tdate] [int] NOT NULL," +
-                    "[ttime] [int] NOT NULL,[lastPrice] [decimal](12,3) NULL,[ask1] [decimal](12,3) NULL,[ask2] [decimal](12,3) NULL," +
-                    "[ask3] [decimal](12,3) NULL,[ask4] [decimal](12,3) NULL,[ask5] [decimal](12,3) NULL,[bid1] [decimal](12,3) NULL," +
-                    "[bid2] [decimal](12,3) NULL,[bid3] [decimal](12,3) NULL,[bid4] [decimal](12,3) NULL,[bid5] [decimal](12,3) NULL," +
-                    "[askv1] [decimal](10, 0) NULL,[askv2] [decimal](10, 0) NULL,[askv3] [decimal](10, 0) NULL,[askv4] [decimal](10, 0) NULL," +
-                    "[askv5] [decimal](10, 0) NULL,[bidv1] [decimal](10, 0) NULL,[bidv2] [decimal](10, 0) NULL,[bidv3] [decimal](10, 0) NULL," +
-                    "[bidv4] [decimal](10, 0) NULL,[bidv5] [decimal](10, 0) NULL,[volume] [decimal](20, 0) NULL,[amount] [decimal](20, 3) NULL," +
-                    "[openInterest] [decimal](20, 0) NULL,[preClose] [decimal](12,3) NULL,[preSettle] [decimal](12,3) NULL,CONSTRAINT[PK_" + tableName + "] " +
-                    "PRIMARY KEY NONCLUSTERED([code] ASC,[tdate] ASC,[ttime] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, " +
-                    "IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON [PRIMARY] CREATE CLUSTERED " +
-                    "INDEX[IX_" + tableName + "_TDATE] ON[dbo].[" + tableName + "]([tdate] ASC,[ttime] ASC)WITH(PAD_INDEX = OFF, " +
-                    "STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, " +
-                    "ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]":commmandText;
+                cmd.CommandText = commmandText;
                 try
                 {
                     cmd.ExecuteReader();
@@ -460,15 +447,21 @@ namespace QuantitativeAnalysis.Utilities.Common
         /// </summary>
         /// <param name="sourceDt">数据源表</param>
         /// <param name="targetTable">服务器上目标表</param>
-        public static void BulkToDB(string connStr, DataTable sourceDt, string targetTable)
+        public static void OptionDataBulkToMSSQL(string connStr, DataTable sourceDt, string targetTable)
         {
             SqlConnection conn = new SqlConnection(connStr);
             SqlBulkCopy bulkCopy = new SqlBulkCopy(conn);   //用其它源的数据有效批量加载sql server表中
             bulkCopy.DestinationTableName = targetTable;    //服务器上目标表的名称
             bulkCopy.BatchSize = sourceDt.Rows.Count;   //每一批次中的行数
-            bulkCopy.ColumnMappings.Add("ttime", "ttime");
-            bulkCopy.ColumnMappings.Add("tdate", "tdate");
-            bulkCopy.ColumnMappings.Add("code", "code");
+            //指定源和目标列
+            //bulkCopy.ColumnMappings.Add(datatable的字段名,数据库表的列名)
+            for (int i = 0; i < sourceDt.Columns.Count; i++)
+            {
+                if (sourceDt.Columns[i].ColumnName != "time")
+                {
+                    bulkCopy.ColumnMappings.Add(sourceDt.Columns[i].ColumnName, sourceDt.Columns[i].ColumnName);
+                }
+            }
             try
             {
                 conn.Open();
@@ -486,6 +479,163 @@ namespace QuantitativeAnalysis.Utilities.Common
                     bulkCopy.Close();
             }
 
+        }
+
+        /// <summary>
+        /// 判断给定数据库是否存在
+        /// </summary>
+        /// <param name="dataBaseName">数据库名</param>
+        /// <param name="connectString">连接字符串</param>
+        /// <returns>返回是否存在数据库</returns>
+        public static bool CheckDataBaseExist(string dataBaseName, string connectString)
+        {
+            using (SqlConnection conn = new SqlConnection(connectString))
+            {
+                conn.Open();//打开数据库  
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "select count(*) from sysdatabases where name='" + dataBaseName + "'";
+                try
+                {
+
+                    int number = (int)cmd.ExecuteScalar();
+                    if (number > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception myerror)
+                {
+                    System.Console.WriteLine(myerror.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// 判断表是否存在。
+        /// </summary>
+        /// <param name="dataBaseName">数据库名</param>
+        /// <param name="tableName">表名</param>
+        /// <returns>返回是否存在表</returns>
+        public static bool CheckExist(string dataBaseName, string tableName, string connectString)
+        {
+            using (SqlConnection conn = new SqlConnection(connectString))
+            {
+                conn.Open();//打开数据库  
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "select COUNT(*) from [" + dataBaseName + "].sys.sysobjects where name = '" + tableName + "'";
+                try
+                {
+
+                    int number = (int)cmd.ExecuteScalar();
+                    if (number > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception myerror)
+                {
+                    System.Console.WriteLine(myerror.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 获取已存储信息的函数。
+        /// </summary>
+        /// <param name="tableName">数据表</param>
+        /// <param name="connectString">连接字符串</param>
+        /// <returns>记录数目</returns>
+        public static int MaxRecordDate(string tableName, string connectString)
+        {
+            int num = 0;
+            using (SqlConnection conn = new SqlConnection(connectString))
+            {
+                conn.Open();//打开数据库  
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "select max(tdate) from [" + tableName + "]";
+                try
+                {
+
+                    int number = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (number > 0)
+                    {
+                        num = number;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                catch (Exception myerror)
+                {
+                    System.Console.WriteLine(myerror.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return num;
+        }
+
+
+        /// <summary>
+        /// 获取已存储信息的函数。
+        /// </summary>
+        /// <param name="tableName">数据表</param>
+        /// <param name="connectString">连接字符串</param>
+        /// <param name="SqlStr">SQL查询语句</param>
+        /// <returns>记录数目</returns>
+        public static int getNumbers(string tableName, string connectString,string SqlStr)
+        {
+            int num = 0;
+            using (SqlConnection conn = new SqlConnection(connectString))
+            {
+                conn.Open();//打开数据库  
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = SqlStr;
+                try
+                {
+
+                    int number = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (number > 0)
+                    {
+                        num = number;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                catch (Exception myerror)
+                {
+                    System.Console.WriteLine(myerror.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return num;
         }
 
     }

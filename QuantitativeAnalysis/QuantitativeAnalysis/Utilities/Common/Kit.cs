@@ -214,6 +214,10 @@ namespace QuantitativeAnalysis.Utilities.Common
                 int.TryParse((string)arg, out r);
                 return r;
             }
+            if (arg.GetType()==typeof(DateTime))
+            {
+                return ToInt_yyyyMMdd((DateTime)arg);
+            }
             return 0;
         }
 

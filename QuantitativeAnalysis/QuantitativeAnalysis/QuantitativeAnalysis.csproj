@@ -161,6 +161,7 @@
     <Compile Include="Utilities\Futures\FuturesMargin.cs" />
     <Compile Include="Utilities\Option\OptionInfoReform.cs" />
     <Compile Include="Utilities\Option\OptionMargin.cs" />
+    <Compile Include="Utilities\Option\OptionUtils_50ETF.cs" />
     <Compile Include="Utilities\Parameters\SlipPoint.cs" />
     <Compile Include="Utilities\Stock\StockBasicInfoUtils.cs" />
     <Compile Include="Utilities\Transaction\Minute\MinuteCloseAllWithBar.cs" />
