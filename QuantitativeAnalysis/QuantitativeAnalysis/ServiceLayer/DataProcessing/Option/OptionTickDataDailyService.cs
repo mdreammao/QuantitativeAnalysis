@@ -27,13 +27,13 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
             var SqlString = String.Format(@"
             SELECT * FROM [WindFullMarket{0}].[dbo].[MarketData_{1}] where tdate={2} and ttime>=91500000 order by tdate,ttime
             ", yyyyMM, codeStr, yyyyMMdd);
-            if (Convert.ToInt32(yyyyMM) < 201511)
-            {
-                connName = "local";
-                SqlString = String.Format(@"
-            SELECT * FROM [TradeMarket{0}].[dbo].[MarketData_{1}] where tdate={2} and ttime>=91500000 order by tdate,ttime
-            ", yyyyMM, codeStr, yyyyMMdd);
-            }
+            //if (Convert.ToInt32(yyyyMM) <= 201509)
+            //{
+            //    connName = "local";
+            //    SqlString = String.Format(@"
+            //SELECT * FROM [TradeMarket{0}].[dbo].[MarketData_{1}] where tdate={2} and ttime>=91500000 order by tdate,ttime
+            //", yyyyMM, codeStr, yyyyMMdd);
+            //}
             return Platforms.container.Resolve<OptionDataFromMSSQLRepository>().readFromMSSQLDaily(code, date, connName, SqlString);
         }
 
