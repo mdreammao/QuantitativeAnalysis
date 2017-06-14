@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 {
-    class OptionTickDataDailyService : SequentialByDayService<OptionTickFromMssql>
+    class OptionTickDataDailyStoringService : SequentialByDayService<OptionTickFromMssql>
     {
         protected override List<OptionTickFromMssql> readFromLocalCSVOnly(string code, DateTime date, string tag = null)
         {
@@ -20,14 +20,21 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 
         protected override List<OptionTickFromMssql> readFromMSSQLOnly(string code, DateTime date)
         {
-            var connName = "local";
+            var connName = "corp170";
             var yyyyMM = date.ToString("yyyyMM");
             var yyyyMMdd = date.ToString("yyyyMMdd");
             var codeStr = code.Replace('.', '_');
             var SqlString = String.Format(@"
-            SELECT * FROM [OptionTickData].[dbo].[MarketData_{0}] where tdate={1} and ttime>=91500000 order by tdate,ttime
-            ", codeStr, yyyyMMdd);
-            return Platforms.container.Resolve<OptionDataFromLocalServerRepository>().readFromMSSQLDaily(code, date, connName, SqlString);
+            SELECT * FROM [WindFullMarket{0}].[dbo].[MarketData_{1}] where tdate={2} and ttime>=91500000 order by tdate,ttime
+            ", yyyyMM, codeStr, yyyyMMdd);
+            //if (Convert.ToInt32(yyyyMM) <= 201509)
+            //{
+            //    connName = "local";
+            //    SqlString = String.Format(@"
+            //SELECT * FROM [TradeMarket{0}].[dbo].[MarketData_{1}] where tdate={2} and ttime>=91500000 order by tdate,ttime
+            //", yyyyMM, codeStr, yyyyMMdd);
+            //}
+            return Platforms.container.Resolve<OptionDataFrom170ServerRepository>().readFromMSSQLDaily(code, date, connName, SqlString);
         }
 
         protected override List<OptionTickFromMssql> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)

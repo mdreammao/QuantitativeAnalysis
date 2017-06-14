@@ -21,8 +21,10 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
 
         protected abstract List<T> readFromLocalCsv(String path);
 
+        protected abstract void saveToSQLServer(IList<T> data,string serviceName, string dataBaseName, string tableName, string sqlStr);
+
         /// <summary>
-        /// 
+        /// 核心存储程序
         /// </summary>
         /// <param name="appendMode">是否为append模式，否则为new模式</param>
         /// <param name="localCsvExpiration">CacheData中本地csv文件的保鲜期（天数）</param>

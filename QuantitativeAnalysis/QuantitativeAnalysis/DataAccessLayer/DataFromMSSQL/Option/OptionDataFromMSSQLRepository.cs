@@ -11,6 +11,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Option
 {
     public class OptionDataFromMSSQLRepository : DataFromMSSQLRepository <OptionTickFromMssql>
     {
-
+    
     }
 }

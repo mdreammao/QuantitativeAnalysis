@@ -35,6 +35,11 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             throw new NotImplementedException();
         }
 
+        protected override void saveToSQLServer(IList<StockBasicInfo> data, string serviceName, string dataBaseName, string tableName, string sqlStr)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void saveToLocalCsvFile(IList<StockBasicInfo> data, string path, bool appendMode = false, string tag = null)
         {
             Platforms.container.Resolve<StockBasicInfoToLocalCSVRepository>().saveToLocalCsv(path,data);

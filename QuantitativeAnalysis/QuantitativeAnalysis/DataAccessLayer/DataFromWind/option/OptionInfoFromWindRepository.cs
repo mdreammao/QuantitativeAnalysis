@@ -18,7 +18,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromWind.Option
             return readFromWindOnlyByDate(code.ToUpper(), startDate, endDate);
         }
 
-        public List<OptionInfo> readFromWindEntirely(string code,string tag = null, IDictionary<string, object> options = null)
+        public List<OptionInfo> read50ETFOptionFromWind(string tag = null, IDictionary<string, object> options = null)
         {
 
             return readFromWindOnly50ETFOption("510050.SH", "sse");

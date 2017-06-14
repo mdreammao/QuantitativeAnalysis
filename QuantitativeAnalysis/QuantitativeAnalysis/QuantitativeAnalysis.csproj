@@ -79,6 +79,8 @@
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Stock\StockDailyFactorFromLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Stock\StockDailyMarketFromLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromMSSQL\Common\DataFromMSSQLRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFrom170ServerRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFromLocalServerRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFromMSSQLRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Common\DataFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesDailyFromWindRepository.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="ModelLayer\Option\OptionTickFromMssql.cs" />
     <Compile Include="ModelLayer\Stock\BasicInfo\StockBasicInfo.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Option\OptionTickDataDailyService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Option\OptionTickDataDailyStoringService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockBasicInfoService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockDailyFactorService.cs" />
     <Compile Include="Utilities\Common\MSSQLUtils.cs" />
@@ -147,7 +150,7 @@
     <Compile Include="ServiceLayer\DataProcessing\Common\SequentialByYearService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Futures\FuturesDailyDataService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Futures\FuturesMinuteDataService.cs" />
-    <Compile Include="ServiceLayer\DataProcessing\Option\OptionInfoService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Option\OptionInfoOf50ETFService.cs" />
     <Compile Include="Utilities\AccountOperator\Minute\AccountUpdatingWithMinuteBar.cs" />
     <Compile Include="Utilities\Common\CsvFileUtils.cs" />
     <Compile Include="Utilities\Common\DataTableUtils.cs" />

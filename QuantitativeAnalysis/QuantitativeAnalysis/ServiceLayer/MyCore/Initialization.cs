@@ -87,7 +87,7 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             switch (ConfigurationManager.AppSettings["50ETFOptionInfoRecord"])
             {
                 case "on":
-                    OptionInfoService optionInfoService = container.Resolve<OptionInfoService>();
+                    OptionInfoOf50ETFService optionInfoService = container.Resolve<OptionInfoOf50ETFService>();
                     optionInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(tag:"OptionInfo",code:"510050.SH");
                     break;
                 default:

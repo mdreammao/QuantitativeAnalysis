@@ -50,13 +50,20 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                 {
                     //先检查目标数据库中存在的数据
                     string tableName = "MarketData_"+option.optionCode.Replace('.', '_');
-                    if (checkTargetDataTable(date,tableName)==0) 
+                    int numbers = checkTargetDataTable(date, tableName);
+                   if (numbers>10000) 
                     {
-                        var data= OptionTickDataUtils.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date));
-                        string connStr = MSSQLUtils.GetConnectionString(targetServer) +"database=" + dataBase + ";";
-                        MSSQLUtils.OptionDataBulkToMSSQL(connStr, DataTableUtils.ToDataTable(data), tableName);
+                        var data= OptionTickDataUtils.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchFromMssql(option.optionCode, date));
+                        var data2 = Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date);
+                        //if (data!=null && data.Count>0)
+                        //{
+                            
+                        //    string connStr = MSSQLUtils.GetConnectionString(targetServer) + "database=" + dataBase + ";";
+                        //    MSSQLUtils.OptionDataBulkToMSSQL(connStr, DataTableUtils.ToDataTable(data), tableName);
+                        //}
                     }
                 }
+                //Console.WriteLine("Date:{0} Complete!", date.ToString("yyyyMMdd"));
             }
         }
 

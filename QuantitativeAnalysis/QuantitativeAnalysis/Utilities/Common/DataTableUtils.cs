@@ -37,6 +37,10 @@ namespace QuantitativeAnalysis.Utilities.Common
             var cols = toColumnsFunc(typeof(T));
             dataTable.Columns.AddRange(cols);
 
+            if (items==null)
+            {
+                return dataTable;
+            }
             //fill rows
             foreach (T item in items)
             {
