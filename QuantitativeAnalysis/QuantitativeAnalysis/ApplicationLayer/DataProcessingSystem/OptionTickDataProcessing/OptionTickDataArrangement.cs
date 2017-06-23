@@ -19,7 +19,6 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
         private DateTime startDate, endDate;
         private List<DateTime> tradeDays = new List<DateTime>();
         private List<OptionInfo> optionInfoList = new List<OptionInfo>();
-        private string sourceServer;
         private string targetServer;
         private string dataBase;
         static Logger log = LogManager.GetCurrentClassLogger();
@@ -28,14 +27,13 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
         /// </summary>
         /// <param name="startDate">开始时间</param>
         /// <param name="endDate">结束时间</param>
-        public OptionTickDataArrangement(int startDate,int endDate,string sourceServer="local",string targetServer="local",string dataBase="optionTickData")
+        public OptionTickDataArrangement(int startDate,int endDate,string targetServer="local",string dataBase="optionTickData")
         {
 
             this.startDate = Kit.ToDate(startDate);
             this.endDate = Kit.ToDate(endDate);
             this.tradeDays = DateUtils.GetTradeDays(startDate, endDate);
             this.optionInfoList = (List<OptionInfo>)Caches.get("OptionInfo_510050.SH");
-            this.sourceServer = sourceServer;
             this.targetServer = targetServer;
             this.dataBase = dataBase;
             save50ETFOptionData();
