@@ -20,6 +20,10 @@ namespace QuantitativeAnalysis.Utilities.DataApplication
             filterList.Add(list[0]);
             for (int i = 1; i < list.Count(); i++)
             {
+                if (list[i].lastPrice==0 && list[i].ask1==1 && list[i].bid1==0)//删除成交价及盘口价格为0的数据
+                {
+                    continue;
+                }
                 if (list[i].ttime<150000000)
                 {
                     if (list[i].code == filterList[last].code && list[i].ttime == filterList[last].ttime && list[i].tdate == filterList[last].tdate)

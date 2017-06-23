@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using NLog;
 using QuantitativeAnalysis.ModelLayer.Option;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Option;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
@@ -21,6 +22,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
         private string sourceServer;
         private string targetServer;
         private string dataBase;
+        static Logger log = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -37,6 +39,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
             this.targetServer = targetServer;
             this.dataBase = dataBase;
             save50ETFOptionData();
+            //saveStockData("510050.SH");
         }
 
         private void save50ETFOptionData()
@@ -44,6 +47,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
             //逐日进行检查
             foreach (var date in tradeDays)
             {
+                //记录50ETF期权数据
                 var list = OptionUtils_50ETF.getOptionListByDate(optionInfoList,Kit.ToInt(date));
                 //逐合约进行检查
                 foreach (var option in list)
@@ -51,7 +55,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                     //先检查目标数据库中存在的数据
                     string tableName = "MarketData_"+option.optionCode.Replace('.', '_');
                     int numbers = checkTargetDataTable(date, tableName);
-                   if (numbers>0) 
+                   if (numbers==0) 
                     {
                         var data= OptionTickDataUtils.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchFromMssql(option.optionCode, date));
                         //var data2 = Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date);
@@ -63,11 +67,40 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                         }
                     }
                 }
+                
+
+
                 Console.WriteLine("Date:{0} Complete!", date.ToString("yyyyMMdd"));
             }
         }
 
+        private void saveStockData(string code)
+        {
+            //逐日进行检查
+            foreach (var date in tradeDays)
+            {
+                //先检查目标数据库中存在的数据
+                string tableName = "MarketData_" + code.Replace('.', '_');
+                int numbers = checkTargetDataTable(date, tableName);
+                if (numbers<=1000)
+                {
+                    log.Warn("date:{0} code:{1} numbers{2}.", date.ToString("yyMMdd"), code, numbers);
+                }
+                if (numbers == 0)
+                {
+                    
+                    var data = OptionTickDataUtils.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchFromMssql(code, date));
+                    //var data2 = Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date);
+                    if (data != null && data.Count > 0)
+                    {
 
+                        string connStr = MSSQLUtils.GetConnectionString(targetServer) + "database=" + dataBase + ";";
+                        MSSQLUtils.OptionDataBulkToMSSQL(connStr, DataTableUtils.ToDataTable(data), tableName);
+                    }
+                }
+                Console.WriteLine("Date:{0} Complete!", date.ToString("yyyyMMdd"));
+            }
+        }
         private int checkTargetDataTable(DateTime date,string tableName)
         {
 
