@@ -1,6 +1,5 @@
 ﻿using NLog;
-using QuantitativeAnalysis.ModelLayer.Common;
-using QuantitativeAnalysis.ModelLayer.Option;
+using QuantitativeAnalysis.ModelLayer.Stock.Tick;
 using QuantitativeAnalysis.Utilities.Common;
 using System;
 using System.Collections.Generic;
@@ -9,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Common
+namespace QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Stock
 {
-    public abstract class DataFromMSSQLRepository<T> where T:TickFromMssql,new ()
+    class StockDataFromMSSQLRepository
     {
         Logger log = LogManager.GetCurrentClassLogger();
-        public virtual List<T> readFromMSSQLDaily(string code, DateTime date,string connName,string SqlString)
+        public virtual List<StockTickFromMssql> readFromMSSQLDaily(string code, DateTime date, string connName, string SqlString)
         {
             string yyyyMM = date.ToString("yyyyMM");
             string yyyyMMdd = date.ToString("yyyyMMdd");
@@ -22,7 +21,7 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Common
             string connStr = MSSQLUtils.GetConnectionString(connName);
             DataTable dt = MSSQLUtils.GetTable(connStr, SqlString);
             return dt.AsEnumerable().Select(
-                row => new T
+                row => new StockTickFromMssql
                 {
                     code = Convert.ToString(row["stkcd"]),
                     time = Kit.ToDateTime(row["tdate"], row["ttime"]),
@@ -30,8 +29,6 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Common
                     ttime = Kit.ToInt(row["ttime"]),
                     lastPrice = Kit.ToDouble(row["cp"]),
                     preClose = Kit.ToDouble(row["PRECLOSE"]),
-                    preSettle = Kit.ToDouble(row["PrevSettle"]),
-                    openInterest=Kit.ToDouble(row["OpenInterest"]),
                     volume = Kit.ToDouble(row["ts"]),
                     amount = Kit.ToDouble(row["tt"]),
                     ask1 = Kit.ToDouble(row["S1"]),
@@ -56,10 +53,9 @@ namespace QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Common
                     bidv5 = Kit.ToDouble(row["BV5"])
                 }).ToList();
         }
-
-        public virtual T toEntityFromCsv(DataRow row)
+        public virtual StockTickFromMssql toEntityFromCsv(DataRow row)
         {
-            return DataTableUtils.CreateItemFromRow<T>(row);
+            return DataTableUtils.CreateItemFromRow<StockTickFromMssql>(row);
         }
     }
 }

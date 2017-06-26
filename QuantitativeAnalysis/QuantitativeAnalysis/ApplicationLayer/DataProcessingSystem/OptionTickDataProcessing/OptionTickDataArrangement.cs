@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using NLog;
 using QuantitativeAnalysis.ModelLayer.Option;
+using QuantitativeAnalysis.ModelLayer.Stock.Tick;
 using QuantitativeAnalysis.ServiceLayer.DataProcessing.Option;
+using QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock;
 using QuantitativeAnalysis.ServiceLayer.MyCore;
 using QuantitativeAnalysis.Utilities.Common;
 using QuantitativeAnalysis.Utilities.DataApplication;
@@ -37,7 +39,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
             this.targetServer = targetServer;
             this.dataBase = dataBase;
             save50ETFOptionData();
-            //saveStockData("510050.SH");
+            saveStockData("510050.SH");
         }
 
         private void save50ETFOptionData()
@@ -55,7 +57,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                     int numbers = checkTargetDataTable(date, tableName);
                    if (numbers==0) 
                     {
-                        var data= OptionTickDataUtils.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchFromMssql(option.optionCode, date));
+                        var data= OptionTickDataUtils<OptionTickFromMssql>.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchFromMssql(option.optionCode, date));
                         //var data2 = Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date);
                         if (data != null && data.Count > 0)
                         {
@@ -82,12 +84,12 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                 int numbers = checkTargetDataTable(date, tableName);
                 if (numbers<=1000)
                 {
-                    log.Warn("date:{0} code:{1} numbers{2}.", date.ToString("yyMMdd"), code, numbers);
+                    log.Warn("date:{0} code:{1} numbers:{2}.", date.ToString("yyyyMMdd"), code, numbers);
                 }
                 if (numbers == 0)
                 {
                     
-                    var data = OptionTickDataUtils.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchFromMssql(code, date));
+                    var data = OptionTickDataUtils<StockTickFromMssql>.filteringTickData(Platforms.container.Resolve<StockTickDataDailyStoringService>().fetchFromMssql(code, date));
                     //var data2 = Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date);
                     if (data != null && data.Count > 0)
                     {

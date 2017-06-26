@@ -1,4 +1,5 @@
-﻿using QuantitativeAnalysis.ModelLayer.Option;
+﻿using QuantitativeAnalysis.ModelLayer.Common;
+using QuantitativeAnalysis.ModelLayer.Option;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.Utilities.DataApplication
 {
-    public static class OptionTickDataUtils
+    public static class OptionTickDataUtils<T> where T: TickFromMssql, new()
     {
-        public static List<OptionTickFromMssql> filteringTickData(List<OptionTickFromMssql> list)
+        public static List<T> filteringTickData(List<T> list) 
         {
-            List<OptionTickFromMssql> filterList = new List<OptionTickFromMssql>();
+            List<T> filterList = new List<T>();
             if (list==null || list.Count==0)
             {
                 return null;
@@ -31,7 +32,7 @@ namespace QuantitativeAnalysis.Utilities.DataApplication
                         if ((i == list.Count() - 1) || (list[i + 1].tdate > list[i].tdate) || (list[i + 1].ttime > list[i].ttime + 500))
                         {
 
-                            OptionTickFromMssql tickData = list[i];
+                            T tickData = list[i];
                             tickData.ttime += 500;
                             filterList.Add(tickData);
                             last++;
@@ -47,13 +48,13 @@ namespace QuantitativeAnalysis.Utilities.DataApplication
                 {
                     if (filterList[last].ttime>=150000000)
                     {
-                        OptionTickFromMssql tickData = list[i];
+                        T tickData = list[i];
                         filterList[last] = tickData;
                         filterList[last].ttime = 150000000;
                     }
                     else
                     {
-                        OptionTickFromMssql tickData = list[i];
+                        T tickData = list[i];
                         tickData.ttime = 150000000;
                         filterList.Add(tickData);
                         last++;

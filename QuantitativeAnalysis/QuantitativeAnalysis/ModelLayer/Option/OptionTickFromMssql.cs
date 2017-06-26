@@ -9,5 +9,7 @@ namespace QuantitativeAnalysis.ModelLayer.Option
 {
     public class OptionTickFromMssql : TickFromMssql
     {
+        public double openInterest { get; set; }
+        public double preSettle { get; set; }
     }
 }

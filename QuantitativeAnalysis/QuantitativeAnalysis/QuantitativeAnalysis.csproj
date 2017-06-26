@@ -78,10 +78,11 @@
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Stock\StockBasicInfoFromLocalCsvRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Stock\StockDailyFactorFromLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromLocalCSV\Stock\StockDailyMarketFromLocalCSVRepository.cs" />
-    <Compile Include="DataAccessLayer\DataFromMSSQL\Common\DataFromMSSQLRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFrom170ServerRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFromLocalServerRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFromMSSQLRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromMSSQL\Stock\StockDataFrom170ServerRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromMSSQL\Stock\StockDataFromMSSQLRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Common\DataFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesDailyFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesMinuteFromWindRepository.cs" />
@@ -94,10 +95,12 @@
     <Compile Include="DataAccessLayer\DataToLocalCSV\Stock\StockDailyFactorToLocalCSVRepository.cs" />
     <Compile Include="ModelLayer\Option\OptionTickFromMssql.cs" />
     <Compile Include="ModelLayer\Stock\BasicInfo\StockBasicInfo.cs" />
+    <Compile Include="ModelLayer\Stock\Tick\StockTickFromMssql.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Option\OptionTickDataDailyService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Option\OptionTickDataDailyStoringService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockBasicInfoService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockDailyFactorService.cs" />
+    <Compile Include="ServiceLayer\DataProcessing\Stock\StockTickDataDailyStoringService.cs" />
     <Compile Include="Utilities\Common\MSSQLUtils.cs" />
     <Compile Include="Utilities\DataApplication\OptionTickDataUtils.cs" />
     <Compile Include="Utilities\DataApplication\RecordUtil.cs" />
@@ -180,6 +183,7 @@
     <Folder Include="ApplicationLayer\MonitoringSystem\" />
     <Folder Include="ApplicationLayer\SimulationSystem\" />
     <Folder Include="ApplicationLayer\StatisticalSystem\" />
+    <Folder Include="DataAccessLayer\DataFromMSSQL\Common\" />
     <Folder Include="DataAccessLayer\DateToMSSQL\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Finance\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Technique\" />

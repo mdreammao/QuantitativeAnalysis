@@ -1,4 +1,4 @@
-﻿using QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Common;
+﻿using QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Option;
 using QuantitativeAnalysis.ModelLayer.Option;
 using QuantitativeAnalysis.Utilities.Common;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.DataAccessLayer.DataFromMSSQL.Option
 {
-    class OptionDataFrom170ServerRepository : DataFromMSSQLRepository<OptionTickFromMssql>
+    class OptionDataFrom170ServerRepository : OptionDataFromMSSQLRepository
     {
         public override List<OptionTickFromMssql> readFromMSSQLDaily(string code, DateTime date, string connName, string SqlString)
         {

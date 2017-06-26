@@ -18,9 +18,9 @@ namespace QuantitativeAnalysis.ModelLayer.Common
     {
         public double volume { get; set; }
         public double amount { get; set; }
-        public double preSettle { get; set; }
+       
         public double preClose { get; set; }
-        public double openInterest { get; set; }
+        
         //包含交易日字段和自然日字段
         public int tdate { get; set; }
         public int ttime { get; set; }
