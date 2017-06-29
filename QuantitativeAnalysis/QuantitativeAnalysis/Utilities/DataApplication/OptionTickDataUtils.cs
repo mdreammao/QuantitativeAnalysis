@@ -3,12 +3,13 @@ using QuantitativeAnalysis.ModelLayer.Option;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace QuantitativeAnalysis.Utilities.DataApplication
 {
-    public static class OptionTickDataUtils<T> where T: TickFromMssql, new()
+    public static class TickDataUtils<T> where T: TickFromMssql, new()
     {
         public static List<T> filteringTickData(List<T> list) 
         {
@@ -21,7 +22,7 @@ namespace QuantitativeAnalysis.Utilities.DataApplication
             filterList.Add(list[0]);
             for (int i = 1; i < list.Count(); i++)
             {
-                if (list[i].lastPrice==0 && list[i].ask1==1 && list[i].bid1==0)//删除成交价及盘口价格为0的数据
+                if (list[i].lastPrice<=0 && list[i].ask1<=0 && list[i].bid1<=0)//删除成交价及盘口价格为或负数的数据
                 {
                     continue;
                 }

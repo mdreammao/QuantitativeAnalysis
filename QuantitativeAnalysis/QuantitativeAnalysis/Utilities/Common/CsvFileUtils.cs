@@ -59,6 +59,10 @@ namespace QuantitativeAnalysis.Utilities.Common
             {
                 return ((DateTime)cell).ToString("yyyy/MM/dd HH:mm:ss fff");
             }
+            if (cell is string)
+            {
+                return cell.ToString().Replace(',', ';');
+            }
             return cell.ToString();
         }
 

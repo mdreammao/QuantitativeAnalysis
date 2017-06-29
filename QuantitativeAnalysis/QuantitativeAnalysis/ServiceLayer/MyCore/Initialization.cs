@@ -42,8 +42,6 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
             try
             {
                 WindAPI wapi = Platforms.GetWindAPI();
-
-
             }
             catch (Exception e)
             {
@@ -100,11 +98,11 @@ namespace QuantitativeAnalysis.ServiceLayer.MyCore
                 case "on":
                     StockBasicInfoService stockInfoService = container.Resolve<StockBasicInfoService>();
                     stockInfoService.fetchFromLocalCsvOrWindAndSaveAndCache(localCsvExpiration: 0, tag: "StockBasicInfo", code: "allStocks");
-                    //var stockInfoList = StockBasicInfoUtils.getAllStockList();
-                    //foreach (var stock in stockInfoList)
-                    //{
-                    //    container.Resolve<StockDailyMarketService>().fetchFromLocalCsvOrWindAndSave(stock.code, new DateTime(2007, 1, 1), DateTime.Today);
-                    //}
+                    var stockInfoList = StockBasicInfoUtils.getAllStockList();
+                    foreach (var stock in stockInfoList)
+                    {
+                        container.Resolve<StockDailyMarketService>().fetchFromLocalCsvOrWindAndSave(stock.code, new DateTime(2007, 1, 1), DateTime.Today);
+                    }
                     break;
                 default:
                     break;

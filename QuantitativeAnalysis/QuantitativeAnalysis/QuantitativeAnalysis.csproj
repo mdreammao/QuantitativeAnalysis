@@ -81,8 +81,9 @@
     <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFrom170ServerRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFromLocalServerRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromMSSQL\Option\OptionDataFromMSSQLRepository.cs" />
-    <Compile Include="DataAccessLayer\DataFromMSSQL\Stock\StockDataFrom170ServerRepository.cs" />
-    <Compile Include="DataAccessLayer\DataFromMSSQL\Stock\StockDataFromMSSQLRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromMSSQL\Stock\TickData\StockDataFromMDBStyleServerRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromMSSQL\Stock\TickData\StockDataFromTDBStyleServerRepository.cs" />
+    <Compile Include="DataAccessLayer\DataFromMSSQL\Stock\TickData\StockTickDataFromMSSQLRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Common\DataFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesDailyFromWindRepository.cs" />
     <Compile Include="DataAccessLayer\DataFromWind\Futures\FuturesMinuteFromWindRepository.cs" />
@@ -93,6 +94,10 @@
     <Compile Include="DataAccessLayer\DataToLocalCSV\Common\DayToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Stock\StockBasicInfoToLocalCSVRepository.cs" />
     <Compile Include="DataAccessLayer\DataToLocalCSV\Stock\StockDailyFactorToLocalCSVRepository.cs" />
+    <Compile Include="DataAccessLayer\DateToMSSQL\Common\DataToMSSQLRepository.cs" />
+    <Compile Include="DataAccessLayer\DateToMSSQL\Option\OptionTickDataToMSSQLRepository.cs" />
+    <Compile Include="DataAccessLayer\DateToMSSQL\stock\StockDailyDataToMSSQLRepository.cs" />
+    <Compile Include="DataAccessLayer\DateToMSSQL\stock\StockTickDataToMSSQLRepository.cs" />
     <Compile Include="ModelLayer\Option\OptionTickFromMssql.cs" />
     <Compile Include="ModelLayer\Stock\BasicInfo\StockBasicInfo.cs" />
     <Compile Include="ModelLayer\Stock\Tick\StockTickFromMssql.cs" />
@@ -102,6 +107,7 @@
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockDailyFactorService.cs" />
     <Compile Include="ServiceLayer\DataProcessing\Stock\StockTickDataDailyStoringService.cs" />
     <Compile Include="Utilities\Common\MSSQLUtils.cs" />
+    <Compile Include="Utilities\Common\MyReflection.cs" />
     <Compile Include="Utilities\DataApplication\OptionTickDataUtils.cs" />
     <Compile Include="Utilities\DataApplication\RecordUtil.cs" />
     <Compile Include="Utilities\DataApplication\ResultPathUtil.cs" />
@@ -184,7 +190,6 @@
     <Folder Include="ApplicationLayer\SimulationSystem\" />
     <Folder Include="ApplicationLayer\StatisticalSystem\" />
     <Folder Include="DataAccessLayer\DataFromMSSQL\Common\" />
-    <Folder Include="DataAccessLayer\DateToMSSQL\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Finance\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Technique\" />
     <Folder Include="ModelLayer\Stock\MultiFactor\Valuation\" />

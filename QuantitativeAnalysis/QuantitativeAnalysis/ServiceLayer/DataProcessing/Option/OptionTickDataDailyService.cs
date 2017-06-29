@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
 {
@@ -18,7 +19,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
             throw new NotImplementedException();
         }
 
-        protected override List<OptionTickFromMssql> readFromMSSQLOnly(string code, DateTime date)
+        protected override List<OptionTickFromMssql> readFromMSSQLOnly(string code, DateTime date,string sourceServer)
         {
             var connName = "local";
             var yyyyMM = date.ToString("yyyyMM");
@@ -36,6 +37,11 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Option
         }
 
         protected override void saveToLocalCSV(IList<OptionTickFromMssql> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void saveToMSSQLOnly(string targetServer, string dataBase, string tableName, DataTable data, Dictionary<string, string> pair = null)
         {
             throw new NotImplementedException();
         }

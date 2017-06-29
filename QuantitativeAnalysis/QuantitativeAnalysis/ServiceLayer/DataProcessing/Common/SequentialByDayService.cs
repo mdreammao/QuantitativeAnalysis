@@ -29,6 +29,16 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         static Logger log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// 仅将数据存储到SQLSERVER的函数
+        /// </summary>
+        /// <param name="targetServer">目标服务器</param>
+        /// <param name="dataBase">数据库</param>
+        /// <param name="tableName">表</param>
+        /// <param name="data">数据</param>
+        /// <param name="pair">datatable和数据库表结构的配对</param>
+        protected abstract void saveToMSSQLOnly(string targetServer, string dataBase, string tableName, DataTable data, Dictionary<string, string> pair = null);
+
+        /// <summary>
         /// 仅从wind读取数据
         ///  数据,可能会抛出异常
         /// </summary>
@@ -43,7 +53,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Common
         /// <param name="code"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        protected abstract List<T> readFromMSSQLOnly(string code, DateTime date);
+        protected abstract List<T> readFromMSSQLOnly(string code, DateTime date,string sourceServer="local");
 
         /// <summary>
         ///  尝试从本地csv文件获取数据,可能会抛出异常

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
 {
@@ -28,11 +29,6 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
             return Platforms.container.Resolve<FuturesMinuteFromWindRepository>().readFromWind(code, dateStart, dateEnd, tag, options);
         }
 
-        protected override List<FuturesMinute> readFromMSSQLOnly(string code, DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
         private static string _buildCacheDataFilePath(string code, DateTime date, string tag)
         {
             if (tag == null) tag = typeof(FuturesMinute).ToString();
@@ -47,6 +43,16 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Futures
         protected override void saveToLocalCSV(IList<FuturesMinute> data, string code, DateTime date, string tag = null, bool appendMode = false, bool canSaveToday = false)
         {
             Platforms.container.Resolve<FuturesMinuteToLocalCSVRepository>().saveToLocalCsv(data, code, date, tag);
+        }
+
+        protected override void saveToMSSQLOnly(string targetServer, string dataBase, string tableName, DataTable data, Dictionary<string, string> pair = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override List<FuturesMinute> readFromMSSQLOnly(string code, DateTime date, string sourceServer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

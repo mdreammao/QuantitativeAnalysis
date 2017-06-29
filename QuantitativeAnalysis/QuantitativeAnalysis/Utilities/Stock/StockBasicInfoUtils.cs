@@ -19,7 +19,7 @@ namespace QuantitativeAnalysis.Utilities.Stock
         private static List<StockBasicInfo> _stockBasicInfo;
         
         /// <summary>
-        /// 获得股票基本数据的够着函数
+        /// 获得股票基本数据的构造函数
         /// </summary>
         /// <returns>股票数据列表</returns>
         private static List<StockBasicInfo> getStockBasicInfo()

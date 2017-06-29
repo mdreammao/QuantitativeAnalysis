@@ -29,21 +29,30 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
         /// </summary>
         /// <param name="startDate">开始时间</param>
         /// <param name="endDate">结束时间</param>
-        public OptionTickDataArrangement(int startDate,int endDate,string targetServer="local",string dataBase="optionTickData")
+        public OptionTickDataArrangement(int startDate,int endDate,string targetServer="local",string dataBase="TickData_50ETFOption")
         {
-
             this.startDate = Kit.ToDate(startDate);
             this.endDate = Kit.ToDate(endDate);
             this.tradeDays = DateUtils.GetTradeDays(startDate, endDate);
             this.optionInfoList = (List<OptionInfo>)Caches.get("OptionInfo_510050.SH");
             this.targetServer = targetServer;
             this.dataBase = dataBase;
-            save50ETFOptionData();
+            //save50ETFOptionData();
             saveStockData("510050.SH");
         }
 
         private void save50ETFOptionData()
         {
+            //给定model和数据库表的配对
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            var propertyList = MyReflection.getPropertyName((new OptionTickFromMssql()).GetType());
+            foreach (var name in propertyList)
+            {
+                if (name != "time")
+                {
+                    pair.Add(name, name);
+                }
+            }
             //逐日进行检查
             foreach (var date in tradeDays)
             {
@@ -55,16 +64,13 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                     //先检查目标数据库中存在的数据
                     string tableName = "MarketData_"+option.optionCode.Replace('.', '_');
                     int numbers = checkTargetDataTable(date, tableName);
-                   if (numbers==0) 
+                    if (numbers <= 1000)
                     {
-                        var data= OptionTickDataUtils<OptionTickFromMssql>.filteringTickData(Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchFromMssql(option.optionCode, date));
-                        //var data2 = Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date);
-                        if (data != null && data.Count > 0)
-                        {
-
-                            string connStr = MSSQLUtils.GetConnectionString(targetServer) + "database=" + dataBase + ";";
-                            MSSQLUtils.OptionDataBulkToMSSQL(connStr, DataTableUtils.ToDataTable(data), tableName);
-                        }
+                        log.Warn("date:{0} code:{1} numbers:{2}.", date.ToString("yyyyMMdd"), option.optionCode, numbers);
+                    }
+                    if (numbers == 0)
+                    {
+                        Platforms.container.Resolve<OptionTickDataDailyStoringService>().fetchDataFromSQLandModifiedandSaveToSQL(option.optionCode, date, "corp170", targetServer, dataBase, tableName, pair);
                     }
                 }
                 
@@ -76,6 +82,16 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
 
         private void saveStockData(string code)
         {
+            //给定model和数据库表的配对
+            Dictionary<string, string> pair = new Dictionary<string, string>();
+            var propertyList = MyReflection.getPropertyName((new StockTickFromMssql()).GetType());
+            foreach (var name in propertyList)
+            {
+                if (name!="time")
+                {
+                    pair.Add(name, name);
+                }
+            }
             //逐日进行检查
             foreach (var date in tradeDays)
             {
@@ -86,17 +102,9 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                 {
                     log.Warn("date:{0} code:{1} numbers:{2}.", date.ToString("yyyyMMdd"), code, numbers);
                 }
-                if (numbers == 0)
+                if (numbers==0)
                 {
-                    
-                    var data = OptionTickDataUtils<StockTickFromMssql>.filteringTickData(Platforms.container.Resolve<StockTickDataDailyStoringService>().fetchFromMssql(code, date));
-                    //var data2 = Platforms.container.Resolve<OptionTickDataDailyService>().fetchFromMssql(option.optionCode, date);
-                    if (data != null && data.Count > 0)
-                    {
-
-                        string connStr = MSSQLUtils.GetConnectionString(targetServer) + "database=" + dataBase + ";";
-                        MSSQLUtils.OptionDataBulkToMSSQL(connStr, DataTableUtils.ToDataTable(data), tableName);
-                    }
+                    Platforms.container.Resolve<StockTickDataDailyStoringService>().fetchDataFromSQLandModifiedandSaveToSQL(code, date, "corp170", targetServer, dataBase, tableName, pair);
                 }
                 Console.WriteLine("Date:{0} Complete!", date.ToString("yyyyMMdd"));
             }
@@ -104,46 +112,41 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
         private int checkTargetDataTable(DateTime date,string tableName)
         {
 
+            int number = 0;
             string connStr = MSSQLUtils.GetConnectionString(targetServer);
-            //数据库不存在
-            if (MSSQLUtils.CheckDataBaseExist(dataBase,connStr)==false)
-            {
-                MSSQLUtils.CreateDataBase(connStr, getCreateDataBaseString(dataBase));
-                string connTableStr = connStr + "database=" + dataBase + ";";
-                MSSQLUtils.CreateTable(connTableStr, getCreateTableString(tableName));
-                return 0;
-            }
-            //表不存在
-            else if (MSSQLUtils.CheckExist(dataBase,tableName,connStr)==false)
-            {
-                string connTableStr = connStr + "database=" + dataBase + ";";
-                MSSQLUtils.CreateTable(connTableStr, getCreateTableString(tableName));
-                return 0;
-            }
-            //表存在判断数据是否存在
-            else
-            {
-                string connTableStr = connStr + "database=" + dataBase + ";";
-                string sqlStr = string.Format(@"select count(*) from {0} where tdate={1}", tableName, date.ToString("yyyyMMdd"));
-                int number = MSSQLUtils.getNumbers(tableName, connTableStr, sqlStr);
-                return number;
-            }
-        }
-
-        private bool initialization(string dataBase,string tableName)
-        {
-            bool success = false;
             try
             {
-
-                success = true; 
+                //数据库不存在
+                if (MSSQLUtils.CheckDataBaseExist(dataBase, connStr) == false)
+                {
+                    MSSQLUtils.CreateDataBase(connStr, getCreateDataBaseString(dataBase));
+                    string connTableStr = connStr + "database=" + dataBase + ";";
+                    MSSQLUtils.CreateTable(connTableStr, getCreateTableString(tableName));
+                }
+                //表不存在
+                else if (MSSQLUtils.CheckExist(dataBase, tableName, connStr) == false)
+                {
+                    string connTableStr = connStr + "database=" + dataBase + ";";
+                    MSSQLUtils.CreateTable(connTableStr, getCreateTableString(tableName));
+                }
+                //表存在判断数据是否存在
+                else
+                {
+                    string connTableStr = connStr + "database=" + dataBase + ";";
+                    string sqlStr = string.Format(@"select count(*) from {0} where tdate={1}", tableName, date.ToString("yyyyMMdd"));
+                    number = MSSQLUtils.getNumbers(tableName, connTableStr, sqlStr);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                log.Error(e, "无法从数据库中读取数据！");
             }
-            return success;
+            finally
+            {
+                
+            }
+            return number;
         }
 
         private string getCreateDataBaseString(string dataBaseName)

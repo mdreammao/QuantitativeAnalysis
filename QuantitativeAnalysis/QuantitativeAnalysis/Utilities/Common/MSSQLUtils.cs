@@ -443,6 +443,57 @@ namespace QuantitativeAnalysis.Utilities.Common
         }
 
         /// <summary>
+        /// 将datatable类型存入指定数据库中
+        /// </summary>
+        /// <param name="connStr">连接字符串</param>
+        /// <param name="sourceDt">给定的数据源</param>
+        /// <param name="targetTable">目标表</param>
+        /// <param name="pairList">datatable和数据库表的配对</param>
+        public static void dataBulkToMSSQL(string connStr, DataTable sourceDt, string targetTable, Dictionary<string, string> pairList = null)
+        {
+            SqlConnection conn = new SqlConnection(connStr);
+            //用其它源的数据有效批量加载sql server表中
+            SqlBulkCopy bulkCopy = new SqlBulkCopy(conn);
+            //服务器上目标表的名称
+            bulkCopy.DestinationTableName = targetTable;
+            //每一批次中的行数
+            bulkCopy.BatchSize = sourceDt.Rows.Count;  
+            //指定源和目标列bulkCopy.ColumnMappings.Add(datatable的字段名,数据库表的列名)
+            if (pairList==null)
+            {
+                for (int i = 0; i < sourceDt.Columns.Count; i++)
+                {
+                    bulkCopy.ColumnMappings.Add(sourceDt.Columns[i].ColumnName, sourceDt.Columns[i].ColumnName);
+                }
+            }
+            else
+            {
+                foreach (var pair in pairList)
+                {
+                    bulkCopy.ColumnMappings.Add(pair.Key,pair.Value);
+                }
+            }
+            try
+            {
+                conn.Open();
+                if (sourceDt != null && sourceDt.Rows.Count != 0)
+                    bulkCopy.WriteToServer(sourceDt);   //将提供的数据源中的所有行复制到目标表中
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+                if (bulkCopy != null)
+                    bulkCopy.Close();
+            }
+
+        }
+
+
+        /// <summary>
         /// 往数据库中批量插入数据
         /// </summary>
         /// <param name="sourceDt">数据源表</param>

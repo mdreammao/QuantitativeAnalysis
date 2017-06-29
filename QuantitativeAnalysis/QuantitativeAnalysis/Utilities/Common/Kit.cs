@@ -39,6 +39,7 @@ namespace QuantitativeAnalysis.Utilities.Common
             return new DateTime(y, m, d,
                  ttime / 10000, (ttime % 10000) / 100, ttime % 100, millisecond);
         }
+
         public static DateTime ToDateTime(string tdate, string ttime)
         {
             int d = 0, t = 0;
@@ -316,6 +317,15 @@ namespace QuantitativeAnalysis.Utilities.Common
             if (text == null) return null;
             int x = text.LastIndexOf('.');
             return text.Substring(x + 1);
+        }
+
+        public static object DBNullToZero(object obj)
+        {
+            if (obj is DBNull)
+            {
+                obj = 0;
+            }
+            return obj;
         }
 
     }

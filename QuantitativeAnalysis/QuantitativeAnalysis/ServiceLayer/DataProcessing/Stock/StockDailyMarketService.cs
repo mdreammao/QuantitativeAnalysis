@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
+using QuantitativeAnalysis.DataAccessLayer.DateToMSSQL.stock;
 
 namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
 {
@@ -19,6 +21,11 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
         protected override List<StockDailyMarket> readFromLocalCSVOnly(string code, DateTime startDate, DateTime endDate,string tag = null)
         {
             return Platforms.container.Resolve<StockDailyMarketFromLocalCSVRepository>().ReadFromLocalCSVForDays(code,startDate,endDate);
+        }
+
+        protected override List<StockDailyMarket> readFromSQLServerOnly(string code, DateTime startDate, DateTime endDate, string sourceServer = "local", string tag = null)
+        {
+            throw new NotImplementedException();
         }
 
         protected override List<StockDailyMarket> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)
@@ -31,7 +38,9 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             Platforms.container.Resolve<StockDailyMarketToLocalCSVRepository>().saveToLocalCsv(data);
         }
 
-
-
+        protected override void saveToSQLServer(string targetServer, string dataBase, string tableName, DataTable data, Dictionary<string, string> pair = null)
+        {
+            Platforms.container.Resolve<StockDailyDataToMSSQLRepository>().saveToSQLServer(targetServer,dataBase,tableName,data,pair);
+        }
     }
 }

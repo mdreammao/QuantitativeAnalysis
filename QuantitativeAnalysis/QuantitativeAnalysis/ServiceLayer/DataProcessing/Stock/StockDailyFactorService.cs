@@ -5,6 +5,7 @@ using QuantitativeAnalysis.Utilities.Common;
 using QuantitativeAnalysis.Utilities.Stock;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +48,19 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
         /// <param name="canSaveToday">是否需保存今日数据</param>
         protected abstract void saveToLocalCSV(IList<T> data, string tag = null, bool appendMode = false, bool canSaveToday = false);
 
+        protected abstract List<T> readFromSQLServerOnly(string code, DateTime startDate, DateTime endDate, string sourceServer = "local", string tag = null);
+        
+        
+        /// <summary>
+        /// 将数据存储到SQLSERVER的函数
+        /// </summary>
+        /// <param name="targetServer">目标服务器</param>
+        /// <param name="dataBase">数据库</param>
+        /// <param name="tableName">表</param>
+        /// <param name="data">数据</param>
+        /// <param name="pair">datatable和数据库表结构的配对</param>
+        protected abstract void saveToSQLServer(string targetServer, string dataBase, string tableName, DataTable data, Dictionary<string, string> pair = null);
+
         /// <summary>
         /// 尝试从Wind获取数据。
         /// </summary>
@@ -74,7 +88,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             }
             if(endDate<startDate)
             {
-                log.Error("退市时间过早，无法读取数据！");
+                log.Debug("退市时间过早，无法读取数据！");
                 return result;
             }
             log.Debug("尝试从Wind获取{0}...", code);
@@ -84,7 +98,7 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             }
             catch (Exception e)
             {
-                log.Error(e, "尝试从Wind获取失败！");
+                log.Error(e, "尝试从wind读取数据失败！品种{0},时间{1}至{2}", code, startDate.ToShortDateString(), endDate.ToShortDateString());
                 //debug 输出失败信息
                 Console.WriteLine("尝试从wind读取数据失败！品种{0},时间{1}至{2}", code, startDate.ToShortDateString(),endDate.ToShortDateString());
             }
@@ -160,41 +174,58 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
             List<DateTime> lackedDates = new List<DateTime>();
             //根据股票的上市退市日期来调整获取数据的日期
             startDate = startDate > StockBasicInfoUtils.getStockListDate(code) ? startDate : StockBasicInfoUtils.getStockListDate(code);
-            endDate = endDate > StockBasicInfoUtils.getStockDelistDate(code) ? StockBasicInfoUtils.getStockDelistDate(code) : endDate;
+            endDate = endDate > StockBasicInfoUtils.getStockDelistDate(code) ? StockBasicInfoUtils.getStockDelistDate(code).AddDays(-1) : endDate;
             var tradeDays = DateUtils.GetTradeDays(startDate, endDate);
             bool csvHasData = false;
             result = fetchFromLocalCsv(code, startDate,endDate,tag);
-            if (result != null) csvHasData = true;
-            if (result == null && Caches.WindConnection == false && Caches.WindConnectionTry==true)
+            if (result != null && result.Count>0) csvHasData = true;
+            if ((result == null || result.Count==0) && Caches.WindConnection == false && Caches.WindConnectionTry==true)
             {
                 log.Error("本地无CSV数据并且wind无法连接，故无法获得数据！");
                 return result;
             }
-            if (result!=null)
+            if (result == null || result.Count==0) //数据不完整，必须去万德获取数据
+            {
+                result = fetchFromWind(code, startDate, endDate);
+            }
+            if (result != null)
             {
                 exitsDates = result.Select(x => x.time).ToList();
                 foreach (var date in tradeDays)
                 {
-                    if (exitsDates.Contains(date)==false && date<DateTime.Today)
+                    if (exitsDates.Contains(date) == false && date < DateTime.Today)
                     {
                         lackedDates.Add(date);
                     }
                 }
             }
-            if (result == null) //数据不完整，必须去万德获取数据
-            {
-                result = fetchFromWind(code, startDate, endDate);
-            }
             if (result!=null && lackedDates.Count!=0)
             {
-                foreach (var date in lackedDates)
+                if (lackedDates.Count<=20) //若缺失数据较少逐日补齐
                 {
-                    var lackedList = fetchFromWind(code, date, date);
-                    if (lackedList!=null)
+                    foreach (var date in lackedDates)
                     {
-                        lackedInfo.AddRange(lackedList);
+                        var lackedList = fetchFromWind(code, date, date);
+                        if (lackedList != null)
+                        {
+                            lackedInfo.AddRange(lackedList);
+                        }
                     }
                 }
+                else //若缺失数据较多，整段补齐
+                {
+                    lackedDates.Sort();
+                    var lackedList = fetchFromWind(code, lackedDates[0], lackedDates[lackedDates.Count - 1]);
+                    foreach (var item in lackedList)
+                    {
+                        if (!exitsDates.Contains(item.time))
+                        {
+                            lackedInfo.Add(item);
+                        }
+                    }
+
+                }
+                
             }
             if (!csvHasData && result != null && result.Count() > 0)
             {
@@ -208,6 +239,29 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
                 result.AddRange(lackedInfo);
                 result.OrderBy(x => x.time).ToList();
             }
+            return result;
+        }
+
+        /// <summary>
+        /// 先后尝试MSSQL读取数据，Wind获取数据。若无MSSQL数据，则保存到SQLServer。
+        /// </summary>
+        /// <param name="code">代码，如股票代码，期权代码</param>
+        /// <param name="date">指定的日期</param>
+        /// <param name="tag">读写文件路径前缀，若为空默认为类名</param>
+        /// <returns></returns>
+        virtual public List<T> fetchFromSQLServerOrWindAndSave(string code, DateTime startDate, DateTime endDate, string sourceServer="local", string targetSource="local",string tag = null)
+        {
+            if (tag == null) tag = typeof(T).ToString();
+            List<T> result = null;
+            List<T> lackedInfo = new List<T>();
+            //记录本地获取的数据
+            List<DateTime> exitsDates = new List<DateTime>();
+            List<DateTime> lackedDates = new List<DateTime>();
+            //根据股票的上市退市日期来调整获取数据的日期
+            startDate = startDate > StockBasicInfoUtils.getStockListDate(code) ? startDate : StockBasicInfoUtils.getStockListDate(code);
+            endDate = endDate > StockBasicInfoUtils.getStockDelistDate(code) ? StockBasicInfoUtils.getStockDelistDate(code).AddDays(-1) : endDate;
+            var tradeDays = DateUtils.GetTradeDays(startDate, endDate);
+            bool csvHasData = false;
             return result;
         }
 
