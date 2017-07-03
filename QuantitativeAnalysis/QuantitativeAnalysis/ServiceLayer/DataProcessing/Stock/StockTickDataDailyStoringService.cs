@@ -25,23 +25,33 @@ namespace QuantitativeAnalysis.ServiceLayer.DataProcessing.Stock
 
         protected override List<StockTickFromMssql> readFromMSSQLOnly(string code, DateTime date,string sourceServer="corp170")
         {
+            List<StockTickFromMssql> list = null;
             var connName = sourceServer;
             var yyyyMM = date.ToString("yyyyMM");
             var yyyyMMdd = date.ToString("yyyyMMdd");
             var codeStr = code.Replace('.', '_');
-            var SqlString = String.Format(@"
+            if (sourceServer=="corp170")
+            {
+                var SqlString = String.Format(@"
             SELECT * FROM [WindFullMarket{0}].[dbo].[MarketData_{1}] where tdate={2} and ((ttime>=91500000 and ttime%10000000<=5959999 and ttime%100000<=59999) or (ttime<240000 and ttime>0)) order by tdate,ttime
             ", yyyyMM, codeStr, yyyyMMdd);
-            if (date>=new DateTime(2011,8,1))
-            {
-                return Platforms.container.Resolve<StockDataFromTDBStyleServerRepository>().readFromMSSQLDaily(connName, SqlString);
-
+                if (date >= new DateTime(2011, 8, 1))
+                {
+                    list = Platforms.container.Resolve<StockDataFromTDBStyleServerRepository>().readFromMSSQLDaily(connName, SqlString);
+                }
+                else
+                {
+                    list = Platforms.container.Resolve<StockDataFromMDBStyleServerRepository>().readFromMSSQLDaily(connName, SqlString);
+                }
             }
-            else
+            if (sourceServer=="corp217")
             {
-                return Platforms.container.Resolve<StockDataFromMDBStyleServerRepository>().readFromMSSQLDaily(connName, SqlString);
-
+                var SqlString = String.Format(@"
+            SELECT * FROM [TradeMarket{0}].[dbo].[MarketData_{1}] where tdate={2} and ((ttime>=91500000 and ttime%10000000<=5959999 and ttime%100000<=59999) or (ttime<240000 and ttime>0)) order by tdate,ttime
+            ", yyyyMM, codeStr, yyyyMMdd);
+                list= Platforms.container.Resolve<StockDataFromTDBStyleServerRepository>().readFromMSSQLDaily(connName, SqlString);
             }
+            return list;
         }
 
         protected override List<StockTickFromMssql> readFromWindOnly(string code, DateTime startDate, DateTime endDate, string tag = null, IDictionary<string, object> options = null)

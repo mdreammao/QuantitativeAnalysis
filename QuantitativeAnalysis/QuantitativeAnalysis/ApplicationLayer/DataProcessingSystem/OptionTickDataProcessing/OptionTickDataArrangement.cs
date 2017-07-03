@@ -104,7 +104,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
                 }
                 if (numbers==0)
                 {
-                    Platforms.container.Resolve<StockTickDataDailyStoringService>().fetchDataFromSQLandModifiedandSaveToSQL(code, date, "corp170", targetServer, dataBase, tableName, pair);
+                    Platforms.container.Resolve<StockTickDataDailyStoringService>().fetchDataFromSQLandModifiedandSaveToSQL(code, date, "corp217", targetServer, dataBase, tableName, pair);
                 }
                 Console.WriteLine("Date:{0} Complete!", date.ToString("yyyyMMdd"));
             }
