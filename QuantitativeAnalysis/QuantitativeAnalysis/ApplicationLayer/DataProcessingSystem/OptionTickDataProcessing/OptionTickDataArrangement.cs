@@ -24,6 +24,7 @@ namespace QuantitativeAnalysis.ApplicationLayer.DataProcessingSystem.OptionTickD
         private string targetServer;
         private string dataBase;
         static Logger log = LogManager.GetCurrentClassLogger();
+        
         /// <summary>
         /// 构造函数
         /// </summary>
